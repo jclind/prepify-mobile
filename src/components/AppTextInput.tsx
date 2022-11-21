@@ -1,38 +1,28 @@
-import { StyleSheet, TextInput, View } from 'react-native'
+import { StyleSheet, TextInput, View, TextInputProps } from 'react-native'
 import React from 'react'
-import colors from '../config/colors'
+import styleVars from '../config/styleVars'
 import defaultStyles from '../config/defaultStyles'
 
-interface TextInputProps {
-  placeholder?: string
-  value?: string
-  textContentType?: string
-  secureTextEntry?: boolean
-  autofill?: boolean
-  onChangeText: (e: string | React.ChangeEvent<any>) => void
-  onSubmitEditing?: () => void
+type AppTextInputProps = TextInputProps & {
+  value: string
+  // onChangeText: (e: string | React.ChangeEvent<any>) => void
+  // onSubmitEditing?: () => void
 }
 
 export default function AppTextInput({
   placeholder,
   value = '',
-  onChangeText,
-  onSubmitEditing,
-  textContentType = 'none',
-  secureTextEntry,
-  autofill,
-}: TextInputProps) {
+  // onChangeText,
+  // onSubmitEditing,
+  ...otherProps
+}: AppTextInputProps) {
   return (
     <View style={styles.container}>
       <TextInput
         style={[defaultStyles.text, styles.input]}
         placeholder={placeholder}
         value={value}
-        onChangeText={onChangeText}
-        onSubmitEditing={onSubmitEditing}
-        textContentType={textContentType}
-        secureTextEntry={secureTextEntry}
-        autofill={autofill}
+        {...otherProps}
       />
     </View>
   )
@@ -40,11 +30,10 @@ export default function AppTextInput({
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: colors.inputBorderColor,
+    borderColor: styleVars.inputBorderColor,
     borderWidth: 1,
     borderRadius: 15,
     flexDirection: 'row',
-    marginVertical: 15,
   },
   input: {
     padding: 15,

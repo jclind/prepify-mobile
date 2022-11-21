@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import defaultStyles from '../config/defaultStyles'
-import colors from '../config/colors'
+import styleVars from '../config/styleVars'
 
 interface TextLargeProps {
   children: React.ReactNode
@@ -19,8 +19,8 @@ export default function TextSmall({
       style={[
         defaultStyles.text,
         styles.text,
+        { color: textColor || styleVars.primaryText },
         style,
-        { color: textColor || colors.primaryText },
       ]}
     >
       {children}

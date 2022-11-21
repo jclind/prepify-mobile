@@ -1,10 +1,7 @@
 import { ImageBackground, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import Screen from '../components/layout/Screen'
 import PrepifyLogo from '../components/PrepifyLogo'
-import defaultStyles from '../config/defaultStyles'
 import Button from '../components/Button'
-import colors from '../config/colors'
 
 export default function Welcome() {
   return (

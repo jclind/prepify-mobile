@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
-import colors from '../config/colors'
+import styleVars from '../config/styleVars'
 
 export default function PrepifyLogo() {
   return (
@@ -11,7 +11,7 @@ export default function PrepifyLogo() {
       <MaterialCommunityIcons
         name='chef-hat'
         size={55}
-        color={colors.primary}
+        color={styleVars.primary}
       />
     </View>
   )
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: 55,
     fontFamily: 'Montserrat_800ExtraBold_Italic',
-    color: colors.primary,
+    color: styleVars.primary,
     marginRight: 10,
   },
 })
