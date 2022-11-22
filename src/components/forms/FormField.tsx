@@ -1,4 +1,4 @@
-import { StyleSheet, View, TextInputProps } from 'react-native'
+import { StyleSheet, View, TextInputProps, TextInput } from 'react-native'
 import { useFormikContext } from 'formik'
 import React, { useEffect } from 'react'
 
@@ -7,9 +7,15 @@ import ErrorMessage from './ErrorMessage'
 
 type FormFieldProps = TextInputProps & {
   name: string
+  inputRef?: React.RefObject<TextInput> | null
+  onSubmitEditing?: () => void
 }
 
-export default function FormField({ name, ...otherProps }: FormFieldProps) {
+export default function FormField({
+  name,
+  onSubmitEditing,
+  ...otherProps
+}: FormFieldProps) {
   const { setFieldTouched, handleChange, errors, touched, values } =
     useFormikContext()
 
@@ -24,7 +30,7 @@ export default function FormField({ name, ...otherProps }: FormFieldProps) {
       <AppTextInput
         onBlur={() => setFieldTouched(name)}
         onChangeText={handleChange(name)}
-        onSubmitEditing={() => console.log('done')}
+        onSubmitEditing={onSubmitEditing}
         value={values[name]}
         {...otherProps}
       />

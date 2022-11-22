@@ -5,6 +5,8 @@ import defaultStyles from '../config/defaultStyles'
 
 type AppTextInputProps = TextInputProps & {
   value: string
+  inputRef?: React.RefObject<TextInput> | null
+
   // onChangeText: (e: string | React.ChangeEvent<any>) => void
   // onSubmitEditing?: () => void
 }
@@ -12,8 +14,7 @@ type AppTextInputProps = TextInputProps & {
 export default function AppTextInput({
   placeholder,
   value = '',
-  // onChangeText,
-  // onSubmitEditing,
+  inputRef,
   ...otherProps
 }: AppTextInputProps) {
   return (
@@ -23,6 +24,7 @@ export default function AppTextInput({
         placeholder={placeholder}
         value={value}
         {...otherProps}
+        ref={inputRef}
       />
     </View>
   )

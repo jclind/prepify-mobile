@@ -14,7 +14,12 @@ export default function ApiSignupButton({
 }: ApiSignupButtonProps) {
   return (
     <TouchableOpacity style={styles.container}>
-      <MCIcons name={iconName} size={32} style={styles.icon} />
+      <MCIcons
+        name={iconName}
+        size={28}
+        style={styles.icon}
+        color={styleVars.primaryText}
+      />
       <Text style={[defaultStyles.text, styles.text]}>{text}</Text>
     </TouchableOpacity>
   )
@@ -31,7 +36,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     borderColor: styleVars.secondaryText,
-    marginVertical: 10,
+    marginBottom: 20,
   },
   icon: {
     position: 'absolute',

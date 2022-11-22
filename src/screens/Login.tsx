@@ -1,51 +1,47 @@
 import {
   StyleSheet,
   Text,
-  View,
-  Button,
-  TouchableOpacity,
-  KeyboardAvoidingView,
   TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native'
 import React, { useRef } from 'react'
+import { Formik, FormikErrors } from 'formik'
+import * as yup from 'yup'
 
 import Screen from '../components/layout/Screen'
 import TextLarge from '../components/TextLarge'
 import styleVars from '../config/styleVars'
-import SubmitButton from '../components/forms/SubmitButton'
 import FormField from '../components/forms/FormField'
-import * as yup from 'yup'
+import SubmitButton from '../components/forms/SubmitButton'
+import TextSmall from '../components/TextSmall'
 import Divider from '../components/Divider'
 import ApiSignupButton from '../components/forms/ApiSignupButton'
 import formStyles from '../config/formStyles'
 import Form from '../components/forms/Form'
 
-interface RegisterFormValues {
+interface LoginFormValues {
   [key: string]: string
-  username: string
   email: string
   password: string
 }
-const initialValues: RegisterFormValues = {
-  username: '',
+
+const initialValues: LoginFormValues = {
   email: '',
   password: '',
 }
 
 const validationSchema = yup.object().shape({
-  username: yup.string().required().label('Username'),
   email: yup.string().required().email().label('Email'),
   password: yup.string().required().min(4).label('Password'),
 })
 
-export default function Register() {
-  const emailRef = useRef<TextInput>(null)
+export default function Login() {
   const passwordRef = useRef<TextInput>(null)
-
   return (
     <Screen style={formStyles.container}>
       <TextLarge style={formStyles.title} textColor={styleVars.primary}>
-        Create Account
+        Login
       </TextLarge>
       <Form
         initialValues={initialValues}
@@ -56,18 +52,10 @@ export default function Register() {
         <FormField
           autoCapitalize='none'
           autoCorrect={false}
-          name='username'
-          placeholder='Username'
-          onSubmitEditing={() => emailRef.current?.focus()}
-        />
-        <FormField
-          autoCapitalize='none'
-          autoCorrect={false}
           name='email'
           placeholder='Email'
           textContentType='emailAddress'
           keyboardType='email-address'
-          inputRef={emailRef}
           onSubmitEditing={() => passwordRef.current?.focus()}
         />
         <FormField
@@ -78,7 +66,12 @@ export default function Register() {
           inputRef={passwordRef}
           secureTextEntry
         />
-        <SubmitButton title='Create an Account' style={formStyles.submitBtn} />
+        <SubmitButton title='Login' style={formStyles.submitBtn} />
+        <TouchableOpacity style={formStyles.forgotPassBtn}>
+          <TextSmall textColor={styleVars.secondaryText}>
+            Forgot Password?
+          </TextSmall>
+        </TouchableOpacity>
       </Form>
       <Divider text='or' />
       <View style={formStyles.apiBtns}>

@@ -51,8 +51,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   text: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    fontFamily: 'Montserrat_600SemiBold',
+    // fontFamily: 'Montserrat_600SemiBold',
   },
 })

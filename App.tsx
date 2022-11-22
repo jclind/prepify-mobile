@@ -17,6 +17,7 @@ import {
 
 import Welcome from './src/screens/Welcome'
 import Register from './src/screens/Register'
+import Login from './src/screens/Login'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -46,7 +47,7 @@ export default function App() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View onLayout={onLayoutRootView} style={styles.container}>
-        <Register />
+        <Login />
       </View>
     </TouchableWithoutFeedback>
   )
