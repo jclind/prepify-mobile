@@ -7,23 +7,25 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
     justifyContent: 'flex-end',
   },
-  title: {
+  titleContainer: {
     position: 'absolute',
     top: 30,
+    width: '100%',
+  },
+  title: {
+    width: '100%',
+  },
+  description: {
+    marginTop: 15,
+    color: styleVars.tertiaryText,
   },
   form: {
     width: '100%',
     marginBottom: 30,
   },
   submitBtn: {
-    marginTop: 15,
+    marginTop: 10,
     marginBottom: 0,
-  },
-  forgotPassBtn: {
-    alignSelf: 'center',
-    alignItems: 'center',
-    marginTop: 15,
-    padding: 5,
   },
   divider: {
     height: 1,

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import TextSmall from '../TextSmall'
+import TextSmall from '../text/TextSmall'
 
 type ErrorMessageProps = {
   error: string

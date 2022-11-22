@@ -12,4 +12,6 @@ export default {
   black: '#000',
   white: '#fff',
   danger: '#ff5252',
+
+  borderRadius: 10,
 }

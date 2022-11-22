@@ -11,7 +11,10 @@
   "dependencies": {
     "@expo-google-fonts/inter": "^0.2.2",
     "@expo-google-fonts/montserrat": "^0.2.2",
+    "@react-navigation/bottom-tabs": "^6.4.1",
+    "@react-navigation/native-stack": "^6.9.2",
     "@types/react-native": "~0.70.6",
+    "axios": "^1.2.0",
     "expo": "~47.0.6",
     "expo-app-loading": "~2.1.1",
     "expo-font": "~11.0.1",

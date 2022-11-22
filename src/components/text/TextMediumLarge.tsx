@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import defaultStyles from '../config/defaultStyles'
-import styleVars from '../config/styleVars'
+import defaultStyles from '../../config/defaultStyles'
+import styleVars from '../../config/styleVars'
 
 interface TextLargeProps {
   children: React.ReactNode
@@ -9,7 +9,7 @@ interface TextLargeProps {
   style?: any
 }
 
-export default function TextLarge({
+export default function TextMediumLarge({
   children,
   textColor,
   style,
@@ -19,8 +19,8 @@ export default function TextLarge({
       style={[
         defaultStyles.text,
         styles.text,
-        style,
         { color: textColor || styleVars.primaryText },
+        style,
       ]}
     >
       {children}
@@ -30,7 +30,7 @@ export default function TextLarge({
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 32,
+    fontSize: 24,
     fontFamily: 'Montserrat_600SemiBold',
   },
 })

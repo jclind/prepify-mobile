@@ -40,6 +40,6 @@ export default function FormField({
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 15,
+    marginVertical: 12,
   },
 })

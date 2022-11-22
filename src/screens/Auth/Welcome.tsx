@@ -1,13 +1,13 @@
 import { ImageBackground, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import PrepifyLogo from '../components/PrepifyLogo'
-import Button from '../components/Button'
+import PrepifyLogo from '../../components/PrepifyLogo'
+import Button from '../../components/Button'
 
-export default function Welcome() {
+export default function Welcome({ navigation }) {
   return (
     <ImageBackground
       style={styles.container}
-      source={require('../../assets/welcome-screen.jpg')}
+      source={require('../../../assets/welcome-screen.jpg')}
       blurRadius={2}
       resizeMode='cover'
     >
@@ -24,16 +24,12 @@ export default function Welcome() {
       <View style={styles.actionBtns}>
         <Button
           title='Sign Up'
-          onPress={() => {
-            console.log('clicked')
-          }}
+          onPress={() => navigation.navigate('Register')}
           style={styles.button}
         />
         <Button
           title='Login'
-          onPress={() => {
-            console.log('clicked')
-          }}
+          onPress={() => navigation.navigate('Login')}
           backgroundColor={'none'}
           style={styles.button}
         />

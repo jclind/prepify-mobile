@@ -1,52 +1,51 @@
 import {
   StyleSheet,
   Text,
-  View,
-  Button,
-  TouchableOpacity,
-  KeyboardAvoidingView,
   TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native'
 import React, { useRef } from 'react'
-
-import Screen from '../components/layout/Screen'
-import TextLarge from '../components/TextLarge'
-import styleVars from '../config/styleVars'
-import SubmitButton from '../components/forms/SubmitButton'
-import FormField from '../components/forms/FormField'
 import * as yup from 'yup'
-import Divider from '../components/Divider'
-import ApiSignupButton from '../components/forms/ApiSignupButton'
-import formStyles from '../config/formStyles'
-import Form from '../components/forms/Form'
 
-interface RegisterFormValues {
+import Screen from '../../components/layout/Screen'
+import TextLarge from '../../components/text/TextLarge'
+import styleVars from '../../config/styleVars'
+import FormField from '../../components/forms/FormField'
+import SubmitButton from '../../components/forms/SubmitButton'
+import TextSmall from '../../components/text/TextSmall'
+import Divider from '../../components/Divider'
+import ApiSignupButton from '../../components/forms/ApiSignupButton'
+import formStyles from '../../config/formStyles'
+import Form from '../../components/forms/Form'
+import SecondarySubmitButton from '../../components/forms/SecondarySubmitButton'
+import FormTitle from '../../components/forms/FormTitle'
+import FormDescription from '../../components/forms/FormDescription'
+
+interface LoginFormValues {
   [key: string]: string
-  username: string
   email: string
   password: string
 }
-const initialValues: RegisterFormValues = {
-  username: '',
+
+const initialValues: LoginFormValues = {
   email: '',
   password: '',
 }
 
 const validationSchema = yup.object().shape({
-  username: yup.string().required().label('Username'),
   email: yup.string().required().email().label('Email'),
   password: yup.string().required().min(4).label('Password'),
 })
 
-export default function Register() {
-  const emailRef = useRef<TextInput>(null)
+export default function Login({ navigation }) {
   const passwordRef = useRef<TextInput>(null)
-
   return (
     <Screen style={formStyles.container}>
-      <TextLarge style={formStyles.title} textColor={styleVars.primary}>
-        Create Account
-      </TextLarge>
+      <View style={formStyles.titleContainer}>
+        <FormTitle style={formStyles.title}>Login</FormTitle>
+        <FormDescription>Please sign in to continue.</FormDescription>
+      </View>
       <Form
         initialValues={initialValues}
         onSubmit={() => console.log('form submitted')}
@@ -56,18 +55,10 @@ export default function Register() {
         <FormField
           autoCapitalize='none'
           autoCorrect={false}
-          name='username'
-          placeholder='Username'
-          onSubmitEditing={() => emailRef.current?.focus()}
-        />
-        <FormField
-          autoCapitalize='none'
-          autoCorrect={false}
           name='email'
           placeholder='Email'
           textContentType='emailAddress'
           keyboardType='email-address'
-          inputRef={emailRef}
           onSubmitEditing={() => passwordRef.current?.focus()}
         />
         <FormField
@@ -78,7 +69,12 @@ export default function Register() {
           inputRef={passwordRef}
           secureTextEntry
         />
-        <SubmitButton title='Create an Account' style={formStyles.submitBtn} />
+        <SubmitButton title='Login' style={formStyles.submitBtn} />
+
+        <SecondarySubmitButton
+          text={'Forgot Password?'}
+          onPress={() => navigation.push('ForgotPassword')}
+        />
       </Form>
       <Divider text='or' />
       <View style={formStyles.apiBtns}>

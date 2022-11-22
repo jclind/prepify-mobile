@@ -5,6 +5,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
 import * as SplashScreen from 'expo-splash-screen'
 import {
   useFonts,
@@ -14,10 +15,11 @@ import {
   Montserrat_700Bold,
   Montserrat_800ExtraBold_Italic,
 } from '@expo-google-fonts/montserrat'
-
-import Welcome from './src/screens/Welcome'
-import Register from './src/screens/Register'
-import Login from './src/screens/Login'
+import ForgotPassword from './src/screens/Auth/ForgotPassword'
+import Login from './src/screens/Auth/Login'
+import AuthNavigator from './src/navigation/AuthNavigator'
+import Home from './src/screens/App/Home'
+import AppNavigator from './src/navigation/AppNavigator'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -47,7 +49,10 @@ export default function App() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View onLayout={onLayoutRootView} style={styles.container}>
-        <Login />
+        <NavigationContainer>
+          {/* <AuthNavigator /> */}
+          <AppNavigator />
+        </NavigationContainer>
       </View>
     </TouchableWithoutFeedback>
   )
