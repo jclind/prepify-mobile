@@ -19,6 +19,7 @@ type AppTextProps = {
   style?: any
   size?: Size
   numberOfLines?: number
+  multiline?: boolean
 }
 
 export default function AppText({
@@ -27,6 +28,7 @@ export default function AppText({
   style,
   size = 'medium',
   numberOfLines = 1,
+  multiline,
 }: AppTextProps) {
   const selectedSizeStyles = SIZES[size]
 

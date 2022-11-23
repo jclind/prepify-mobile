@@ -6,6 +6,7 @@ import { MCIcons } from '../config/types/MCIcons'
 import Account from '../screens/App/Account'
 import Home from '../screens/App/Home'
 import Search from '../screens/App/Search'
+import HomeNavigator from './HomeNavigator'
 
 const Tab = createBottomTabNavigator()
 
@@ -20,7 +21,7 @@ export default function AppNavigator() {
     >
       <Tab.Screen
         name='Feed'
-        component={Home}
+        component={HomeNavigator}
         options={{
           tabBarIcon: ({ size, color }) => (
             <MCIcons name='home' size={size} color={color} />

@@ -23,7 +23,8 @@
     "formik": "^2.2.9",
     "react": "18.1.0",
     "react-native": "0.70.5",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "expo-linear-gradient": "~12.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

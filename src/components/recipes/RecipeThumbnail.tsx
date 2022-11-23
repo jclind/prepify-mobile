@@ -3,14 +3,22 @@ import React from 'react'
 import RecipeType from '../../config/types/Recipe'
 import styleVars from '../../config/styleVars'
 import AppText from '../text/AppText'
-import { MCIcons } from '../../config/types/MCIcons'
-import { formatRating } from '../../util/formatRating'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { useNavigation } from '@react-navigation/native'
+import TotalTimeElement from './TotalTimeElement'
+import RatingElement from './RatingElement'
 
 type RecipeThumbnailProps = {
   recipe: RecipeType
 }
+type RootStackParamList = {
+  Recipe: { _id: string } | undefined
+}
 
 export default function RecipeThumbnail({ recipe }: RecipeThumbnailProps) {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+
   const priceText = () => {
     const servingPrice = Number(recipe.servingPrice)
     const numServings = Number(recipe.yield.value)
@@ -22,45 +30,13 @@ export default function RecipeThumbnail({ recipe }: RecipeThumbnailProps) {
       >{`Serving: $${servingPrice} | Recipe: $${recipePrice}`}</AppText>
     )
   }
-  const totalTime = () => {
-    const totalTime = Number(recipe.totalTime)
-    return (
-      <View style={styles.footerItem}>
-        <MCIcons
-          style={styles.footerItemIcon}
-          name='timer-outline'
-          size={24}
-          color={styleVars.primaryText}
-        />
-        <AppText size='mediumSmall'>
-          {totalTime > 1 ? `${totalTime} mins` : `${totalTime} min`}
-        </AppText>
-      </View>
-    )
-  }
-  const rating = () => {
-    const rateValue = Number(recipe.rating.rateValue)
-    const rateCount = Number(recipe.rating.rateCount)
-
-    const formattedRating = formatRating(rateValue, rateCount)
-
-    return (
-      <View style={styles.footerItem}>
-        <MCIcons
-          style={styles.footerItemIcon}
-          name='star-outline'
-          size={24}
-          color={styleVars.primaryText}
-        />
-        <AppText size='mediumSmall'>
-          {formattedRating} {rateCount ? `(${rateCount})` : ''}
-        </AppText>
-      </View>
-    )
-  }
 
   return (
-    <TouchableOpacity activeOpacity={0.8} style={styles.container}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      style={styles.container}
+      onPress={() => navigation.navigate('Recipe', { _id: recipe._id })}
+    >
       <Image
         source={{ uri: recipe.recipeImage }}
         style={styles.recipeImage}
@@ -74,8 +50,8 @@ export default function RecipeThumbnail({ recipe }: RecipeThumbnailProps) {
         </View>
         {priceText()}
         <View style={styles.footerData}>
-          {totalTime()}
-          {rating()}
+          <TotalTimeElement totalTime={Number(recipe.totalTime)} />
+          <RatingElement rating={recipe.rating} />
         </View>
       </View>
     </TouchableOpacity>
@@ -97,7 +73,8 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 10,
-    height: 135,
+    paddingTop: 5,
+    height: 125,
   },
   textContainer: {
     flex: 1,
@@ -108,7 +85,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textTransform: 'capitalize',
-    marginBottom: 10,
+    marginBottom: 5,
     // textAlignVertical: 'middle',
     textAlign: 'center',
     alignItems: 'center',
@@ -119,17 +96,11 @@ const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
   },
+
   footerData: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    marginTop: 15,
-  },
-  footerItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  footerItemIcon: {
-    marginRight: 5,
+    marginTop: 10,
   },
 })

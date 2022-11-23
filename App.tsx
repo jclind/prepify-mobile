@@ -48,8 +48,8 @@ export default function App() {
   if (!isReady) return null
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View onLayout={onLayoutRootView} style={styles.container}>
+    <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
+      <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
         <NavigationContainer>
           <AppNavigator />
         </NavigationContainer>
