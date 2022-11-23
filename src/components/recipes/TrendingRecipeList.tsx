@@ -10,7 +10,7 @@ export default function TrendingRecipeList() {
   const { getTrendingRecipes } = RecipeAPI
 
   useEffect(() => {
-    getTrendingRecipes(2).then(res => {
+    getTrendingRecipes(6).then(res => {
       setRecipes(res.data)
     })
   }, [])

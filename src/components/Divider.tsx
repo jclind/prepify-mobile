@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import TextSmall from './text/TextSmall'
+import AppText from './text/AppText'
 import styleVars from '../config/styleVars'
 
 type DividerProps = {
@@ -11,7 +11,11 @@ export default function Divider({ text }: DividerProps) {
   return (
     <View style={styles.container}>
       <View style={styles.line} />
-      {text && <TextSmall style={styles.text}>{text}</TextSmall>}
+      {text && (
+        <AppText size='small' style={styles.text}>
+          {text}
+        </AppText>
+      )}
       <View style={styles.line} />
     </View>
   )

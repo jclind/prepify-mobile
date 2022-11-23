@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import TextSmall from '../text/TextSmall'
+import AppText from '../text/AppText'
 
 type ErrorMessageProps = {
   error: string
@@ -12,7 +12,11 @@ export default function ErrorMessage({ error, visible }: ErrorMessageProps) {
 
   if (!visible || !error) return null
 
-  return <TextSmall style={styles.error}>{error}</TextSmall>
+  return (
+    <AppText size='small' style={styles.error}>
+      {error}
+    </AppText>
+  )
 }
 
 const styles = StyleSheet.create({

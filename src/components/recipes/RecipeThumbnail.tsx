@@ -2,10 +2,8 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import RecipeType from '../../config/types/Recipe'
 import styleVars from '../../config/styleVars'
-import TextMedium from '../text/TextMedium'
-import TextSmall from '../text/TextSmall'
+import AppText from '../text/AppText'
 import { MCIcons } from '../../config/types/MCIcons'
-import TextMediumSmall from '../text/TextMediumSmall'
 import { formatRating } from '../../util/formatRating'
 
 type RecipeThumbnailProps = {
@@ -18,9 +16,10 @@ export default function RecipeThumbnail({ recipe }: RecipeThumbnailProps) {
     const numServings = Number(recipe.yield.value)
     const recipePrice = (servingPrice * numServings).toFixed(2)
     return (
-      <TextSmall
+      <AppText
+        size='small'
         style={styles.priceText}
-      >{`Serving: $${servingPrice} | Recipe: $${recipePrice}`}</TextSmall>
+      >{`Serving: $${servingPrice} | Recipe: $${recipePrice}`}</AppText>
     )
   }
   const totalTime = () => {
@@ -33,9 +32,9 @@ export default function RecipeThumbnail({ recipe }: RecipeThumbnailProps) {
           size={24}
           color={styleVars.primaryText}
         />
-        <TextMediumSmall>
+        <AppText size='mediumSmall'>
           {totalTime > 1 ? `${totalTime} mins` : `${totalTime} min`}
-        </TextMediumSmall>
+        </AppText>
       </View>
     )
   }
@@ -53,9 +52,9 @@ export default function RecipeThumbnail({ recipe }: RecipeThumbnailProps) {
           size={24}
           color={styleVars.primaryText}
         />
-        <TextMediumSmall>
+        <AppText size='mediumSmall'>
           {formattedRating} {rateCount ? `(${rateCount})` : ''}
-        </TextMediumSmall>
+        </AppText>
       </View>
     )
   }
@@ -69,7 +68,9 @@ export default function RecipeThumbnail({ recipe }: RecipeThumbnailProps) {
       />
       <View style={styles.content}>
         <View style={styles.textContainer}>
-          <TextMedium style={styles.title}>{recipe.title} More Text</TextMedium>
+          <AppText size='medium' style={styles.title} numberOfLines={2}>
+            {recipe.title}
+          </AppText>
         </View>
         {priceText()}
         <View style={styles.footerData}>
@@ -96,18 +97,20 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 10,
-    height: 125,
+    height: 135,
   },
   textContainer: {
     flex: 1,
     width: '100%',
+    // minHeight: 40,
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
     textTransform: 'capitalize',
     marginBottom: 10,
-    textAlignVertical: 'middle',
+    // textAlignVertical: 'middle',
+    textAlign: 'center',
     alignItems: 'center',
   },
   priceText: {

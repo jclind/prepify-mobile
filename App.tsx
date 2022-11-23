@@ -20,6 +20,7 @@ import Login from './src/screens/Auth/Login'
 import AuthNavigator from './src/navigation/AuthNavigator'
 import Home from './src/screens/App/Home'
 import AppNavigator from './src/navigation/AppNavigator'
+import AppText from './src/components/text/AppText'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -50,7 +51,6 @@ export default function App() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View onLayout={onLayoutRootView} style={styles.container}>
         <NavigationContainer>
-          {/* <AuthNavigator /> */}
           <AppNavigator />
         </NavigationContainer>
       </View>

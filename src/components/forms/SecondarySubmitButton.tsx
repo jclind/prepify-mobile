@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import TextSmall from '../text/TextSmall'
+import AppText from '../text/AppText'
 import styleVars from '../../config/styleVars'
 
 type SecondarySubmitButtonProps = {
@@ -14,7 +14,9 @@ export default function SecondarySubmitButton({
 }: SecondarySubmitButtonProps) {
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>
-      <TextSmall textColor={styleVars.secondaryText}>{text}</TextSmall>
+      <AppText size='small' textColor={styleVars.secondaryText}>
+        {text}
+      </AppText>
     </TouchableOpacity>
   )
 }
