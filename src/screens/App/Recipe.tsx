@@ -12,13 +12,12 @@ import { useRoute } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
 import RecipeAPI from '../../api/recipes'
 
-import Screen from '../../components/layout/Screen'
 import RecipeType from '../../config/types/Recipe'
 import AppText from '../../components/text/AppText'
-import { MCIcons } from '../../config/types/MCIcons'
 import styleVars from '../../config/styleVars'
 import TotalTimeElement from '../../components/recipes/TotalTimeElement'
 import RatingElement from '../../components/recipes/RatingElement'
+import RecipeInfoBox from '../../components/recipes/RecipeInfoBox'
 
 type ParamList = {
   Recipe: {
@@ -85,46 +84,24 @@ export default function Recipe() {
               {recipe.description}
             </AppText>
             <View style={styles.dataBoxContainer}>
-              <View style={styles.dataBox}>
-                <AppText
-                  style={styles.dataBoxTitle}
-                  size='small'
-                  textColor={styleVars.secondaryText}
-                >
-                  Servings
-                </AppText>
-                <AppText style={styles.dataBoxValue} size='medium'>
-                  {recipe.yield.value}
-                </AppText>
-              </View>
-              <View style={styles.dataBox}>
-                <AppText
-                  style={styles.dataBoxTitle}
-                  size='small'
-                  textColor={styleVars.secondaryText}
-                >
-                  Recipe Cost
-                </AppText>
-                <AppText style={styles.dataBoxValue} size='medium'>
-                  $
-                  {(
-                    Number(recipe.servingPrice) * Number(recipe.yield.value)
-                  ).toFixed(2)}
-                </AppText>
-              </View>
-              <View style={styles.dataBox}>
-                <AppText
-                  style={styles.dataBoxTitle}
-                  size='small'
-                  textColor={styleVars.secondaryText}
-                >
-                  Serving Cost
-                </AppText>
-                <AppText style={styles.dataBoxValue} size='medium'>
-                  ${Number(recipe.servingPrice).toFixed(2)}
-                </AppText>
-              </View>
+              <RecipeInfoBox label='Servings' value={recipe.yield.value} />
+              <RecipeInfoBox
+                label='Recipe Cost'
+                value={(
+                  Number(recipe.servingPrice) * Number(recipe.yield.value)
+                ).toFixed(2)}
+              />
+              <RecipeInfoBox
+                label='Serving Cost'
+                value={Number(recipe.servingPrice).toFixed(2)}
+              />
             </View>
+          </View>
+          <View style={styles.ingredientsContainer}>
+            <View style={styles.ingredientsContainerHeader}></View>
+            <AppText style={styles.ingredientsTitle} size='medium'>
+              Ingredients for
+            </AppText>
           </View>
         </View>
       </View>
@@ -189,7 +166,7 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   recipeDescription: {
-    paddingTop: 30,
+    paddingTop: 20,
   },
   dataBoxContainer: {
     flexDirection: 'row',
@@ -197,22 +174,11 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'space-between',
   },
-  dataBox: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 25,
-
-    borderWidth: 1,
-    borderColor: styleVars.inputBorderColor,
-    borderRadius: styleVars.borderRadius,
-    height: 110,
-    width: 110,
-  },
-  dataBoxTitle: {
-    position: 'absolute',
-    top: 15,
-  },
-  dataBoxValue: {
+  ingredientsContainer: {},
+  ingredientsTitle: {
     fontFamily: 'Montserrat_600SemiBold',
+  },
+  ingredientsContainerHeader: {
+    flexDirection: 'row',
   },
 })
