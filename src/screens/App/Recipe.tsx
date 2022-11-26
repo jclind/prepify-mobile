@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
@@ -18,6 +19,8 @@ import styleVars from '../../config/styleVars'
 import TotalTimeElement from '../../components/recipes/TotalTimeElement'
 import RatingElement from '../../components/recipes/RatingElement'
 import RecipeInfoBox from '../../components/recipes/RecipeInfoBox'
+import { MCIcons } from '../../config/types/MCIcons'
+import { number } from 'yup/lib/locale'
 
 type ParamList = {
   Recipe: {
@@ -27,6 +30,14 @@ type ParamList = {
 
 export default function Recipe() {
   const [recipe, setRecipe] = useState<RecipeType>()
+  const [servings, setServings] = useState<number | null>()
+
+  const decServings = () => {
+    if (servings > 1) setServings(prev => prev - 1)
+  }
+  const incServings = () => {
+    if (servings < 99) setServings(prev => prev + 1)
+  }
 
   const route = useRoute<RouteProp<ParamList, 'Recipe'>>()
   const { params } = route
@@ -34,7 +45,10 @@ export default function Recipe() {
 
   useEffect(() => {
     RecipeAPI.getRecipe(recipeID).then(res => {
-      if (res.data) return setRecipe(res.data)
+      if (res.data) {
+        setServings(Number(res.data?.yield?.value))
+        return setRecipe(res.data)
+      }
       // !ERROR
     })
   }, [])
@@ -84,12 +98,12 @@ export default function Recipe() {
               {recipe.description}
             </AppText>
             <View style={styles.dataBoxContainer}>
-              <RecipeInfoBox label='Servings' value={recipe.yield.value} />
+              <RecipeInfoBox label='Servings' value={servings} />
               <RecipeInfoBox
                 label='Recipe Cost'
-                value={(
-                  Number(recipe.servingPrice) * Number(recipe.yield.value)
-                ).toFixed(2)}
+                value={(Number(recipe.servingPrice) * Number(servings)).toFixed(
+                  2
+                )}
               />
               <RecipeInfoBox
                 label='Serving Cost'
@@ -98,10 +112,41 @@ export default function Recipe() {
             </View>
           </View>
           <View style={styles.ingredientsContainer}>
-            <View style={styles.ingredientsContainerHeader}></View>
-            <AppText style={styles.ingredientsTitle} size='medium'>
-              Ingredients for
-            </AppText>
+            <View style={styles.ingredientsContainerHeader}>
+              <View style={styles.left}>
+                <AppText style={styles.ingredientsTitle} size='medium'>
+                  Ingredients for
+                </AppText>
+                <AppText size='mediumSmall' textColor={styleVars.tertiaryText}>
+                  {`${recipe.yield.value} ${recipe.yield.type.value}`}
+                </AppText>
+              </View>
+              <View style={styles.right}>
+                <View style={styles.servingModContainer}>
+                  <TouchableOpacity
+                    style={styles.servingsMod}
+                    onPress={decServings}
+                  >
+                    <MCIcons
+                      name='minus'
+                      size={18}
+                      color={styleVars.primaryText}
+                    />
+                  </TouchableOpacity>
+                  <AppText size='medium'>{servings}</AppText>
+                  <TouchableOpacity
+                    style={styles.servingsMod}
+                    onPress={incServings}
+                  >
+                    <MCIcons
+                      name='plus'
+                      size={18}
+                      color={styleVars.primaryText}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
           </View>
         </View>
       </View>
@@ -177,8 +222,23 @@ const styles = StyleSheet.create({
   ingredientsContainer: {},
   ingredientsTitle: {
     fontFamily: 'Montserrat_600SemiBold',
+    paddingBottom: 5,
   },
   ingredientsContainerHeader: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  left: {},
+  right: {},
+  servingModContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: styleVars.secondaryBackground,
+
+    borderRadius: styleVars.borderRadius,
+  },
+  servingsMod: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
   },
 })

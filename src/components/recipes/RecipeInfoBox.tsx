@@ -5,7 +5,7 @@ import styleVars from '../../config/styleVars'
 
 type RecipeInfoBoxProps = {
   label: string
-  value: string
+  value: string | number
 }
 
 export default function RecipeInfoBox({ label, value }: RecipeInfoBoxProps) {

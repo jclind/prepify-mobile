@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import RecipeType from '../../config/types/Recipe'
 import styleVars from '../../config/styleVars'
 import AppText from '../text/AppText'
@@ -16,6 +16,8 @@ type RootStackParamList = {
 }
 
 export default function RecipeThumbnail({ recipe }: RecipeThumbnailProps) {
+  const [isImgLoaded, setIsImgLoaded] = useState(false)
+
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
@@ -37,11 +39,15 @@ export default function RecipeThumbnail({ recipe }: RecipeThumbnailProps) {
       style={styles.container}
       onPress={() => navigation.navigate('Recipe', { _id: recipe._id })}
     >
-      <Image
-        source={{ uri: recipe.recipeImage }}
-        style={styles.recipeImage}
-        resizeMode='cover'
-      />
+      <View style={styles.imageContainer}>
+        {!isImgLoaded && <View style={styles.imageLoadingPlaceholder} />}
+        <Image
+          source={{ uri: recipe.recipeImage }}
+          style={styles.recipeImage}
+          resizeMode='cover'
+          onLoad={() => setIsImgLoaded(true)}
+        />
+      </View>
       <View style={styles.content}>
         <View style={styles.textContainer}>
           <AppText size='medium' style={styles.title} numberOfLines={2}>
@@ -67,9 +73,17 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginRight: 20,
   },
+  imageContainer: {},
   recipeImage: {
     width: '100%',
     height: 200,
+  },
+  imageLoadingPlaceholder: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: styleVars.secondaryBackground,
+    zIndex: 1,
   },
   content: {
     padding: 10,
