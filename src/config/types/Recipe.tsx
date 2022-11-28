@@ -1,3 +1,28 @@
+export type InstructionType = {
+  quantity: string
+  id: string
+  measurement: {
+    value: string
+    label: string
+  }
+  name: string
+  price: string
+}
+export type IngredientType = {
+  quantity: string
+  id: string
+  measurement: {
+    value: string
+    label: string
+  }
+  name: string
+  price: string
+}
+export type IngredientsListType = {
+  name: string
+  list: IngredientType[]
+}
+
 type RecipeType = {
   _id: string
   title: string
@@ -16,27 +41,9 @@ type RecipeType = {
   description: string | null
   instructions: {
     name: string
-    list: {
-      context: string
-      index: {
-        [key: string]: string
-      }
-      id: string
-    }[]
+    list: InstructionType[]
   }[]
-  ingredients: {
-    name: string
-    list: {
-      quantity: string
-      id: string
-      measurement: {
-        value: string
-        label: string
-      }
-      name: string
-      price: string
-    }[]
-  }[]
+  ingredients: IngredientsListType[]
   recipeImage: string
   tags: string[]
   nutritionData: any

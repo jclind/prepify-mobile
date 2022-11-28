@@ -21,6 +21,7 @@ import RatingElement from '../../components/recipes/RatingElement'
 import RecipeInfoBox from '../../components/recipes/RecipeInfoBox'
 import { MCIcons } from '../../config/types/MCIcons'
 import { number } from 'yup/lib/locale'
+import Ingredients from '../../components/recipes/Ingredients'
 
 type ParamList = {
   Recipe: {
@@ -31,13 +32,6 @@ type ParamList = {
 export default function Recipe() {
   const [recipe, setRecipe] = useState<RecipeType>()
   const [servings, setServings] = useState<number | null>()
-
-  const decServings = () => {
-    if (servings > 1) setServings(prev => prev - 1)
-  }
-  const incServings = () => {
-    if (servings < 99) setServings(prev => prev + 1)
-  }
 
   const route = useRoute<RouteProp<ParamList, 'Recipe'>>()
   const { params } = route
@@ -111,43 +105,11 @@ export default function Recipe() {
               />
             </View>
           </View>
-          <View style={styles.ingredientsContainer}>
-            <View style={styles.ingredientsContainerHeader}>
-              <View style={styles.left}>
-                <AppText style={styles.ingredientsTitle} size='medium'>
-                  Ingredients for
-                </AppText>
-                <AppText size='mediumSmall' textColor={styleVars.tertiaryText}>
-                  {`${recipe.yield.value} ${recipe.yield.type.value}`}
-                </AppText>
-              </View>
-              <View style={styles.right}>
-                <View style={styles.servingModContainer}>
-                  <TouchableOpacity
-                    style={styles.servingsMod}
-                    onPress={decServings}
-                  >
-                    <MCIcons
-                      name='minus'
-                      size={18}
-                      color={styleVars.primaryText}
-                    />
-                  </TouchableOpacity>
-                  <AppText size='medium'>{servings}</AppText>
-                  <TouchableOpacity
-                    style={styles.servingsMod}
-                    onPress={incServings}
-                  >
-                    <MCIcons
-                      name='plus'
-                      size={18}
-                      color={styleVars.primaryText}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </View>
+          <Ingredients
+            servings={servings}
+            setServings={setServings}
+            recipe={recipe}
+          />
         </View>
       </View>
     </ScrollView>
@@ -218,27 +180,5 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     width: '100%',
     justifyContent: 'space-between',
-  },
-  ingredientsContainer: {},
-  ingredientsTitle: {
-    fontFamily: 'Montserrat_600SemiBold',
-    paddingBottom: 5,
-  },
-  ingredientsContainerHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  left: {},
-  right: {},
-  servingModContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: styleVars.secondaryBackground,
-
-    borderRadius: styleVars.borderRadius,
-  },
-  servingsMod: {
-    paddingVertical: 10,
-    paddingHorizontal: 15,
   },
 })
