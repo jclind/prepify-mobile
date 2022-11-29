@@ -23,12 +23,23 @@ import { MCIcons } from '../../config/types/MCIcons'
 import { number } from 'yup/lib/locale'
 import Ingredients from '../../components/recipes/Ingredients'
 import Directions from '../../components/recipes/Directions'
+import RecipeHeader from '../../components/recipes/RecipeHeader'
+import Animated, {
+  interpolate,
+  useSharedValue,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  runOnJS,
+} from 'react-native-reanimated'
 
 type ParamList = {
   Recipe: {
     _id: string
   }
 }
+
+const HEADER_HEIGHT = 80
+const { height } = Dimensions.get('window')
 
 export default function Recipe() {
   const [recipe, setRecipe] = useState<RecipeType>()
@@ -37,7 +48,6 @@ export default function Recipe() {
   const route = useRoute<RouteProp<ParamList, 'Recipe'>>()
   const { params } = route
   const recipeID = params._id
-
   useEffect(() => {
     RecipeAPI.getRecipe(recipeID).then(res => {
       if (res.data) {
@@ -48,73 +58,163 @@ export default function Recipe() {
     })
   }, [])
 
+  const scrollY = useSharedValue(0)
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: e => {
+      scrollY.value = e.contentOffset.y
+    },
+  })
+
+  const calcHexOpacity = (opacity: number): string => {
+    const hexOpacity = (opacity * 255).toString(16).split('.')[0]
+    const suffix = (hexOpacity.length === 1 ? 0 : '') + hexOpacity
+    return suffix
+  }
+
+  const containerStyles = useAnimatedStyle(() => {
+    // const scale = interpolate(scrollY.value, [0, 260], [1000, 100])
+    const backgroundOpacity = interpolate(
+      scrollY.value,
+      [0, 150, 300, height],
+      [0, 0, 1, 1]
+    )
+
+    const hexOpacity = (backgroundOpacity * 255).toString(16).split('.')[0]
+    const backgroundColor =
+      sv.primaryBackground + (hexOpacity.length === 1 ? 0 : '') + hexOpacity
+    return {
+      backgroundColor,
+    }
+  })
+  const iconContainerStyles = useAnimatedStyle(() => {
+    const iconBackgroundOpacity = interpolate(
+      scrollY.value,
+      [0, 200, 300, height],
+      [0.5, 0.5, 0, 0]
+    )
+
+    const hexOpacity = (iconBackgroundOpacity * 255).toString(16).split('.')[0]
+    const backgroundColor =
+      sv.black + (hexOpacity.length === 1 ? 0 : '') + hexOpacity
+    return {
+      backgroundColor,
+    }
+  })
+  const [textColor, setTextColor] = useState('black')
+  const test = val => {
+    setTextColor(val)
+  }
+  useAnimatedStyle(() => {
+    const iconBackgroundColor = interpolate(
+      scrollY.value,
+      [0, 150, 300, height],
+      [255, 255, 0, 0]
+    )
+
+    function hexToRgb(hex) {
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+      return result
+        ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16),
+          }
+        : null
+    }
+    const rgbPrimaryTextVals = hexToRgb(sv.primaryText)
+
+    const calcValue = rgbValue => {
+      return (255 / rgbValue) * iconBackgroundColor
+    }
+
+    // const hexOpacity = (iconBackgroundOpacity * 255).toString(16).split('.')[0]
+    // const color =
+    //   sv.primaryText + (hexOpacity.length === 1 ? 0 : '') + hexOpacity
+    const color = `rgb(${calcValue(rgbPrimaryTextVals.r)}, ${calcValue(
+      rgbPrimaryTextVals.g
+    )}, ${calcValue(rgbPrimaryTextVals.b)})`
+    runOnJS(test)(color)
+    return {
+      color,
+    }
+  })
+
+  // const headerY = interpolate(scrollY.value, [0, 80], [0, -80])
+
   if (!recipe) return null
 
   return (
-    <ScrollView>
-      <View style={styles.container} onStartShouldSetResponder={() => true}>
-        <View style={styles.imageContainer}>
-          <Image
-            source={{ uri: recipe.recipeImage }}
-            style={styles.image}
-            resizeMode='cover'
-          />
-          <LinearGradient
-            colors={['rgba(0,0,0,0.2)', 'transparent']}
-            style={styles.imageGradient}
-          />
-          <View style={styles.overlayData}>
-            <View style={styles.overlayDataItem}>
-              <AppText size='small' style={styles.overlayDataItemTitle}>
-                Total Time
-              </AppText>
-              <TotalTimeElement totalTime={Number(recipe.totalTime)} />
-            </View>
-            <View style={styles.divider} />
-            <View style={styles.overlayDataItem}>
-              <AppText size='small' style={styles.overlayDataItemTitle}>
-                Rating
-              </AppText>
-              <RatingElement rating={recipe.rating} />
-            </View>
-          </View>
-        </View>
-        <View style={styles.contentContainer}>
-          <View style={styles.headerContainer}>
-            <AppText style={styles.recipeTitle} size={'mediumLarge'}>
-              {recipe.title}
-            </AppText>
-            <AppText
-              style={styles.recipeDescription}
-              size={'mediumSmall'}
-              numberOfLines={9}
-              textColor={sv.secondaryText}
-            >
-              {recipe.description}
-            </AppText>
-            <View style={styles.dataBoxContainer}>
-              <RecipeInfoBox label='Servings' value={servings} />
-              <RecipeInfoBox
-                label='Recipe Cost'
-                value={(Number(recipe.servingPrice) * Number(servings)).toFixed(
-                  2
-                )}
-              />
-              <RecipeInfoBox
-                label='Serving Cost'
-                value={Number(recipe.servingPrice).toFixed(2)}
-              />
+    <View style={{ flex: 1 }}>
+      <RecipeHeader
+        containerStyles={containerStyles}
+        iconContainerStyles={iconContainerStyles}
+        textColor={textColor}
+      />
+      <Animated.ScrollView scrollEventThrottle={16} onScroll={scrollHandler}>
+        <View style={styles.container} onStartShouldSetResponder={() => true}>
+          <View style={styles.imageContainer}>
+            <Image
+              source={{ uri: recipe.recipeImage }}
+              style={styles.image}
+              resizeMode='cover'
+            />
+            <LinearGradient
+              colors={['rgba(0,0,0,0.2)', 'transparent']}
+              style={styles.imageGradient}
+            />
+            <View style={styles.overlayData}>
+              <View style={styles.overlayDataItem}>
+                <AppText size='small' style={styles.overlayDataItemTitle}>
+                  Total Time
+                </AppText>
+                <TotalTimeElement totalTime={Number(recipe.totalTime)} />
+              </View>
+              <View style={styles.divider} />
+              <View style={styles.overlayDataItem}>
+                <AppText size='small' style={styles.overlayDataItemTitle}>
+                  Rating
+                </AppText>
+                <RatingElement rating={recipe.rating} />
+              </View>
             </View>
           </View>
-          <Ingredients
-            servings={servings}
-            setServings={setServings}
-            recipe={recipe}
-          />
-          <Directions recipe={recipe} />
+          <View style={styles.contentContainer}>
+            <View style={styles.headerContainer}>
+              <AppText style={styles.recipeTitle} size={'mediumLarge'}>
+                {recipe.title}
+              </AppText>
+              <AppText
+                style={styles.recipeDescription}
+                size={'mediumSmall'}
+                numberOfLines={9}
+                textColor={sv.secondaryText}
+              >
+                {recipe.description}
+              </AppText>
+              <View style={styles.dataBoxContainer}>
+                <RecipeInfoBox label='Servings' value={servings} />
+                <RecipeInfoBox
+                  label='Recipe Cost'
+                  value={(
+                    Number(recipe.servingPrice) * Number(servings)
+                  ).toFixed(2)}
+                />
+                <RecipeInfoBox
+                  label='Serving Cost'
+                  value={Number(recipe.servingPrice).toFixed(2)}
+                />
+              </View>
+            </View>
+            <Ingredients
+              servings={servings}
+              setServings={setServings}
+              recipe={recipe}
+            />
+            <Directions recipe={recipe} />
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </Animated.ScrollView>
+    </View>
   )
 }
 

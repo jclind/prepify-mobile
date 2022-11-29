@@ -20,8 +20,14 @@ export default function IngredientItem({ ingredient }: IngredientItemProps) {
   const [isChecked, setIsChecked] = useState(false)
 
   return (
-    <TouchableOpacity onPress={() => setIsChecked(prev => !prev)}>
-      <View style={styles.ingredientItem}>
+    <TouchableWithoutFeedback onPress={() => setIsChecked(prev => !prev)}>
+      <View
+        style={
+          isChecked
+            ? [styles.ingredientItem, styles.checked]
+            : styles.ingredientItem
+        }
+      >
         <Checkbox
           style={styles.checkbox}
           value={isChecked}
@@ -37,7 +43,7 @@ export default function IngredientItem({ ingredient }: IngredientItemProps) {
           </AppText>
         </Text>
       </View>
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   )
 }
 
@@ -45,14 +51,17 @@ const styles = StyleSheet.create({
   ingredientItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: 35,
-    // maxWidth: '85%',
+    paddingBottom: 30,
+    marginVertical: 5,
   },
   checkbox: {
-    borderRadius: 8,
-    height: 25,
-    width: 25,
+    borderRadius: 5,
+    height: 22,
+    width: 22,
     marginRight: 15,
+  },
+  checked: {
+    opacity: 0.6,
   },
   textContainer: { flex: 1 },
   quantity: {

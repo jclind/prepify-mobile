@@ -9,8 +9,8 @@ export default {
   tertiaryBackground: '#d6d6d6',
   primaryBtnText: '#eeeeee',
   inputBorderColor: '#d6d6d6',
-  black: '#000',
-  white: '#fff',
+  black: '#000000',
+  white: '#ffffff',
   danger: '#ff5252',
 
   borderRadius: 10,

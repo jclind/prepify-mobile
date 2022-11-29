@@ -13,7 +13,6 @@ type DirectionsProps = {
 
 export default function Directions({ recipe }: DirectionsProps) {
   const renderDirectionsList = (instList: InstructionListType) => {
-    console.log(instList.list)
     return (
       <View style={recipeStyles.sectionList}>
         {instList.list.map(inst => {

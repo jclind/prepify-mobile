@@ -21,7 +21,6 @@ export default function Form({
   style,
   children,
 }: FormProps) {
-  console.log(initialValues)
   return (
     <Formik
       initialValues={initialValues}

@@ -1,9 +1,17 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native'
 import React, { useState } from 'react'
 import { InstructionType } from '../../config/types/Recipe'
 import AppText from '../text/AppText'
 import sv from '../../config/sv'
 import Checkbox from 'expo-checkbox'
+import recipeStyles from '../../config/recipeStyles'
+import { MCIcons } from '../../config/types/MCIcons'
 
 type DirectionItemProps = {
   direction: InstructionType
@@ -12,41 +20,47 @@ type DirectionItemProps = {
 export default function DirectionItem({ direction }: DirectionItemProps) {
   const [isChecked, setIsChecked] = useState(false)
   return (
-    <TouchableOpacity
-      onPress={() => setIsChecked(prev => !prev)}
-      activeOpacity={0.8}
-      style={isChecked ? [styles.container, styles.checked] : styles.container}
-    >
-      <Checkbox
-        style={styles.checkbox}
-        value={isChecked}
-        onValueChange={setIsChecked}
-        color={isChecked ? sv.primary : undefined}
-      />
-      <View>
+    <TouchableWithoutFeedback onPress={() => setIsChecked(prev => !prev)}>
+      <View
+        style={
+          isChecked ? [styles.container, styles.checked] : styles.container
+        }
+      >
         <AppText size='medium' style={styles.indexText}>
           Step {direction.index}
         </AppText>
         <AppText size='mediumSmall' style={styles.content} numberOfLines={10}>
           {direction.content.trim()}
         </AppText>
+
+        <Checkbox
+          style={styles.checkbox}
+          value={isChecked}
+          onValueChange={setIsChecked}
+          color={isChecked ? sv.primary : undefined}
+        />
       </View>
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flex: 1,
+    alignSelf: 'center',
+    maxWidth: '95%',
+    borderRadius: sv.borderRadius,
     marginBottom: 35,
-    maxWidth: '100%',
+    padding: 15,
+    backgroundColor: sv.secondaryBackground,
   },
   checkbox: {
-    borderRadius: 8,
-    height: 25,
-    width: 25,
-    marginRight: 15,
+    position: 'absolute',
+    top: 15,
+    right: 15,
+    borderRadius: 5,
+    height: 22,
+    width: 22,
   },
   checked: {
     opacity: 0.6,
