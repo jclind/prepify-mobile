@@ -7,10 +7,9 @@ import {
 } from 'react-native'
 import Checkbox from 'expo-checkbox'
 import React, { useState } from 'react'
-import { IngredientType } from '../../config/types/Recipe'
-import sv from '../../config/sv'
-import AppText from '../text/AppText'
-import recipes from '../../api/recipes'
+import { IngredientType } from '../../../config/types/Recipe'
+import sv from '../../../config/sv'
+import AppText from '../../text/AppText'
 
 type IngredientItemProps = {
   ingredient: IngredientType

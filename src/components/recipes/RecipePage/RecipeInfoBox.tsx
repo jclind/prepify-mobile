@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import AppText from '../text/AppText'
-import sv from '../../config/sv'
+import AppText from '../../text/AppText'
+import sv from '../../../config/sv'
 
 type RecipeInfoBoxProps = {
   label: string
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     borderRadius: sv.borderRadius,
     height: 100,
     width: 110,
+    marginHorizontal: 5,
   },
   dataBoxTitle: {
     position: 'absolute',

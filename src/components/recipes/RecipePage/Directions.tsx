@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import RecipeType, { InstructionListType } from '../../config/types/Recipe'
-import AppText from '../text/AppText'
-import recipeStyles from '../../config/recipeStyles'
+import RecipeType, { InstructionListType } from '../../../config/types/Recipe'
+import AppText from '../../text/AppText'
+import recipeStyles from '../../../config/recipeStyles'
 import SectionTitle from './SectionTitle'
 import SectionListTitle from './SectionListTitle'
 import DirectionItem from './DirectionItem'
@@ -37,6 +37,7 @@ export default function Directions({ recipe }: DirectionsProps) {
           )
         })}
       </View>
+      <View style={recipeStyles.horizontalDivider} />
     </View>
   )
 }

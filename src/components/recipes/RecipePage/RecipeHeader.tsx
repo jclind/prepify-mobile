@@ -1,9 +1,9 @@
 import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
-import sv from '../../config/sv'
+import sv from '../../../config/sv'
 import { useNavigation } from '@react-navigation/native'
 
-import { MCIcons } from '../../config/types/MCIcons'
+import { MCIcons } from '../../../config/types/MCIcons'
 import Animated, {
   interpolate,
   runOnJS,
@@ -28,10 +28,12 @@ export default function RecipeHeader({ scrollY }) {
     )
 
     const hexOpacity = (backgroundOpacity * 255).toString(16).split('.')[0]
-    const backgroundColor =
-      sv.primaryBackground + (hexOpacity.length === 1 ? 0 : '') + hexOpacity
+    const hexSuffix = (hexOpacity.length === 1 ? 0 : '') + hexOpacity
+    const backgroundColor = sv.primaryBackground + hexSuffix
+    const borderColor = sv.inputBorderColor + hexSuffix
     return {
       backgroundColor,
+      borderColor,
     }
   })
   const iconContainerStyles = useAnimatedStyle(() => {
@@ -116,6 +118,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingTop: 50,
     backgroundColor: 'rgba(0,0,0,0)',
+    borderBottomWidth: 1,
   },
   right: {
     flexDirection: 'row',

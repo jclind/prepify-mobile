@@ -6,12 +6,10 @@ import {
   View,
 } from 'react-native'
 import React, { useState } from 'react'
-import { InstructionType } from '../../config/types/Recipe'
-import AppText from '../text/AppText'
-import sv from '../../config/sv'
+import { InstructionType } from '../../../config/types/Recipe'
+import AppText from '../../text/AppText'
+import sv from '../../../config/sv'
 import Checkbox from 'expo-checkbox'
-import recipeStyles from '../../config/recipeStyles'
-import { MCIcons } from '../../config/types/MCIcons'
 
 type DirectionItemProps = {
   direction: InstructionType

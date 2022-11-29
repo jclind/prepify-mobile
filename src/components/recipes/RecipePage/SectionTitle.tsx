@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import AppText from '../text/AppText'
-import recipeStyles from '../../config/recipeStyles'
+import AppText from '../../text/AppText'
+import recipeStyles from '../../../config/recipeStyles'
 
 type SectionTitleProps = {
   children: string

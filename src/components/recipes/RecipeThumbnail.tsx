@@ -6,7 +6,7 @@ import AppText from '../text/AppText'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
 import TotalTimeElement from './TotalTimeElement'
-import RatingElement from './RatingElement'
+import RatingElement from './RecipePage/RatingElement'
 
 type RecipeThumbnailProps = {
   recipe: RecipeType

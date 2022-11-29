@@ -9,6 +9,7 @@ export default StyleSheet.create({
   },
   sectionContainer: {
     marginTop: 45,
+    paddingHorizontal: 15,
   },
   sectionTitle: {
     fontFamily: 'Montserrat_600SemiBold',

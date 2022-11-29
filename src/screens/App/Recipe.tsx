@@ -1,4 +1,10 @@
-import { Image, StyleSheet, View, ActivityIndicator } from 'react-native'
+import {
+  Image,
+  StyleSheet,
+  View,
+  ActivityIndicator,
+  ScrollView,
+} from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { RouteProp } from '@react-navigation/native'
 import { useRoute } from '@react-navigation/native'
@@ -9,15 +15,17 @@ import RecipeType from '../../config/types/Recipe'
 import AppText from '../../components/text/AppText'
 import sv from '../../config/sv'
 import TotalTimeElement from '../../components/recipes/TotalTimeElement'
-import RatingElement from '../../components/recipes/RatingElement'
-import RecipeInfoBox from '../../components/recipes/RecipeInfoBox'
-import Ingredients from '../../components/recipes/Ingredients'
-import Directions from '../../components/recipes/Directions'
-import RecipeHeader from '../../components/recipes/RecipeHeader'
+import RatingElement from '../../components/recipes/RecipePage/RatingElement'
+import RecipeInfoBox from '../../components/recipes/RecipePage/RecipeInfoBox'
+import Ingredients from '../../components/recipes/RecipePage/Ingredients'
+import Directions from '../../components/recipes/RecipePage/Directions'
+import RecipeHeader from '../../components/recipes/RecipePage/RecipeHeader'
 import Animated, {
   useSharedValue,
   useAnimatedScrollHandler,
 } from 'react-native-reanimated'
+import TagsList from '../../components/recipes/RecipePage/TagsList'
+import Ratings from '../../components/recipes/RecipePage/Ratings/Ratings'
 
 type ParamList = {
   Recipe: {
@@ -107,26 +115,45 @@ export default function Recipe() {
               >
                 {recipe.description}
               </AppText>
-              <View style={styles.dataBoxContainer}>
+            </View>
+            <ScrollView horizontal={true}>
+              <View
+                style={styles.dataBoxContainer}
+                onStartShouldSetResponder={() => true}
+              >
                 <RecipeInfoBox label='Servings' value={servings} />
                 <RecipeInfoBox
                   label='Recipe Cost'
-                  value={(
+                  value={`$${(
                     Number(recipe.servingPrice) * Number(servings)
-                  ).toFixed(2)}
+                  ).toFixed(2)}`}
                 />
                 <RecipeInfoBox
                   label='Serving Cost'
-                  value={Number(recipe.servingPrice).toFixed(2)}
+                  value={`$${Number(recipe.servingPrice).toFixed(2)}`}
                 />
+                {recipe.fridgeLife && (
+                  <RecipeInfoBox
+                    label='Fridge Life'
+                    value={`${recipe.fridgeLife} days`}
+                  />
+                )}
+                {recipe.freezerLife && (
+                  <RecipeInfoBox
+                    label='Freezer Life'
+                    value={`${recipe.freezerLife} days`}
+                  />
+                )}
               </View>
-            </View>
+            </ScrollView>
             <Ingredients
               servings={servings}
               setServings={setServings}
               recipe={recipe}
             />
             <Directions recipe={recipe} />
+            <TagsList tags={recipe.tags} />
+            <Ratings recipe={recipe} />
           </View>
         </View>
       </Animated.ScrollView>
@@ -162,7 +189,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   contentContainer: {
-    padding: 15,
+    paddingVertical: 15,
   },
   overlayData: {
     position: 'absolute',
@@ -195,6 +222,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     paddingTop: 40,
+    paddingHorizontal: 15,
   },
   recipeTitle: {
     textTransform: 'capitalize',
@@ -205,7 +233,8 @@ const styles = StyleSheet.create({
   dataBoxContainer: {
     flexDirection: 'row',
     paddingTop: 45,
+    paddingBottom: 5,
     width: '100%',
-    justifyContent: 'space-between',
+    paddingLeft: 10,
   },
 })

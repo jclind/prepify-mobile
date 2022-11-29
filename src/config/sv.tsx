@@ -13,6 +13,9 @@ export default {
   white: '#ffffff',
   danger: '#ff5252',
 
+  tagBackground: '#42f6ff78',
+  tagBorderColor: '#00adb57f',
+
   borderRadius: 10,
   lineHeight: 25,
 }

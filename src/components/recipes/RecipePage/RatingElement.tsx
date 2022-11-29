@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { formatRating } from '../../util/formatRating'
-import sv from '../../config/sv'
-import { MCIcons } from '../../config/types/MCIcons'
-import AppText from '../text/AppText'
+import { formatRating } from '../../../util/formatRating'
+import sv from '../../../config/sv'
+import { MCIcons } from '../../../config/types/MCIcons'
+import AppText from '../../text/AppText'
 
 type RatingElementProps = {
   rating: { rateValue: string; rateCount: string }
