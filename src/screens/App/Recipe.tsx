@@ -1,12 +1,4 @@
-import {
-  Dimensions,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { Image, StyleSheet, View, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { RouteProp } from '@react-navigation/native'
 import { useRoute } from '@react-navigation/native'
@@ -19,17 +11,12 @@ import sv from '../../config/sv'
 import TotalTimeElement from '../../components/recipes/TotalTimeElement'
 import RatingElement from '../../components/recipes/RatingElement'
 import RecipeInfoBox from '../../components/recipes/RecipeInfoBox'
-import { MCIcons } from '../../config/types/MCIcons'
-import { number } from 'yup/lib/locale'
 import Ingredients from '../../components/recipes/Ingredients'
 import Directions from '../../components/recipes/Directions'
 import RecipeHeader from '../../components/recipes/RecipeHeader'
 import Animated, {
-  interpolate,
   useSharedValue,
   useAnimatedScrollHandler,
-  useAnimatedStyle,
-  runOnJS,
 } from 'react-native-reanimated'
 
 type ParamList = {
@@ -38,12 +25,10 @@ type ParamList = {
   }
 }
 
-const HEADER_HEIGHT = 80
-const { height } = Dimensions.get('window')
-
 export default function Recipe() {
   const [recipe, setRecipe] = useState<RecipeType>()
   const [servings, setServings] = useState<number | null>()
+  const [isImageLoaded, setIsImageLoaded] = useState(false)
 
   const route = useRoute<RouteProp<ParamList, 'Recipe'>>()
   const { params } = route
@@ -65,91 +50,21 @@ export default function Recipe() {
     },
   })
 
-  const calcHexOpacity = (opacity: number): string => {
-    const hexOpacity = (opacity * 255).toString(16).split('.')[0]
-    const suffix = (hexOpacity.length === 1 ? 0 : '') + hexOpacity
-    return suffix
-  }
+  const renderLoadingIndication = () => (
+    <View style={styles.loadingContainer}>
+      <RecipeHeader scrollY={scrollY} />
+      <View style={styles.loadingIndicator}>
+        <ActivityIndicator size='large' color={sv.primary} />
+      </View>
+    </View>
+  )
 
-  const containerStyles = useAnimatedStyle(() => {
-    // const scale = interpolate(scrollY.value, [0, 260], [1000, 100])
-    const backgroundOpacity = interpolate(
-      scrollY.value,
-      [0, 150, 300, height],
-      [0, 0, 1, 1]
-    )
-
-    const hexOpacity = (backgroundOpacity * 255).toString(16).split('.')[0]
-    const backgroundColor =
-      sv.primaryBackground + (hexOpacity.length === 1 ? 0 : '') + hexOpacity
-    return {
-      backgroundColor,
-    }
-  })
-  const iconContainerStyles = useAnimatedStyle(() => {
-    const iconBackgroundOpacity = interpolate(
-      scrollY.value,
-      [0, 200, 300, height],
-      [0.5, 0.5, 0, 0]
-    )
-
-    const hexOpacity = (iconBackgroundOpacity * 255).toString(16).split('.')[0]
-    const backgroundColor =
-      sv.black + (hexOpacity.length === 1 ? 0 : '') + hexOpacity
-    return {
-      backgroundColor,
-    }
-  })
-  const [textColor, setTextColor] = useState('black')
-  const test = val => {
-    setTextColor(val)
-  }
-  useAnimatedStyle(() => {
-    const iconBackgroundColor = interpolate(
-      scrollY.value,
-      [0, 150, 300, height],
-      [255, 255, 0, 0]
-    )
-
-    function hexToRgb(hex) {
-      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-      return result
-        ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16),
-          }
-        : null
-    }
-    const rgbPrimaryTextVals = hexToRgb(sv.primaryText)
-
-    const calcValue = rgbValue => {
-      return (255 / rgbValue) * iconBackgroundColor
-    }
-
-    // const hexOpacity = (iconBackgroundOpacity * 255).toString(16).split('.')[0]
-    // const color =
-    //   sv.primaryText + (hexOpacity.length === 1 ? 0 : '') + hexOpacity
-    const color = `rgb(${calcValue(rgbPrimaryTextVals.r)}, ${calcValue(
-      rgbPrimaryTextVals.g
-    )}, ${calcValue(rgbPrimaryTextVals.b)})`
-    runOnJS(test)(color)
-    return {
-      color,
-    }
-  })
-
-  // const headerY = interpolate(scrollY.value, [0, 80], [0, -80])
-
-  if (!recipe) return null
+  if (!recipe) return renderLoadingIndication()
 
   return (
     <View style={{ flex: 1 }}>
-      <RecipeHeader
-        containerStyles={containerStyles}
-        iconContainerStyles={iconContainerStyles}
-        textColor={textColor}
-      />
+      {!isImageLoaded && renderLoadingIndication()}
+      <RecipeHeader scrollY={scrollY} />
       <Animated.ScrollView scrollEventThrottle={16} onScroll={scrollHandler}>
         <View style={styles.container} onStartShouldSetResponder={() => true}>
           <View style={styles.imageContainer}>
@@ -157,6 +72,7 @@ export default function Recipe() {
               source={{ uri: recipe.recipeImage }}
               style={styles.image}
               resizeMode='cover'
+              onLoad={() => setIsImageLoaded(true)}
             />
             <LinearGradient
               colors={['rgba(0,0,0,0.2)', 'transparent']}
@@ -217,9 +133,19 @@ export default function Recipe() {
     </View>
   )
 }
-
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  loadingContainer: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    backgroundColor: sv.primaryBackground,
+    flex: 1,
+    zIndex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingIndicator: {},
   imageContainer: {
     position: 'relative',
     width: '100%',
@@ -269,7 +195,6 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     paddingTop: 40,
-    // paddingVertical: 15,
   },
   recipeTitle: {
     textTransform: 'capitalize',

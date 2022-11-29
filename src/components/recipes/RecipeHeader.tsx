@@ -1,34 +1,101 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useState } from 'react'
 import sv from '../../config/sv'
 import { useNavigation } from '@react-navigation/native'
 
 import { MCIcons } from '../../config/types/MCIcons'
-import Animated from 'react-native-reanimated'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import Animated, {
+  interpolate,
+  runOnJS,
+  useAnimatedStyle,
+} from 'react-native-reanimated'
 
-export default function RecipeHeader({
-  containerStyles,
-  iconContainerStyles,
-  textColor,
-}) {
+const { height } = Dimensions.get('window')
+
+export default function RecipeHeader({ scrollY }) {
   const navigation = useNavigation()
+
+  const [textColor, setTextColor] = useState('black')
+  const handleTextColorChange = val => {
+    setTextColor(val)
+  }
+
+  const containerStyles = useAnimatedStyle(() => {
+    const backgroundOpacity = interpolate(
+      scrollY.value,
+      [0, 150, 300, height],
+      [0, 0, 1, 1]
+    )
+
+    const hexOpacity = (backgroundOpacity * 255).toString(16).split('.')[0]
+    const backgroundColor =
+      sv.primaryBackground + (hexOpacity.length === 1 ? 0 : '') + hexOpacity
+    return {
+      backgroundColor,
+    }
+  })
+  const iconContainerStyles = useAnimatedStyle(() => {
+    const iconBackgroundOpacity = interpolate(
+      scrollY.value,
+      [0, 200, 300, height],
+      [0.5, 0.5, 0, 0]
+    )
+
+    const hexOpacity = (iconBackgroundOpacity * 255).toString(16).split('.')[0]
+    const backgroundColor =
+      sv.black + (hexOpacity.length === 1 ? 0 : '') + hexOpacity
+    return {
+      backgroundColor,
+    }
+  })
+  useAnimatedStyle(() => {
+    const iconBackgroundColor = interpolate(
+      scrollY.value,
+      [0, 150, 300, height],
+      [255, 255, 0, 0]
+    )
+
+    function hexToRgb(hex) {
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+      return result
+        ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16),
+          }
+        : null
+    }
+    const rgbPrimaryTextVals = hexToRgb(sv.primaryText)
+
+    const calcValue = rgbValue => {
+      return (255 / rgbValue) * iconBackgroundColor
+    }
+    const color = `rgb(${calcValue(rgbPrimaryTextVals.r)}, ${calcValue(
+      rgbPrimaryTextVals.g
+    )}, ${calcValue(rgbPrimaryTextVals.b)})`
+    runOnJS(handleTextColorChange)(color)
+    return {
+      color,
+    }
+  })
+
   return (
     <Animated.View style={[styles.headerContainer, containerStyles]}>
       <Animated.View style={[styles.iconContainer, iconContainerStyles]}>
-        <MaterialCommunityIcons
-          name={'arrow-left'}
-          size={26}
-          color={textColor}
-          onPress={() => navigation.goBack()}
-        />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <MCIcons name={'arrow-left'} size={26} color={textColor} />
+        </TouchableOpacity>
       </Animated.View>
       <View style={styles.right}>
         <Animated.View style={[styles.iconContainer, iconContainerStyles]}>
-          <MCIcons name='bookmark-outline' size={26} color={textColor} />
+          <TouchableOpacity onPress={() => {}}>
+            <MCIcons name='bookmark-outline' size={26} color={textColor} />
+          </TouchableOpacity>
         </Animated.View>
         <Animated.View style={[styles.iconContainer, iconContainerStyles]}>
-          <MCIcons name='heart-outline' size={26} color={textColor} />
+          <TouchableOpacity onPress={() => {}}>
+            <MCIcons name='heart-outline' size={26} color={textColor} />
+          </TouchableOpacity>
         </Animated.View>
       </View>
     </Animated.View>
@@ -48,7 +115,6 @@ const styles = StyleSheet.create({
     height: 90,
     paddingHorizontal: 15,
     paddingTop: 50,
-    // backgroundColor: sv.primaryBackground,
     backgroundColor: 'rgba(0,0,0,0)',
   },
   right: {
