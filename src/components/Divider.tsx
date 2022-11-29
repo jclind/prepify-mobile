@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import AppText from './text/AppText'
-import styleVars from '../config/styleVars'
+import sv from '../config/sv'
 
 type DividerProps = {
   text?: string
@@ -29,11 +29,11 @@ const styles = StyleSheet.create({
   },
   text: {
     paddingHorizontal: 10,
-    color: styleVars.secondaryText,
+    color: sv.secondaryText,
   },
   line: {
     height: 1,
     flex: 1,
-    backgroundColor: styleVars.inputBorderColor,
+    backgroundColor: sv.inputBorderColor,
   },
 })

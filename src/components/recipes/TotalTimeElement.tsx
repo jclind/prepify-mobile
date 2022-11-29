@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { MCIcons } from '../../config/types/MCIcons'
-import styleVars from '../../config/styleVars'
+import sv from '../../config/sv'
 import AppText from '../text/AppText'
 
 type TotalTimeElementProps = {
@@ -21,7 +21,7 @@ export default function TotalTimeElement({
         style={[styles.icon, iconStyle]}
         name='timer-outline'
         size={24}
-        color={styleVars.primaryText}
+        color={sv.primaryText}
       />
       <AppText size='mediumSmall'>
         {totalTime > 1 ? `${totalTime} mins` : `${totalTime} min`}

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { formatRating } from '../../util/formatRating'
-import styleVars from '../../config/styleVars'
+import sv from '../../config/sv'
 import { MCIcons } from '../../config/types/MCIcons'
 import AppText from '../text/AppText'
 
@@ -27,7 +27,7 @@ export default function RatingElement({
         style={[styles.icon, iconStyle]}
         name='star-outline'
         size={24}
-        color={styleVars.primaryText}
+        color={sv.primaryText}
       />
       <AppText size='mediumSmall'>
         {formattedRating} {rateCount ? `(${rateCount})` : ''}

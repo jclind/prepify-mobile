@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import styleVars from './styleVars'
+import sv from './sv'
 
 export default StyleSheet.create({
   container: {
@@ -17,7 +17,7 @@ export default StyleSheet.create({
   },
   description: {
     marginTop: 15,
-    color: styleVars.tertiaryText,
+    color: sv.tertiaryText,
   },
   form: {
     width: '100%',
@@ -30,7 +30,7 @@ export default StyleSheet.create({
   divider: {
     height: 1,
     width: '100%',
-    backgroundColor: styleVars.inputBorderColor,
+    backgroundColor: sv.inputBorderColor,
     borderRadius: 25,
   },
   apiBtns: {

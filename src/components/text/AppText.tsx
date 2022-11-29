@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TextProps, View } from 'react-native'
 import React from 'react'
 import defaultStyles from '../../config/defaultStyles'
-import styleVars from '../../config/styleVars'
+import sv from '../../config/sv'
 
 const SIZES = {
   small: { fontSize: 14, fontFamily: 'Montserrat_400Regular' },
@@ -19,7 +19,6 @@ type AppTextProps = {
   style?: any
   size?: Size
   numberOfLines?: number
-  multiline?: boolean
 }
 
 export default function AppText({
@@ -28,7 +27,6 @@ export default function AppText({
   style,
   size = 'medium',
   numberOfLines = 1,
-  multiline,
 }: AppTextProps) {
   const selectedSizeStyles = SIZES[size]
 
@@ -38,9 +36,9 @@ export default function AppText({
         defaultStyles.text,
         styles.text,
         {
-          color: textColor || styleVars.primaryText,
+          color: textColor || sv.primaryText,
           ...selectedSizeStyles,
-          lineHeight: selectedSizeStyles.fontSize * 1.2,
+          lineHeight: selectedSizeStyles.fontSize * 1.7,
         },
         style,
       ]}
@@ -52,7 +50,5 @@ export default function AppText({
 }
 
 const styles = StyleSheet.create({
-  text: {
-    // height: '100%',
-  },
+  text: {},
 })

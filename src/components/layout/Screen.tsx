@@ -1,7 +1,7 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Constants from 'expo-constants'
-import styleVars from '../../config/styleVars'
+import sv from '../../config/sv'
 
 interface ScreenProps {
   children: React.ReactNode
@@ -19,7 +19,7 @@ export default function Screen({ children, style }: ScreenProps) {
 const styles = StyleSheet.create({
   screen: {
     paddingTop: Constants.statusBarHeight,
-    backgroundColor: styleVars.primaryBackground,
+    backgroundColor: sv.primaryBackground,
     flex: 1,
   },
   view: {

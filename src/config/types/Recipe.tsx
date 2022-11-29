@@ -1,12 +1,11 @@
 export type InstructionType = {
-  quantity: string
+  content: string
+  index: number
   id: string
-  measurement: {
-    value: string
-    label: string
-  }
+}
+export type InstructionListType = {
   name: string
-  price: string
+  list: InstructionType[]
 }
 export type IngredientType = {
   quantity: string
@@ -39,10 +38,7 @@ type RecipeType = {
   fridgeLife: string | null
   freezerLife: string | null
   description: string | null
-  instructions: {
-    name: string
-    list: InstructionType[]
-  }[]
+  instructions: InstructionListType[]
   ingredients: IngredientsListType[]
   recipeImage: string
   tags: string[]

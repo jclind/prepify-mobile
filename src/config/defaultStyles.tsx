@@ -1,9 +1,9 @@
-import styleVars from './styleVars'
+import sv from './sv'
 export default {
-  colors: styleVars,
+  colors: sv,
   text: {
     fontSize: 18,
-    color: styleVars.primaryText,
+    color: sv.primaryText,
     fontFamily: 'Montserrat_500Medium',
   },
 }

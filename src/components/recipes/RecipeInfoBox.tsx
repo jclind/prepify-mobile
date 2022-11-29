@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import AppText from '../text/AppText'
-import styleVars from '../../config/styleVars'
+import sv from '../../config/sv'
 
 type RecipeInfoBoxProps = {
   label: string
@@ -14,7 +14,7 @@ export default function RecipeInfoBox({ label, value }: RecipeInfoBoxProps) {
       <AppText
         style={styles.dataBoxTitle}
         size='small'
-        textColor={styleVars.secondaryText}
+        textColor={sv.secondaryText}
       >
         {label}
       </AppText>
@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
     paddingTop: 25,
 
     borderWidth: 1,
-    borderColor: styleVars.inputBorderColor,
-    borderRadius: styleVars.borderRadius,
+    borderColor: sv.inputBorderColor,
+    borderRadius: sv.borderRadius,
     height: 100,
     width: 110,
   },

@@ -8,7 +8,7 @@ import {
 import Checkbox from 'expo-checkbox'
 import React, { useState } from 'react'
 import { IngredientType } from '../../config/types/Recipe'
-import styleVars from '../../config/styleVars'
+import sv from '../../config/sv'
 import AppText from '../text/AppText'
 import recipes from '../../api/recipes'
 
@@ -26,7 +26,7 @@ export default function IngredientItem({ ingredient }: IngredientItemProps) {
           style={styles.checkbox}
           value={isChecked}
           onValueChange={setIsChecked}
-          color={isChecked ? styleVars.primary : undefined}
+          color={isChecked ? sv.primary : undefined}
         />
         <Text style={styles.textContainer} numberOfLines={3}>
           <AppText style={styles.quantity} size='mediumSmall'>{`${
@@ -35,10 +35,6 @@ export default function IngredientItem({ ingredient }: IngredientItemProps) {
           <AppText style={styles.ingrText} size='mediumSmall'>
             {ingredient.name}
           </AppText>
-          {/* <AppText style={styles.price} size={'small'}>
-          {' '}
-          (${ingredient.price})
-        </AppText> */}
         </Text>
       </View>
     </TouchableOpacity>
@@ -54,20 +50,20 @@ const styles = StyleSheet.create({
   },
   checkbox: {
     borderRadius: 8,
-    marginRight: 15,
     height: 25,
     width: 25,
+    marginRight: 15,
   },
   textContainer: { flex: 1 },
   quantity: {
     fontFamily: 'Montserrat_600SemiBold',
   },
   ingrText: {
-    color: styleVars.secondaryText,
+    color: sv.secondaryText,
     fontFamily: 'Montserrat_400Regular',
   },
   price: {
-    color: styleVars.primary,
+    color: sv.primary,
     fontFamily: 'Montserrat_500Medium',
   },
 })

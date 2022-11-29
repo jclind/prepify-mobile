@@ -1,6 +1,6 @@
 import { StyleSheet, TextInput, View, TextInputProps } from 'react-native'
 import React from 'react'
-import styleVars from '../config/styleVars'
+import sv from '../config/sv'
 import defaultStyles from '../config/defaultStyles'
 
 type AppTextInputProps = TextInputProps & {
@@ -32,7 +32,7 @@ export default function AppTextInput({
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: styleVars.inputBorderColor,
+    borderColor: sv.inputBorderColor,
     borderWidth: 1,
     borderRadius: 15,
     flexDirection: 'row',

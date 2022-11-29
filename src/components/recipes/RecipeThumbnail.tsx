@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import RecipeType from '../../config/types/Recipe'
-import styleVars from '../../config/styleVars'
+import sv from '../../config/sv'
 import AppText from '../text/AppText'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
@@ -67,9 +67,9 @@ export default function RecipeThumbnail({ recipe }: RecipeThumbnailProps) {
 const styles = StyleSheet.create({
   container: {
     width: 275,
-    borderColor: styleVars.inputBorderColor,
+    borderColor: sv.inputBorderColor,
     borderWidth: 1,
-    borderRadius: styleVars.borderRadius,
+    borderRadius: sv.borderRadius,
     overflow: 'hidden',
     marginRight: 20,
   },
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    backgroundColor: styleVars.secondaryBackground,
+    backgroundColor: sv.secondaryBackground,
     zIndex: 1,
   },
   content: {
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   priceText: {
-    color: styleVars.primary,
+    color: sv.primary,
     fontFamily: 'Montserrat_600SemiBold',
     width: '100%',
     textAlign: 'center',

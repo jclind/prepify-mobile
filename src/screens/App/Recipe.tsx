@@ -15,13 +15,14 @@ import RecipeAPI from '../../api/recipes'
 
 import RecipeType from '../../config/types/Recipe'
 import AppText from '../../components/text/AppText'
-import styleVars from '../../config/styleVars'
+import sv from '../../config/sv'
 import TotalTimeElement from '../../components/recipes/TotalTimeElement'
 import RatingElement from '../../components/recipes/RatingElement'
 import RecipeInfoBox from '../../components/recipes/RecipeInfoBox'
 import { MCIcons } from '../../config/types/MCIcons'
 import { number } from 'yup/lib/locale'
 import Ingredients from '../../components/recipes/Ingredients'
+import Directions from '../../components/recipes/Directions'
 
 type ParamList = {
   Recipe: {
@@ -87,7 +88,7 @@ export default function Recipe() {
               style={styles.recipeDescription}
               size={'mediumSmall'}
               numberOfLines={9}
-              textColor={styleVars.secondaryText}
+              textColor={sv.secondaryText}
             >
               {recipe.description}
             </AppText>
@@ -110,6 +111,7 @@ export default function Recipe() {
             setServings={setServings}
             recipe={recipe}
           />
+          <Directions recipe={recipe} />
         </View>
       </View>
     </ScrollView>
@@ -145,8 +147,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     bottom: -35,
     padding: 15,
-    borderRadius: styleVars.borderRadius,
-    backgroundColor: styleVars.primaryBackground,
+    borderRadius: sv.borderRadius,
+    backgroundColor: sv.primaryBackground,
     shadowColor: '#171717',
     shadowOffset: { width: -2, height: 4 },
     shadowOpacity: 0.2,
@@ -163,7 +165,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: 1,
     marginHorizontal: 15,
-    backgroundColor: styleVars.inputBorderColor,
+    backgroundColor: sv.inputBorderColor,
   },
   headerContainer: {
     paddingTop: 40,
@@ -177,7 +179,7 @@ const styles = StyleSheet.create({
   },
   dataBoxContainer: {
     flexDirection: 'row',
-    paddingVertical: 40,
+    paddingTop: 45,
     width: '100%',
     justifyContent: 'space-between',
   },

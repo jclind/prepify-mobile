@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import React from 'react'
-import styleVars from '../config/styleVars'
+import sv from '../config/sv'
 
 import { MCIcons } from '../config/types/MCIcons'
 import Account from '../screens/App/Account'
@@ -15,8 +15,8 @@ export default function AppNavigator() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: { backgroundColor: styleVars.primaryBackground },
-        tabBarActiveTintColor: styleVars.primary,
+        tabBarStyle: { backgroundColor: sv.primaryBackground },
+        tabBarActiveTintColor: sv.primary,
       }}
     >
       <Tab.Screen

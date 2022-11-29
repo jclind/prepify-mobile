@@ -14,4 +14,5 @@ export default {
   danger: '#ff5252',
 
   borderRadius: 10,
+  lineHeight: 25,
 }

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import defaultStyles from '../config/defaultStyles'
-import styleVars from '../config/styleVars'
+import sv from '../config/sv'
 
 interface ButtonProps {
   title: string
@@ -23,7 +23,7 @@ export default function Button({
       style={[
         styles.button,
         {
-          backgroundColor: backgroundColor || styleVars.primary,
+          backgroundColor: backgroundColor || sv.primary,
         },
         style,
       ]}
@@ -33,7 +33,7 @@ export default function Button({
         style={[
           defaultStyles.text,
           styles.text,
-          { color: textColor || styleVars.primaryBtnText },
+          { color: textColor || sv.primaryBtnText },
         ]}
       >
         {title}

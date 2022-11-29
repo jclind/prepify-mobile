@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Welcome from '../screens/Auth/Welcome'
 import Login from '../screens/Auth/Login'
 import Register from '../screens/Auth/Register'
-import styleVars from '../config/styleVars'
+import sv from '../config/sv'
 import { MCIcons } from '../config/types/MCIcons'
 import ForgotPassword from '../screens/Auth/ForgotPassword'
 
@@ -13,16 +13,16 @@ const Stack = createNativeStackNavigator()
 
 const formHeaderStyles = ({ navigation }) => ({
   headerStyle: {
-    backgroundColor: styleVars.primaryBackground,
+    backgroundColor: sv.primaryBackground,
   },
   headerShadowVisible: false,
-  headerTintColor: styleVars.primaryText,
+  headerTintColor: sv.primaryText,
   title: '',
   headerLeft: props => (
     <MCIcons
       name={'arrow-left'}
       size={28}
-      color={styleVars.secondaryText}
+      color={sv.secondaryText}
       onPress={() => navigation.goBack()}
     />
   ),

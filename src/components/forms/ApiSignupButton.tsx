@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import styleVars from '../../config/styleVars'
+import sv from '../../config/sv'
 import defaultStyles from '../../config/defaultStyles'
 import { MCProps, MCIcons } from '../../config/types/MCIcons'
 
@@ -18,7 +18,7 @@ export default function ApiSignupButton({
         name={iconName}
         size={28}
         style={styles.icon}
-        color={styleVars.primaryText}
+        color={sv.primaryText}
       />
       <Text style={[defaultStyles.text, styles.text]}>{text}</Text>
     </TouchableOpacity>
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     // paddingLeft: 30,
     borderWidth: 1,
     borderRadius: 20,
-    borderColor: styleVars.secondaryText,
+    borderColor: sv.secondaryText,
     marginBottom: 20,
   },
   icon: {
