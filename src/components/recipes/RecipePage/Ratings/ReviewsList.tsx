@@ -29,7 +29,5 @@ export default function ReviewsList({ recipe }: ReviewsListProps) {
 }
 
 const styles = StyleSheet.create({
-  reviewsList: {
-    marginTop: 25,
-  },
+  reviewsList: {},
 })

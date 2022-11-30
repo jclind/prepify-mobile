@@ -1,4 +1,4 @@
-import { Firestore } from '@firebase/firestore'
+import { doc, getDoc } from 'firebase/firestore'
 import { db } from './firebase'
 import { http, nutrition } from './http-common'
 
@@ -23,23 +23,14 @@ class RecipeAPI {
   getUsername = async userId => {
     const usernamesRef = doc(db, 'username', userId)
     const usernamesSnap = await getDoc(usernamesRef)
-    console.log(usernamesSnap)
 
-    // if (usernamesSnap.exists()) {
-    //   const currUsername = usernamesSnap.data().username
-    //   return currUsername
-    // } else {
-    //   navigate('/create-username')
-    //   return null
-    // }
+    if (usernamesSnap.exists()) {
+      const currUsername = usernamesSnap.data().username
+      return currUsername
+    } else {
+      return null
+    }
   }
 }
 
 export default new RecipeAPI()
-function doc(db: Firestore, arg1: string, userId: any) {
-  throw new Error('Function not implemented.')
-}
-
-function getDoc(usernamesRef: any) {
-  throw new Error('Function not implemented.')
-}

@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
   ratingsHeader: {
     alignSelf: 'center',
     flexDirection: 'row',
-    paddingTop: 10,
+    paddingTop: 20,
+    paddingBottom: 25,
   },
   ratingString: {
     flexDirection: 'row',
