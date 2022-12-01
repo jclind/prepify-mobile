@@ -1,4 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import React from 'react'
 import defaultStyles from '../config/defaultStyles'
 import sv from '../config/sv'
@@ -9,6 +15,7 @@ interface ButtonProps {
   textColor?: string
   style?: any
   onPress: () => void
+  loading?: boolean
 }
 
 export default function Button({
@@ -17,6 +24,7 @@ export default function Button({
   textColor,
   onPress,
   style,
+  loading,
 }: ButtonProps) {
   return (
     <TouchableOpacity
@@ -29,6 +37,7 @@ export default function Button({
       ]}
       onPress={onPress}
     >
+      {loading && <ActivityIndicator size='large' color={sv.primaryText} />}
       <Text
         style={[
           defaultStyles.text,

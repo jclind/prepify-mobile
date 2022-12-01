@@ -19,6 +19,7 @@ import SecondarySubmitButton from '../../components/forms/SecondarySubmitButton'
 import FormTitle from '../../components/forms/FormTitle'
 import FormDescription from '../../components/forms/FormDescription'
 import AuthAPI from '../../api/auth'
+import { useAuth } from '../../../Auth'
 
 interface LoginFormValues {
   [key: string]: string
@@ -38,6 +39,7 @@ const validationSchema = yup.object().shape({
 
 export default function Login({ navigation }) {
   const passwordRef = useRef<TextInput>(null)
+  const { isAuthStatusLoading, setIsAuthStatusLoading } = useAuth()
 
   const handleLogin = ({
     email,
@@ -46,7 +48,10 @@ export default function Login({ navigation }) {
     email: string
     password: string
   }) => {
-    AuthAPI.loginWithEmailAndPassword(email, password)
+    setIsAuthStatusLoading(true)
+    AuthAPI.loginWithEmailAndPassword(email, password).then(() => {
+      setIsAuthStatusLoading(false)
+    })
   }
 
   return (
@@ -78,7 +83,11 @@ export default function Login({ navigation }) {
           inputRef={passwordRef}
           secureTextEntry
         />
-        <SubmitButton title='Login' style={formStyles.submitBtn} />
+        <SubmitButton
+          title='Login'
+          style={formStyles.submitBtn}
+          loading={isAuthStatusLoading}
+        />
 
         <SecondarySubmitButton
           text={'Forgot Password?'}

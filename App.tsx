@@ -20,7 +20,6 @@ SplashScreen.preventAutoHideAsync()
 
 export default function App() {
   const [isReady, setIsReady] = useState<boolean>(false)
-  const [isAuthLoaded, setIsAuthLoaded] = useState<Boolean>(false)
 
   const [fontsLoaded] = useFonts({
     Montserrat_400Regular,
@@ -36,15 +35,14 @@ export default function App() {
     }
   }, [isReady])
 
-  useEffect(() => {
-    console.log(isAuthLoaded, fontsLoaded)
-    setIsReady(isAuthLoaded && fontsLoaded)
-  }, [isAuthLoaded, fontsLoaded])
+  // useEffect(() => {
+  //   setIsReady(isAuthLoaded && fontsLoaded)
+  // }, [isAuthLoaded, fontsLoaded])
 
   return (
     <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
       <View style={{ flex: 1 }}>
-        <Auth setIsAuthLoaded={setIsAuthLoaded} isReady={isReady} />
+        <Auth setIsReady={setIsReady} />
       </View>
     </TouchableWithoutFeedback>
   )

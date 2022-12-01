@@ -1,11 +1,17 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Screen from '../../components/layout/Screen'
+import Button from '../../components/Button'
+import AuthAPI from '../../api/auth'
 
 export default function Account() {
+  const handleLogout = () => {
+    AuthAPI.logout()
+  }
+
   return (
     <Screen>
-      <Text>Account</Text>
+      <Button title='Logout' onPress={handleLogout} />
     </Screen>
   )
 }
