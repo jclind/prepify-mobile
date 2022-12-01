@@ -63,16 +63,6 @@ export default function ReviewItem({ review }: ReviewItemProps) {
         >
           <MCIcons name='thumb-up-outline' size={18} color={sv.secondaryText} />
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => console.log('disliked')}
-          style={styles.likeBtn}
-        >
-          <MCIcons
-            name='thumb-down-outline'
-            size={18}
-            color={sv.secondaryText}
-          />
-        </TouchableOpacity>
       </View>
     </View>
   )
@@ -111,5 +101,5 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat_400Regular',
   },
   options: { flexDirection: 'row' },
-  likeBtn: { marginRight: 10 },
+  likeBtn: {},
 })

@@ -18,6 +18,7 @@ import Form from '../../components/forms/Form'
 import SecondarySubmitButton from '../../components/forms/SecondarySubmitButton'
 import FormTitle from '../../components/forms/FormTitle'
 import FormDescription from '../../components/forms/FormDescription'
+import AuthAPI from '../../api/auth'
 
 interface LoginFormValues {
   [key: string]: string
@@ -37,6 +38,17 @@ const validationSchema = yup.object().shape({
 
 export default function Login({ navigation }) {
   const passwordRef = useRef<TextInput>(null)
+
+  const handleLogin = ({
+    email,
+    password,
+  }: {
+    email: string
+    password: string
+  }) => {
+    AuthAPI.loginWithEmailAndPassword(email, password)
+  }
+
   return (
     <Screen style={formStyles.container}>
       <View style={formStyles.titleContainer}>
@@ -45,7 +57,7 @@ export default function Login({ navigation }) {
       </View>
       <Form
         initialValues={initialValues}
-        onSubmit={() => console.log('form submitted')}
+        onSubmit={handleLogin}
         validationSchema={validationSchema}
         style={formStyles.form}
       >

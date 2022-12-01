@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import TextMediumLarge from '../text/TextMediumLarge'
 import formStyles from '../../config/formStyles'
+import AppText from '../text/AppText'
 
 type FormTitleProps = {
   children: string
@@ -10,9 +10,9 @@ type FormTitleProps = {
 
 export default function FormTitle({ children, style }: FormTitleProps) {
   return (
-    <TextMediumLarge style={[formStyles.title, style]}>
+    <AppText size='mediumLarge' style={[formStyles.title, style]}>
       {children}
-    </TextMediumLarge>
+    </AppText>
   )
 }
 

@@ -7,6 +7,7 @@ type ReviewType = {
   reviewCreatedAt?: string
   reviewLastUpdated?: string
   reviewText?: string
+  likes: number
 }
 
 export default ReviewType

@@ -20,7 +20,10 @@ class RecipeAPI {
       `getReviews?userId=${userId}&recipeId=${recipeId}&page=${page}&reviewsPerPage=${reviewsPerPage}&filter=${filter}`
     )
   }
-  getUsername = async userId => {
+  async likeReview(reviewId: string, userId: string) {
+    return await http.get(`likeReview?reviewId=${reviewId}&userId=${userId}`)
+  }
+  async getUsername(userId: string) {
     const usernamesRef = doc(db, 'username', userId)
     const usernamesSnap = await getDoc(usernamesRef)
 

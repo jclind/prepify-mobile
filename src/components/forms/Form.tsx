@@ -9,7 +9,7 @@ interface StringMap {
 type FormProps = {
   initialValues: StringMap
   validationSchema: any
-  onSubmit: () => void
+  onSubmit: ({ email, password }: { email: string; password: string }) => void
   style?: any
   children: React.ReactNode
 }

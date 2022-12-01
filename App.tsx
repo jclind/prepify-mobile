@@ -5,7 +5,6 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
 import * as SplashScreen from 'expo-splash-screen'
 import {
   useFonts,
@@ -15,17 +14,13 @@ import {
   Montserrat_700Bold,
   Montserrat_800ExtraBold_Italic,
 } from '@expo-google-fonts/montserrat'
-import ForgotPassword from './src/screens/Auth/ForgotPassword'
-import Login from './src/screens/Auth/Login'
-import AuthNavigator from './src/navigation/AuthNavigator'
-import Home from './src/screens/App/Home'
-import AppNavigator from './src/navigation/AppNavigator'
-import AppText from './src/components/text/AppText'
+import Auth from './Auth'
 
 SplashScreen.preventAutoHideAsync()
 
 export default function App() {
   const [isReady, setIsReady] = useState<boolean>(false)
+  const [isAuthLoaded, setIsAuthLoaded] = useState<Boolean>(false)
 
   const [fontsLoaded] = useFonts({
     Montserrat_400Regular,
@@ -35,24 +30,21 @@ export default function App() {
     Montserrat_800ExtraBold_Italic,
   })
 
-  const onLayoutRootView = useCallback(async () => {
-    if (isReady && fontsLoaded) {
-      await SplashScreen.hideAsync()
+  useEffect(() => {
+    if (isReady) {
+      SplashScreen.hideAsync()
     }
   }, [isReady])
 
   useEffect(() => {
-    setIsReady(!!fontsLoaded)
-  }, [fontsLoaded])
-
-  if (!isReady) return null
+    console.log(isAuthLoaded, fontsLoaded)
+    setIsReady(isAuthLoaded && fontsLoaded)
+  }, [isAuthLoaded, fontsLoaded])
 
   return (
     <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
-      <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
-        <NavigationContainer>
-          <AppNavigator />
-        </NavigationContainer>
+      <View style={{ flex: 1 }}>
+        <Auth setIsAuthLoaded={setIsAuthLoaded} isReady={isReady} />
       </View>
     </TouchableWithoutFeedback>
   )
