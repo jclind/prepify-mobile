@@ -1,4 +1,11 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import {
+  Keyboard,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native'
 import React from 'react'
 import Constants from 'expo-constants'
 import sv from '../../config/sv'

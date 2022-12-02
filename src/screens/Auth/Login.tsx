@@ -1,8 +1,11 @@
 import {
+  Keyboard,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native'
 import React, { useRef } from 'react'
@@ -20,6 +23,7 @@ import FormTitle from '../../components/forms/FormTitle'
 import FormDescription from '../../components/forms/FormDescription'
 import AuthAPI from '../../api/auth'
 import { useAuth } from '../../contexts/AuthContext'
+import DismissKeyboard from '../../components/DismissKeyboard'
 
 interface LoginFormValues {
   [key: string]: string
@@ -50,56 +54,60 @@ export default function Login({ navigation }) {
   }) => {
     if (isAuthStatusLoading) return
     setIsAuthStatusLoading(true)
+    console.log('heh? 1')
     AuthAPI.loginWithEmailAndPassword(email, password).then(() => {
-      setIsAuthStatusLoading(false)
+      // setIsAuthStatusLoading(false)
+      console.log('heh? 2')
     })
   }
 
   return (
-    <Screen style={formStyles.container}>
-      <View style={formStyles.titleContainer}>
-        <FormTitle style={formStyles.title}>Login</FormTitle>
-        <FormDescription>Please sign in to continue.</FormDescription>
-      </View>
-      <Form
-        initialValues={initialValues}
-        onSubmit={handleLogin}
-        validationSchema={validationSchema}
-        style={formStyles.form}
-      >
-        <FormField
-          autoCapitalize='none'
-          autoCorrect={false}
-          name='email'
-          placeholder='Email'
-          textContentType='emailAddress'
-          keyboardType='email-address'
-          onSubmitEditing={() => passwordRef.current?.focus()}
-        />
-        <FormField
-          autoCapitalize='none'
-          autoCorrect={false}
-          name='password'
-          placeholder='Password'
-          inputRef={passwordRef}
-          secureTextEntry
-        />
-        <SubmitButton
-          title='Login'
-          style={formStyles.submitBtn}
-          loading={isAuthStatusLoading}
-        />
+    <DismissKeyboard>
+      <Screen style={formStyles.container}>
+        <View style={formStyles.titleContainer}>
+          <FormTitle style={formStyles.title}>Login</FormTitle>
+          <FormDescription>Please sign in to continue.</FormDescription>
+        </View>
+        <Form
+          initialValues={initialValues}
+          onSubmit={handleLogin}
+          validationSchema={validationSchema}
+          style={formStyles.form}
+        >
+          <FormField
+            autoCapitalize='none'
+            autoCorrect={false}
+            name='email'
+            placeholder='Email'
+            textContentType='emailAddress'
+            keyboardType='email-address'
+            onSubmitEditing={() => passwordRef.current?.focus()}
+          />
+          <FormField
+            autoCapitalize='none'
+            autoCorrect={false}
+            name='password'
+            placeholder='Password'
+            inputRef={passwordRef}
+            secureTextEntry
+          />
+          <SubmitButton
+            title='Login'
+            style={formStyles.submitBtn}
+            loading={isAuthStatusLoading}
+          />
 
-        <SecondarySubmitButton
-          text={'Forgot Password?'}
-          onPress={() => navigation.push('ForgotPassword')}
-        />
-      </Form>
-      <Divider text='or' />
-      <View style={formStyles.apiBtns}>
-        <ApiSignupButton iconName={'google'} text={'Continue with Google'} />
-        <ApiSignupButton iconName={'apple'} text={'Continue with Apple'} />
-      </View>
-    </Screen>
+          <SecondarySubmitButton
+            text={'Forgot Password?'}
+            onPress={() => navigation.push('ForgotPassword')}
+          />
+        </Form>
+        <Divider text='or' />
+        <View style={formStyles.apiBtns}>
+          <ApiSignupButton iconName={'google'} text={'Continue with Google'} />
+          <ApiSignupButton iconName={'apple'} text={'Continue with Apple'} />
+        </View>
+      </Screen>
+    </DismissKeyboard>
   )
 }

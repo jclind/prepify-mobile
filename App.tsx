@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import {
   Keyboard,
+  Pressable,
   StyleSheet,
   TouchableWithoutFeedback,
   View,
@@ -28,14 +29,21 @@ export default function App() {
   })
 
   return (
-    <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
-      <AuthProvider fontsLoaded={fontsLoaded}>
+    <AuthProvider fontsLoaded={fontsLoaded}>
+      <Pressable
+        style={{ flex: 1 }}
+        onPress={() => {
+          Keyboard.dismiss()
+        }}
+      >
         <View style={{ flex: 1 }}>
-          <Auth />
-          <ChooseNavigator />
+          <>
+            <Auth />
+            <ChooseNavigator />
+          </>
         </View>
-      </AuthProvider>
-    </TouchableWithoutFeedback>
+      </Pressable>
+    </AuthProvider>
   )
 }
 
