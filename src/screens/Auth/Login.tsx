@@ -19,7 +19,7 @@ import SecondarySubmitButton from '../../components/forms/SecondarySubmitButton'
 import FormTitle from '../../components/forms/FormTitle'
 import FormDescription from '../../components/forms/FormDescription'
 import AuthAPI from '../../api/auth'
-import { useAuth } from '../../../Auth'
+import { useAuth } from '../../contexts/AuthContext'
 
 interface LoginFormValues {
   [key: string]: string
@@ -48,6 +48,7 @@ export default function Login({ navigation }) {
     email: string
     password: string
   }) => {
+    if (isAuthStatusLoading) return
     setIsAuthStatusLoading(true)
     AuthAPI.loginWithEmailAndPassword(email, password).then(() => {
       setIsAuthStatusLoading(false)

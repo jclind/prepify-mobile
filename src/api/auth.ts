@@ -12,20 +12,23 @@ import {
   signOut,
 } from 'firebase/auth'
 import { db, auth } from './firebase'
+import { User as FirebaseUser } from 'firebase/auth'
 
 class AuthAPI {
-  private _user = null
+  // private _user: FirebaseUser | null = null
 
-  get user() {
-    return this._user
-  }
-  private set user(newUser) {
-    this._user = newUser
-  }
+  // get user() {
+  //   return this._user
+  // }
+  // private set user(newUser) {
+  //   console.log('why man?')
+  //   this._user = newUser
+  // }
 
   async loginWithEmailAndPassword(email: string, password: string) {
     signInWithEmailAndPassword(auth, email, password).then(userCredential => {
-      this.user = userCredential.user
+      // console.log('here?')
+      // this.user = userCredential.user
     })
   }
   async loginWithGoogle() {}

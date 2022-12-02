@@ -37,16 +37,18 @@ export default function Button({
       ]}
       onPress={onPress}
     >
-      {loading && <ActivityIndicator size='large' color={sv.primaryText} />}
-      <Text
-        style={[
-          defaultStyles.text,
-          styles.text,
-          { color: textColor || sv.primaryBtnText },
-        ]}
-      >
-        {title}
-      </Text>
+      {loading ? (
+        <ActivityIndicator size='small' color={sv.primaryBackground} />
+      ) : (
+        <Text
+          style={[
+            defaultStyles.text,
+            { color: textColor || sv.primaryBtnText },
+          ]}
+        >
+          {title}
+        </Text>
+      )}
     </TouchableOpacity>
   )
 }
@@ -58,8 +60,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 15,
     width: '100%',
-  },
-  text: {
-    // fontFamily: 'Montserrat_600SemiBold',
+    height: 52,
   },
 })
