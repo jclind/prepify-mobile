@@ -20,6 +20,8 @@ import formStyles from '../../config/formStyles'
 import Form from '../../components/forms/Form'
 import FormTitle from '../../components/forms/FormTitle'
 import FormDescription from '../../components/forms/FormDescription'
+import { useAuth } from '../../contexts/AuthContext'
+import AuthAPI from '../../api/auth'
 
 interface RegisterFormValues {
   [key: string]: string
@@ -43,6 +45,16 @@ export default function Register() {
   const emailRef = useRef<TextInput>(null)
   const passwordRef = useRef<TextInput>(null)
 
+  const { isAuthStatusLoading, setIsAuthStatusLoading } = useAuth()
+
+  const handleRegister = ({ username, email, password }) => {
+    setIsAuthStatusLoading(true)
+    AuthAPI.signupWithEmailAndPassword(username, email, password).then(() => {
+      console.log('hello?')
+      setIsAuthStatusLoading(false)
+    })
+  }
+
   return (
     <Screen style={formStyles.container}>
       <View style={formStyles.titleContainer}>
@@ -53,7 +65,7 @@ export default function Register() {
       </View>
       <Form
         initialValues={initialValues}
-        onSubmit={() => console.log('form submitted')}
+        onSubmit={handleRegister}
         validationSchema={validationSchema}
         style={formStyles.form}
       >
@@ -82,7 +94,11 @@ export default function Register() {
           inputRef={passwordRef}
           secureTextEntry
         />
-        <SubmitButton title='Create an Account' style={formStyles.submitBtn} />
+        <SubmitButton
+          title='Create an Account'
+          style={formStyles.submitBtn}
+          loading={isAuthStatusLoading}
+        />
       </Form>
       <Divider text='or' />
       <View style={formStyles.apiBtns}>

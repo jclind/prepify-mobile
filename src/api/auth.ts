@@ -38,10 +38,9 @@ class AuthAPI {
     const isAvailable = await this.checkUsernameAvailability(username)
     if (!isAvailable) throw new Error(`${username} has already been taken`)
 
-    createUserWithEmailAndPassword(auth, email, password).then(cred => {
-      const uid = cred.user.uid
-      this.setUsername(uid, username)
-    })
+    const cred = await createUserWithEmailAndPassword(auth, email, password)
+    const uid = cred.user.uid
+    await this.setUsername(uid, username)
   }
 
   async setUsername(uid, username) {

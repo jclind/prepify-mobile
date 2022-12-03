@@ -14,7 +14,6 @@ export default function ReviewsList({ recipe }: ReviewsListProps) {
 
   useEffect(() => {
     RecipeAPI.getRecipeReviews(null, recipe._id).then(res => {
-      console.log(res.data.reviews)
       setReviews(res.data.reviews)
     })
   }, [])

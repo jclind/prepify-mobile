@@ -54,10 +54,8 @@ export default function Login({ navigation }) {
   }) => {
     if (isAuthStatusLoading) return
     setIsAuthStatusLoading(true)
-    console.log('heh? 1')
     AuthAPI.loginWithEmailAndPassword(email, password).then(() => {
-      // setIsAuthStatusLoading(false)
-      console.log('heh? 2')
+      setIsAuthStatusLoading(false)
     })
   }
 
