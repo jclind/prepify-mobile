@@ -7,7 +7,7 @@ import {
   KeyboardAvoidingView,
   TextInput,
 } from 'react-native'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 
 import Screen from '../../components/layout/Screen'
 import sv from '../../config/sv'
@@ -22,6 +22,7 @@ import FormTitle from '../../components/forms/FormTitle'
 import FormDescription from '../../components/forms/FormDescription'
 import { useAuth } from '../../contexts/AuthContext'
 import AuthAPI from '../../api/auth'
+import ErrorMessage from '../../components/forms/ErrorMessage'
 
 interface RegisterFormValues {
   [key: string]: string
@@ -42,6 +43,8 @@ const validationSchema = yup.object().shape({
 })
 
 export default function Register() {
+  const [error, setError] = useState('')
+
   const emailRef = useRef<TextInput>(null)
   const passwordRef = useRef<TextInput>(null)
 
@@ -49,7 +52,12 @@ export default function Register() {
 
   const handleRegister = ({ username, email, password }) => {
     setIsAuthStatusLoading(true)
-    AuthAPI.signupWithEmailAndPassword(username, email, password).then(() => {
+    AuthAPI.signupWithEmailAndPassword(username, email, password).then(res => {
+      if (res.error) {
+        setError(`Error: ${res.error}`)
+      } else {
+        setError('')
+      }
       console.log('hello?')
       setIsAuthStatusLoading(false)
     })
@@ -69,6 +77,7 @@ export default function Register() {
         validationSchema={validationSchema}
         style={formStyles.form}
       >
+        <ErrorMessage error={error} visible={!!error} />
         <FormField
           autoCapitalize='none'
           autoCorrect={false}

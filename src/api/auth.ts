@@ -34,19 +34,32 @@ class AuthAPI {
   async loginWithGoogle() {}
   async loginWithApple() {}
 
-  async signupWithEmailAndPassword(username, email, password) {
+  async signupWithEmailAndPassword(
+    username,
+    email,
+    password
+  ): Promise<{
+    error: string
+  }> {
+    console.log(1)
     const isAvailable = await this.checkUsernameAvailability(username)
-    if (!isAvailable) throw new Error(`${username} has already been taken`)
-
+    if (!isAvailable) return { error: `${username} has already been taken` }
+    console.log(2)
     const cred = await createUserWithEmailAndPassword(auth, email, password)
+    console.log(cred)
     const uid = cred.user.uid
+    console.log(3)
     await this.setUsername(uid, username)
+    console.log(6)
+    return { error: '' }
   }
 
   async setUsername(uid, username) {
+    console.log(4)
     const usernameData = { username }
 
     const usernamesRef = doc(db, 'username', uid)
+    console.log(5)
     return await setDoc(usernamesRef, usernameData)
   }
   async checkUsernameAvailability(username) {
