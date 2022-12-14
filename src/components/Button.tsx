@@ -26,6 +26,12 @@ export default function Button({
   style,
   loading,
 }: ButtonProps) {
+  const handlePress = () => {
+    if (!loading) {
+      onPress()
+    }
+  }
+
   return (
     <TouchableOpacity
       style={[
@@ -35,7 +41,7 @@ export default function Button({
         },
         style,
       ]}
-      onPress={onPress}
+      onPress={handlePress}
     >
       {loading ? (
         <ActivityIndicator size='small' color={sv.primaryBackground} />
