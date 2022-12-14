@@ -8,6 +8,7 @@ import {
 } from 'firebase/firestore'
 import {
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
 } from 'firebase/auth'
@@ -77,7 +78,12 @@ class AuthAPI {
     signOut(auth)
   }
 
-  async forgotPassword() {}
+  async forgotPassword(email) {
+    sendPasswordResetEmail(auth, email).catch(error => {
+      return { error }
+    })
+    return { error: '' }
+  }
 }
 
 export default new AuthAPI()

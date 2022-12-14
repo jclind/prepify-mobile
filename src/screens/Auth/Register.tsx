@@ -67,7 +67,7 @@ export default function Register() {
     <Screen style={formStyles.container}>
       <View style={formStyles.titleContainer}>
         <FormTitle style={formStyles.title}>Create Account</FormTitle>
-        <FormDescription>
+        <FormDescription numberOfLines={2}>
           Please enter your information below to create a new account.
         </FormDescription>
       </View>
