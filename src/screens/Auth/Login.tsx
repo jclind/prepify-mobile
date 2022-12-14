@@ -8,7 +8,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import * as yup from 'yup'
 
 import Screen from '../../components/layout/Screen'
@@ -24,6 +24,7 @@ import FormDescription from '../../components/forms/FormDescription'
 import AuthAPI from '../../api/auth'
 import { useAuth } from '../../contexts/AuthContext'
 import DismissKeyboard from '../../components/DismissKeyboard'
+import ErrorMessage from '../../components/forms/ErrorMessage'
 
 interface LoginFormValues {
   [key: string]: string
@@ -42,21 +43,30 @@ const validationSchema = yup.object().shape({
 })
 
 export default function Login({ navigation }) {
+  const [error, setError] = useState('')
   const passwordRef = useRef<TextInput>(null)
   const { isAuthStatusLoading, setIsAuthStatusLoading } = useAuth()
 
-  const handleLogin = ({
+  const handleLogin = async ({
     email,
     password,
   }: {
     email: string
     password: string
   }) => {
+    setError('')
     if (isAuthStatusLoading) return
     setIsAuthStatusLoading(true)
-    AuthAPI.loginWithEmailAndPassword(email, password).then(() => {
-      setIsAuthStatusLoading(false)
-    })
+    await AuthAPI.loginWithEmailAndPassword(email, password)
+      .then(res => {
+        if (res.error) {
+          setError(res.error)
+        }
+      })
+      .catch(error => {
+        console.log('heh??', error)
+      })
+    setIsAuthStatusLoading(false)
   }
 
   return (
@@ -72,6 +82,7 @@ export default function Login({ navigation }) {
           validationSchema={validationSchema}
           style={formStyles.form}
         >
+          <ErrorMessage error={error} visible={!!error} />
           <FormField
             autoCapitalize='none'
             autoCorrect={false}

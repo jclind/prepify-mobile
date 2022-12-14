@@ -27,10 +27,12 @@ class AuthAPI {
   // }
 
   async loginWithEmailAndPassword(email: string, password: string) {
-    signInWithEmailAndPassword(auth, email, password).then(userCredential => {
-      // console.log('here?')
-      // this.user = userCredential.user
-    })
+    try {
+      await signInWithEmailAndPassword(auth, email, password)
+      return { error: '' }
+    } catch (error) {
+      return { error }
+    }
   }
   async loginWithGoogle() {}
   async loginWithApple() {}
@@ -42,10 +44,8 @@ class AuthAPI {
   ): Promise<{
     error: string
   }> {
-    console.log(1)
     const isAvailable = await this.checkUsernameAvailability(username)
     if (!isAvailable) return { error: `${username} has already been taken` }
-    console.log(2)
     try {
       const cred = await createUserWithEmailAndPassword(auth, email, password)
       const uid = cred.user.uid

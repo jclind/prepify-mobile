@@ -27,7 +27,8 @@ export default function ForgotPasswordSuccess({
         </FormDescription>
       </View>
       <Button
-        title='Login'
+        title='Back To 
+        Login'
         onPress={() => navigation.goBack()}
         style={styles.loginBtn}
       />

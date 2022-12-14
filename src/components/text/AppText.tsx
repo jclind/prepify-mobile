@@ -7,7 +7,7 @@ const SIZES = {
   small: { fontSize: 14, fontFamily: 'Montserrat_400Regular' },
   mediumSmall: { fontSize: 16, fontFamily: 'Montserrat_500Medium' },
   medium: { fontSize: 18, fontFamily: 'Montserrat_500Medium' },
-  mediumLarge: { fontSize: 24, fontFamily: 'Montserrat_600SemiBold' },
+  mediumLarge: { fontSize: 22, fontFamily: 'Montserrat_600SemiBold' },
   large: { fontSize: 32, fontFamily: 'Montserrat_600SemiBold' },
 }
 
@@ -38,7 +38,8 @@ export default function AppText({
         {
           color: textColor || sv.primaryText,
           ...selectedSizeStyles,
-          lineHeight: selectedSizeStyles.fontSize * 1.7,
+          lineHeight:
+            numberOfLines > 1 ? selectedSizeStyles.fontSize * 1.7 : 'default',
         },
         style,
       ]}
