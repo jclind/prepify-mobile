@@ -57,5 +57,6 @@ const styles = StyleSheet.create({
   },
   chevronRight: {
     color: sv.tertiaryText,
+    paddingRight: 5,
   },
 })

@@ -7,6 +7,8 @@ import Account from '../screens/App/Account'
 import Home from '../screens/App/Home'
 import Search from '../screens/App/Search'
 import HomeNavigator from './HomeNavigator'
+import * as Haptics from 'expo-haptics'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 const Tab = createBottomTabNavigator()
 
@@ -22,6 +24,11 @@ export default function AppNavigator() {
       <Tab.Screen
         name='Feed'
         component={HomeNavigator}
+        listeners={{
+          tabPress: () => {
+            Haptics.selectionAsync()
+          },
+        }}
         options={{
           tabBarIcon: ({ size, color }) => (
             <MCIcons name='home' size={size} color={color} />
@@ -32,6 +39,11 @@ export default function AppNavigator() {
       <Tab.Screen
         name='Search'
         component={Search}
+        listeners={{
+          tabPress: () => {
+            Haptics.selectionAsync()
+          },
+        }}
         options={{
           tabBarIcon: ({ size, color }) => (
             <MCIcons name='magnify' size={size} color={color} />
@@ -41,6 +53,11 @@ export default function AppNavigator() {
       <Tab.Screen
         name='Account'
         component={Account}
+        listeners={{
+          tabPress: () => {
+            Haptics.selectionAsync()
+          },
+        }}
         options={{
           tabBarIcon: ({ size, color }) => (
             <MCIcons name='account' size={size} color={color} />

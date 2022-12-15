@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Keyboard,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -30,6 +31,7 @@ export default function Button({
     if (!loading) {
       onPress()
     }
+    Keyboard.dismiss()
   }
 
   return (
