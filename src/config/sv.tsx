@@ -13,8 +13,10 @@ export default {
   white: '#ffffff',
   danger: '#ff5252',
 
-  tagBackground: '#42f6ff78',
-  tagBorderColor: '#00adb57f',
+  // tagBackground: '#42f6ff78',
+  // tagBorderColor: '#00adb57f',
+  tagBackground: '#4D90FE',
+  tagBorderColor: '#4D90FE',
 
   borderRadius: 10,
   lineHeight: 25,

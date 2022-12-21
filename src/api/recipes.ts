@@ -37,6 +37,27 @@ class RecipeAPI {
   async getRecipeTags(limit = 5) {
     return await http.get(`getRecipeTags?limit=${limit}`)
   }
+
+  async searchAutoComplete(title = '', tags) {
+    let titleParam = ''
+    if (title) {
+      titleParam = `title=${title}`
+    }
+    let tagsParam = ''
+    if (tags.length > 0) {
+      tagsParam += '&selectedTags='
+      tags.forEach((tag, idx) => {
+        if (idx === tags.length - 1) {
+          tagsParam += `${tag}`
+        } else {
+          tagsParam += `${tag},`
+        }
+      })
+    }
+    console.log(tagsParam)
+
+    return await http.get(`searchAutoCompleteRecipes?${titleParam}${tagsParam}`)
+  }
 }
 
 export default new RecipeAPI()

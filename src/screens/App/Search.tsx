@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,11 +13,23 @@ import sv from '../../config/sv'
 import { MCIcons } from '../../config/types/MCIcons'
 import RecipeAPI from '../../api/recipes'
 import AppText from '../../components/text/AppText'
+import * as Haptics from 'expo-haptics'
+import RecipeThumbnail from '../../components/recipes/RecipeThumbnail'
 
 export default function Search() {
+  const [recommendedRecipes, setRecommendedRecipe] = useState([])
+  const [searchLoading, setSearchLoading] = useState(true)
   const [searchText, setSearchText] = useState('')
 
   const [tags, setTags] = useState([])
+  const [selectedTags, setSelectedTags] = useState([])
+
+  const toggleSelectedTag = (arr, tag) => {
+    if (arr.includes(tag)) {
+      return arr.filter(i => i !== tag)
+    }
+    return [...arr, tag]
+  }
 
   useEffect(() => {
     RecipeAPI.getRecipeTags().then(res => {
@@ -24,36 +37,78 @@ export default function Search() {
     })
   }, [])
 
+  useEffect(() => {
+    setSearchLoading(true)
+    RecipeAPI.searchAutoComplete(searchText, selectedTags).then(res => {
+      setRecommendedRecipe(res.data)
+      setSearchLoading(false)
+    })
+  }, [searchText, selectedTags])
+
   return (
-    <View style={styles.container}>
-      <PageTitle style={styles.pageTitle}>Search</PageTitle>
-      <View style={styles.searchInputContainer}>
-        <MCIcons name='magnify' size={28} style={styles.searchIcon} />
-        <TextInput
-          value={searchText}
-          onChangeText={text => setSearchText(text)}
-          style={styles.searchInput}
-          placeholder='Search'
-        />
-      </View>
-      <ScrollView
-        horizontal={true}
-        style={styles.tagScrollView}
-        showsHorizontalScrollIndicator={false}
-      >
-        <View style={styles.tagsContainer}>
-          {tags.map(tag => {
-            return (
-              <TouchableOpacity style={styles.tagButton}>
-                <AppText size='mediumSmall' style={styles.tagText}>
-                  {tag.text}
-                </AppText>
-              </TouchableOpacity>
-            )
-          })}
+    <ScrollView>
+      <View style={styles.container}>
+        <PageTitle style={styles.pageTitle}>Search</PageTitle>
+        <View style={styles.searchInputContainer}>
+          <MCIcons name='magnify' size={28} style={styles.searchIcon} />
+          <TextInput
+            value={searchText}
+            onChangeText={text => setSearchText(text)}
+            style={styles.searchInput}
+            placeholder='Search'
+          />
         </View>
-      </ScrollView>
-    </View>
+        <ScrollView
+          horizontal={true}
+          style={styles.tagScrollView}
+          showsHorizontalScrollIndicator={false}
+        >
+          <View style={styles.tagsContainer}>
+            {tags.map(tag => {
+              const isSelected = selectedTags.includes(tag.text)
+              return (
+                <TouchableOpacity
+                  activeOpacity={1}
+                  key={tag.text}
+                  onPress={() => {
+                    Haptics.selectionAsync()
+                    setSelectedTags(toggleSelectedTag(selectedTags, tag.text))
+                  }}
+                >
+                  <View
+                    style={
+                      isSelected
+                        ? [styles.tagButton, styles.selectedTagContainer]
+                        : [styles.tagButton]
+                    }
+                  >
+                    <AppText
+                      size='mediumSmall'
+                      style={
+                        isSelected
+                          ? [styles.tagText, styles.selectedTag]
+                          : [styles.tagText]
+                      }
+                    >
+                      {tag.text}
+                    </AppText>
+                  </View>
+                </TouchableOpacity>
+              )
+            })}
+          </View>
+        </ScrollView>
+        {searchLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <View style={styles.recommendedRecipes}>
+            {recommendedRecipes.map(r => {
+              return <RecipeThumbnail recipe={r} key={r._id} />
+            })}
+          </View>
+        )}
+      </View>
+    </ScrollView>
   )
 }
 
@@ -109,4 +164,13 @@ const styles = StyleSheet.create({
   tagText: {
     textTransform: 'capitalize',
   },
+  selectedTagContainer: {
+    backgroundColor: sv.secondary,
+    borderColor: sv.secondary,
+  },
+  selectedTag: {
+    color: sv.primaryBackground,
+  },
+
+  recommendedRecipes: {},
 })

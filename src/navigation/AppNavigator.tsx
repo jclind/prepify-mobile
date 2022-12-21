@@ -9,6 +9,7 @@ import Search from '../screens/App/Search'
 import HomeNavigator from './HomeNavigator'
 import * as Haptics from 'expo-haptics'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import AddRecipe from '../screens/App/AddRecipe'
 
 const Tab = createBottomTabNavigator()
 
@@ -53,6 +54,20 @@ export default function AppNavigator() {
       <Tab.Screen
         name='Account'
         component={Account}
+        listeners={{
+          tabPress: () => {
+            Haptics.selectionAsync()
+          },
+        }}
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <MCIcons name='account' size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name='Add Recipe'
+        component={AddRecipe}
         listeners={{
           tabPress: () => {
             Haptics.selectionAsync()

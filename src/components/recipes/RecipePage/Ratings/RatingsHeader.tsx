@@ -15,26 +15,33 @@ export default function RatingsHeader({
 }: RatingsHeaderProps) {
   return (
     <View style={styles.ratingsHeader}>
-      <View style={styles.ratingString}>
-        <AppText size='mediumLarge' style={styles.ratingAverage}>
-          {averageRating}
-        </AppText>
-        <AppText size='medium' style={styles.ratingCount}>
-          ({rateCount})
-        </AppText>
-      </View>
-      <View style={styles.verticalDivider} />
-      <Rating
-        type='custom'
-        ratingCount={5}
-        ratingBackgroundColor={sv.tertiaryBackground}
-        ratingColor={sv.primary}
-        tintColor={sv.primaryBackground}
-        fractions={1}
-        startingValue={averageRating}
-        style={styles.ratingStars}
-        imageSize={25}
-      />
+      {averageRating > 0 ? (
+        <>
+          <View style={styles.ratingString}>
+            <AppText size='mediumLarge' style={styles.ratingAverage}>
+              {averageRating}
+            </AppText>
+            <AppText size='medium' style={styles.ratingCount}>
+              ({rateCount})
+            </AppText>
+          </View>
+          <View style={styles.verticalDivider} />
+
+          <Rating
+            type='custom'
+            ratingCount={5}
+            ratingBackgroundColor={sv.tertiaryBackground}
+            ratingColor={sv.primary}
+            tintColor={sv.primaryBackground}
+            fractions={1}
+            startingValue={averageRating}
+            style={styles.ratingStars}
+            imageSize={25}
+          />
+        </>
+      ) : (
+        <AppText size='mediumLarge'>No Ratings</AppText>
+      )}
     </View>
   )
 }

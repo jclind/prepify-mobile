@@ -13,7 +13,9 @@ type RatingsProps = {
 
 export default function Ratings({ recipe }: RatingsProps) {
   const averageRating =
-    Number(recipe.rating.rateValue) / Number(recipe.rating.rateCount)
+    Number(recipe.rating.rateCount) > 0
+      ? Number(recipe.rating.rateValue) / Number(recipe.rating.rateCount)
+      : 0
 
   return (
     <View style={recipeStyles.sectionContainer}>
