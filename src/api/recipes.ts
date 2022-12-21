@@ -34,6 +34,9 @@ class RecipeAPI {
       return null
     }
   }
+  async getRecipeTags(limit = 5) {
+    return await http.get(`getRecipeTags?limit=${limit}`)
+  }
 }
 
 export default new RecipeAPI()

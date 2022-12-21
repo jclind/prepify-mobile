@@ -42,7 +42,7 @@ export default function SettingsListItem({
       <AppText size='mediumSmall' style={styles.title}>
         {title}
       </AppText>
-      <MCIcons name='chevron-right' size={28} style={styles.chevronRight} />
+      <MCIcons name='chevron-right' size={26} style={styles.chevronRight} />
     </TouchableOpacity>
   )
 }

@@ -9,6 +9,7 @@ import FormTitle from '../../components/forms/FormTitle'
 import SettingsListItem from '../../components/account/SettingsListItem'
 import AppText from '../../components/text/AppText'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
+import PageTitle from '../../components/PageTitle'
 
 type SectionItem = {
   title: string
@@ -17,6 +18,13 @@ type SectionItem = {
 }
 
 const accountLinkLayout: { sectionTitle: string; items: SectionItem[] }[] = [
+  {
+    sectionTitle: 'account',
+    items: [
+      { title: 'account', iconName: 'account-outline' },
+      { title: 'security', iconName: 'lock-outline' },
+    ],
+  },
   {
     sectionTitle: 'support',
     items: [
@@ -39,24 +47,22 @@ const accountLinkLayout: { sectionTitle: string; items: SectionItem[] }[] = [
 ]
 
 export default function Account() {
-  const handleLogout = () => {}
-
   return (
     <View style={styles.container}>
-      <FormTitle style={styles.pageTitle}>Account</FormTitle>
+      <PageTitle style={styles.pageTitle}>Account</PageTitle>
       <View style={styles.section}>
         <UserCard />
       </View>
       {accountLinkLayout.map(section => {
         return (
-          <>
+          <React.Fragment key={section.sectionTitle}>
             <AppText size='small' style={styles.sectionTitle}>
               {section.sectionTitle}
             </AppText>
             <View style={styles.section}>
               {section.items.map((item, idx) => {
                 return (
-                  <>
+                  <React.Fragment key={item.title}>
                     <SettingsListItem
                       iconName={item.iconName}
                       title={item.title}
@@ -67,15 +73,13 @@ export default function Account() {
                         <View style={styles.itemDividerLine} />
                       </View>
                     )}
-                  </>
+                  </React.Fragment>
                 )
               })}
             </View>
-          </>
+          </React.Fragment>
         )
       })}
-
-      <Button title='Logout' onPress={handleLogout} />
     </View>
   )
 }
@@ -85,6 +89,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingTop: 55,
     backgroundColor: sv.secondaryBackground,
+    height: '100%',
   },
   section: {
     backgroundColor: sv.primaryBackground,
