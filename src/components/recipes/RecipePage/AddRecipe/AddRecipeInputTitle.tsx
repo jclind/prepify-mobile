@@ -4,13 +4,15 @@ import AppText from '../../../text/AppText'
 
 type AddRecipeInputTitleProps = {
   title: string
+  style?: any
 }
 
 export default function AddRecipeInputTitle({
   title,
+  style,
 }: AddRecipeInputTitleProps) {
   return (
-    <AppText size='medium' style={styles.text}>
+    <AppText size='medium' style={[styles.text, style]}>
       {title}
     </AppText>
   )

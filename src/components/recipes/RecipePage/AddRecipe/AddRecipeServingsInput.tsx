@@ -12,6 +12,7 @@ import { Picker } from '@react-native-picker/picker'
 import { MCIcons } from '../../../../config/types/MCIcons'
 import sv from '../../../../config/sv'
 import Button from '../../../Button'
+import OpenPickerBtn from './OpenPickerBtn'
 
 type AddRecipeServingsInputProps = {
   servings: number | null
@@ -24,23 +25,20 @@ export default function AddRecipeServingsInput({
 }: AddRecipeServingsInputProps) {
   const [modalVisible, setModalVisible] = useState(false)
 
-  let pickerOptions = []
+  const [tempServings, setTempServings] = useState(null)
+
+  let pickerOptions = [<Picker.Item label='-' value={null} key='0' />]
   for (let i = 1; i < 100; i++) {
     pickerOptions.push(<Picker.Item label={i.toString()} value={i} key={i} />)
   }
 
   return (
     <View>
-      <View style={styles.addServingsBtnContainer}>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <View style={styles.addServingsBtn}>
-            <MCIcons name='plus' size={22} color={sv.primary} />
-            <AppText size='mediumSmall' style={styles.addServingsBtnText}>
-              Add Servings
-            </AppText>
-          </View>
-        </TouchableOpacity>
-      </View>
+      <OpenPickerBtn
+        val={servings ? `${servings} serving${servings > 1 ? 's' : ''}` : null}
+        setModalVisible={setModalVisible}
+        title='Add Servings'
+      />
       <Modal
         animationType='slide'
         transparent={true}
@@ -58,16 +56,18 @@ export default function AddRecipeServingsInput({
               Number Of Servings
             </AppText>
             <Picker
-              selectedValue={servings}
+              selectedValue={tempServings}
               style={styles.picker}
-              onValueChange={(itemValue, itemIndex) => setServings(itemValue)}
+              onValueChange={itemValue => setTempServings(itemValue)}
             >
               {pickerOptions.map(item => item)}
             </Picker>
             <Button
               title='Save'
-              onPress={() => setModalVisible(false)}
-              style={styles.saveBtn}
+              onPress={() => {
+                setServings(tempServings)
+                setModalVisible(false)
+              }}
             />
           </View>
         </View>
@@ -78,15 +78,18 @@ export default function AddRecipeServingsInput({
 
 const styles = StyleSheet.create({
   addServingsBtnContainer: {
-    width: 150,
+    // width: 150,
   },
   addServingsBtn: {
     alignItems: 'center',
-    paddingVertical: 10,
     flexDirection: 'row',
+    paddingTop: 2,
   },
   addServingsBtnText: {
     paddingLeft: 5,
+    color: sv.primary,
+  },
+  numberOfServings: {
     color: sv.primary,
   },
 
@@ -104,15 +107,14 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: 'white',
     width: '100%',
-    height: '40%',
+    height: 365,
     position: 'absolute',
     bottom: 0,
     paddingHorizontal: 10,
-    paddingBottom: 40,
   },
   picker: {
     paddingTop: 20,
-    height: 240,
+    height: 230,
     width: '100%',
   },
   pickerTitle: {
@@ -120,5 +122,4 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     fontFamily: 'Montserrat_600SemiBold',
   },
-  saveBtn: {},
 })

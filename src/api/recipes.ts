@@ -1,6 +1,7 @@
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from './firebase'
 import { http, nutrition } from './http-common'
+import ingredientParser from '@jclind/ingredient-parser'
 
 class RecipeAPI {
   async getTrendingRecipes(limit: number = 4) {
