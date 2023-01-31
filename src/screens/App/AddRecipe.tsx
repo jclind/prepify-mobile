@@ -7,20 +7,20 @@ import {
   Modal,
   Alert,
   ScrollView,
+  KeyboardAvoidingView,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { IngredientResponseType } from '@jclind/ingredient-parser/'
 import AddRecipeInputTitle from '../../components/recipes/RecipePage/AddRecipe/AddRecipeInputTitle'
 import Screen from '../../components/layout/Screen'
 import AddRecipeInput from '../../components/recipes/RecipePage/AddRecipe/AddRecipeInput'
-import AddRecipeImageInput from '../../components/recipes/RecipePage/AddRecipe/AddRecipeImageInput.tsx'
+import AddRecipeImageInput from '../../components/recipes/RecipePage/AddRecipe/AddRecipeImageInput'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import AppText from '../../components/text/AppText'
-import AddRecipeYieldInput from '../../components/recipes/RecipePage/AddRecipe/AddRecipeServingsInput'
 import AddRecipeServingsInput from '../../components/recipes/RecipePage/AddRecipe/AddRecipeServingsInput'
-import AddRecipePrepTimeInput from '../../components/recipes/RecipePage/AddRecipe/AddRecipeTimeInput'
 import AddRecipeTimeInput from '../../components/recipes/RecipePage/AddRecipe/AddRecipeTimeInput'
-import AddRecipeIngredientInput from '../../components/recipes/RecipePage/AddRecipe/AddRecipeIngredientInput'
 import Constants from 'expo-constants'
+import IngredientsContainer from '../../components/recipes/RecipePage/AddRecipe/IngredientsContainer'
 
 export default function AddRecipe() {
   const [title, setTitle] = useState('')
@@ -32,51 +32,70 @@ export default function AddRecipe() {
   const [prepTime, setPrepTime] = useState(null)
   const [cookTime, setCookTime] = useState(null)
 
+  const [ingredients, setIngredients] = useState<IngredientResponseType[]>([])
+
+  useEffect(() => {
+    console.log('HERE', ingredients)
+  }, [ingredients])
+
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <View style={styles.inputSection}>
-          <AddRecipeInputTitle title='Title' />
-          <AddRecipeInput val={title} setVal={setTitle} />
+    <KeyboardAvoidingView
+      behavior='position'
+      style={{
+        flex: 1,
+        width: '100%',
+        height: '100%',
+      }}
+    >
+      <ScrollView keyboardShouldPersistTaps='always'>
+        <View style={styles.container}>
+          <View style={styles.inputSection}>
+            <AddRecipeInputTitle title='Title' />
+            <AddRecipeInput val={title} setVal={setTitle} />
+          </View>
+          <View style={styles.inputSection}>
+            <AddRecipeInputTitle title='Cover Image' />
+            <AddRecipeImageInput image={image} setImage={setImage} />
+          </View>
+          <View style={styles.inputSection}>
+            <AddRecipeInputTitle title='Description' />
+            <AddRecipeInput
+              val={description}
+              setVal={setDescription}
+              numberOfLines={5}
+            />
+          </View>
+          <View style={[styles.inputSection, styles.row]}>
+            <AddRecipeInputTitle title='Servings' style={styles.flex} />
+            <AddRecipeServingsInput
+              servings={servings}
+              setServings={setServings}
+            />
+          </View>
+          <View style={[styles.inputSection, styles.row]}>
+            <AddRecipeInputTitle title='Prep Time' style={styles.flex} />
+            <AddRecipeTimeInput time={prepTime} setTime={setPrepTime} />
+          </View>
+          <View style={[styles.inputSection, styles.row]}>
+            <AddRecipeInputTitle title='Cook Time' style={styles.flex} />
+            <AddRecipeTimeInput time={cookTime} setTime={setCookTime} />
+          </View>
+          <View style={styles.inputSection}>
+            <AddRecipeInputTitle title='Ingredients' />
+            <IngredientsContainer
+              ingredients={ingredients}
+              setIngredients={setIngredients}
+            />
+          </View>
         </View>
-        <View style={styles.inputSection}>
-          <AddRecipeInputTitle title='Cover Image' />
-          <AddRecipeImageInput image={image} setImage={setImage} />
-        </View>
-        <View style={styles.inputSection}>
-          <AddRecipeInputTitle title='Description' />
-          <AddRecipeInput
-            val={description}
-            setVal={setDescription}
-            numberOfLines={5}
-          />
-        </View>
-        <View style={[styles.inputSection, styles.row]}>
-          <AddRecipeInputTitle title='Servings' style={styles.flex} />
-          <AddRecipeServingsInput
-            servings={servings}
-            setServings={setServings}
-          />
-        </View>
-        <View style={[styles.inputSection, styles.row]}>
-          <AddRecipeInputTitle title='Prep Time' style={styles.flex} />
-          <AddRecipeTimeInput time={prepTime} setTime={setPrepTime} />
-        </View>
-        <View style={[styles.inputSection, styles.row]}>
-          <AddRecipeInputTitle title='Cook Time' style={styles.flex} />
-          <AddRecipeTimeInput time={cookTime} setTime={setCookTime} />
-        </View>
-        <View style={styles.inputSection}>
-          <AddRecipeInputTitle title='Ingredients' />
-          <AddRecipeIngredientInput />
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingTop: Constants.statusBarHeight,
     paddingHorizontal: 20,
   },

@@ -8,4 +8,5 @@ declare module '@env' {
   export const FIREBASE_MEASUREMENT_ID: string
   export const EDAMAM_APP_ID: string
   export const EDAMAM_APP_KEY: string
+  export const SPOONACULAR_API_KEY: string
 }

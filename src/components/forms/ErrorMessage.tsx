@@ -8,8 +8,6 @@ type ErrorMessageProps = {
 }
 
 export default function ErrorMessage({ error, visible }: ErrorMessageProps) {
-  console.log(error, visible)
-
   if (!visible || !error) return null
 
   return (
