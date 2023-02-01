@@ -1,6 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { IngredientResponseType } from '@jclind/ingredient-parser/'
+import DraggableFlatList, {
+  ScaleDecorator,
+} from 'react-native-draggable-flatlist'
+import * as Haptics from 'expo-haptics'
 import AddRecipeIngredientInput from './AddRecipeIngredientInput'
 import AddRecipeIngredientItem from './AddRecipeIngredientItem'
 import AppText from '../../../text/AppText'
@@ -18,6 +22,31 @@ export default function IngredientsContainer({
 }: IngredientsProps) {
   const [error, setError] = useState('')
 
+  const removeIngredient = removeId => {
+    setIngredients(prev => prev.filter(ingr => ingr.id !== removeId))
+  }
+
+  const renderItem = ({ item, drag, isActive }) => {
+    const { imagePath } = item?.ingredientData ?? {}
+    const { comment, ingredient, quantity, unit } = item?.parsedIngredient ?? {}
+    return (
+      <ScaleDecorator>
+        <TouchableOpacity onLongPress={drag} disabled={isActive}>
+          <AddRecipeIngredientItem
+            key={item.id}
+            id={item.id}
+            comment={comment}
+            name={ingredient}
+            imagePath={imagePath}
+            quantity={quantity}
+            unit={unit}
+            removeIngredient={removeIngredient}
+          />
+        </TouchableOpacity>
+      </ScaleDecorator>
+    )
+  }
+
   return (
     <View>
       {error && <Error error={error} />}
@@ -27,23 +56,15 @@ export default function IngredientsContainer({
         setError={setError}
       />
       <View>
-        {ingredients.length > 0 &&
-          ingredients.map(ingr => {
-            const { _id, imagePath } = ingr?.ingredientData ?? {}
-            const { comment, ingredient, quantity, unit } =
-              ingr?.parsedIngredient ?? {}
-            return (
-              <AddRecipeIngredientItem
-                // key={_id}
-                _id={_id}
-                comment={comment}
-                name={ingredient}
-                imagePath={imagePath}
-                quantity={quantity}
-                unit={unit}
-              />
-            )
-          })}
+        <DraggableFlatList
+          data={ingredients}
+          onDragEnd={({ data }) => setIngredients(data)}
+          keyExtractor={item => item.id}
+          renderItem={renderItem}
+          onScrollOffsetChange={() => Haptics.selectionAsync()}
+          onPlaceholderIndexChange={() => Haptics.selectionAsync()}
+          onDragBegin={() => Haptics.selectionAsync()}
+        />
       </View>
     </View>
   )

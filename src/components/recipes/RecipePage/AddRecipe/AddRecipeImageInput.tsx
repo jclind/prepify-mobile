@@ -31,8 +31,6 @@ export default function AddRecipeImageInput({
       quality: 1,
     })
 
-    console.log(result)
-
     if (!result.canceled) {
       setImage(result.assets[0].uri)
     }
@@ -40,7 +38,6 @@ export default function AddRecipeImageInput({
 
   return (
     <View>
-      {/* <Button title='Pick an image from camera roll' onPress={pickImage} /> */}
       {!image ? (
         <TouchableOpacity
           onPress={pickImage}

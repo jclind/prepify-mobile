@@ -1,28 +1,32 @@
 import { StyleSheet, Text, Image, View } from 'react-native'
 import React from 'react'
 import AppText from '../../../text/AppText'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { MCIcons } from '../../../../config/types/MCIcons'
 
 const unknownImagePath =
   'https://spoonacular.com/cdn/ingredients_100x100/uknown.jpg'
 
 type IngredientItemProps = {
-  _id: string | null
+  id: string | null
   name: string | null
   quantity: number | null
   unit: string | null
   comment: string | null
   imagePath: string | null
+  removeIngredient: (string) => void
 }
 
 export default function AddRecipeIngredientItem({
-  _id,
+  id,
   name,
   quantity,
   unit,
   comment,
   imagePath,
+  removeIngredient,
 }: IngredientItemProps) {
-  console.log('HEH? 2', name, _id)
+  console.log('HEH? 2', name, id)
   return (
     <View style={styles.container}>
       <View style={styles.imgContainer}>
@@ -52,6 +56,14 @@ export default function AddRecipeIngredientItem({
           </AppText>
         )}
       </Text>
+      <TouchableOpacity
+        onPress={() => {
+          removeIngredient(id)
+        }}
+        style={styles.closeBtn}
+      >
+        <MCIcons name='close' size={18} />
+      </TouchableOpacity>
     </View>
   )
 }
@@ -60,13 +72,14 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '80%',
+    width: '100%',
   },
   imgContainer: {
     marginRight: 15,
   },
   ingredientText: {
     flexDirection: 'row',
+    flex: 1,
   },
   text: {
     fontFamily: 'Montserrat_500Medium',
@@ -74,4 +87,5 @@ const styles = StyleSheet.create({
   bold: {
     fontFamily: 'Montserrat_700Bold',
   },
+  closeBtn: {},
 })

@@ -6,12 +6,14 @@ type AddRecipeInputType = {
   val: string
   setVal: (val) => void
   numberOfLines?: number
+  onEnter?: () => void
 }
 
 export default function AddRecipeInput({
   val,
   setVal,
   numberOfLines = 1,
+  onEnter,
 }: AddRecipeInputType) {
   return (
     <View>
@@ -24,6 +26,8 @@ export default function AddRecipeInput({
         ]}
         multiline={numberOfLines > 1}
         numberOfLines={numberOfLines}
+        blurOnSubmit={!!onEnter}
+        onSubmitEditing={onEnter || null}
       />
     </View>
   )

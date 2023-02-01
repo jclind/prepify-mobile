@@ -10,6 +10,7 @@ import {
   ingredientParser,
   IngredientResponseType,
 } from '@jclind/ingredient-parser'
+import uuid from 'react-native-uuid'
 import AddRecipeInput from './AddRecipeInput'
 import AppText from '../../../text/AppText'
 import sv from '../../../../config/sv'
@@ -36,14 +37,19 @@ export default function AddRecipeIngredientInput({
 
     setLoading(true)
 
+    console.log('SUSSSYYYYYY 0')
     ingredientParser(inputVal, SPOONACULAR_API_KEY)
       .then(res => {
-        setIngredients(prev => [...prev, res])
+        console.log('SUSSSYYYYYY 1')
+        const ingredientData = { ...res, id: uuid.v4() }
+        setIngredients(prev => [...prev, ingredientData])
         setInputVal('')
         setLoading(false)
       })
       .catch(err => {
-        setError(err)
+        console.log('SUSSSYYYYYY 2')
+        console.log(err)
+        // setError(err)
         setLoading(false)
       })
   }
@@ -51,7 +57,12 @@ export default function AddRecipeIngredientInput({
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
-        <AddRecipeInput val={inputVal} setVal={setInputVal} numberOfLines={2} />
+        <AddRecipeInput
+          val={inputVal}
+          setVal={setInputVal}
+          numberOfLines={2}
+          onEnter={handleAddIngredient}
+        />
       </View>
       <TouchableOpacity style={styles.addBtn} onPress={handleAddIngredient}>
         {loading ? (
@@ -66,7 +77,7 @@ export default function AddRecipeIngredientInput({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     flexDirection: 'row',
   },
   inputContainer: { flex: 1 },
