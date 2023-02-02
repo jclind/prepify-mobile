@@ -12,9 +12,9 @@ import uuid from 'react-native-uuid'
 import sv from '../../../../config/sv'
 import Error from '../../../Error'
 import { MCIcons } from '../../../../config/types/MCIcons'
-import { IngredientsType } from '../../../../screens/App/AddRecipe'
 import AddRecipeInput from './AddRecipeInput'
 import AddLabelContainer from './AddLabelContainer'
+import { IngredientsType } from './addRecipeTypes'
 
 type IngredientsProps = {
   ingredients: IngredientsType[]
@@ -88,7 +88,7 @@ export default function IngredientsContainer({
       <AddLabelContainer
         labelVal={labelVal}
         setLabelVal={setLabelVal}
-        addIngredient={addIngredient}
+        addToList={addIngredient}
       />
     </View>
   )

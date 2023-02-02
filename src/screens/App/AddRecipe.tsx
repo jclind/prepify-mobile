@@ -22,10 +22,11 @@ import AddRecipeServingsInput from '../../components/recipes/RecipePage/AddRecip
 import AddRecipeTimeInput from '../../components/recipes/RecipePage/AddRecipe/AddRecipeTimeInput'
 import Constants from 'expo-constants'
 import IngredientsContainer from '../../components/recipes/RecipePage/AddRecipe/IngredientsContainer'
-
-export type IngredientsType =
-  | IngredientResponseType
-  | { label: string; id?: string }
+import InstructionsContainer from '../../components/recipes/RecipePage/AddRecipe/InstructionsContainer'
+import {
+  IngredientsType,
+  InstructionsType,
+} from '../../components/recipes/RecipePage/AddRecipe/addRecipeTypes'
 
 export default function AddRecipe() {
   const [title, setTitle] = useState('')
@@ -38,6 +39,7 @@ export default function AddRecipe() {
   const [cookTime, setCookTime] = useState(null)
 
   const [ingredients, setIngredients] = useState<IngredientsType[]>([])
+  const [instructions, setInstructions] = useState<InstructionsType[]>([])
 
   useEffect(() => {
     console.log('HERE', ingredients)
@@ -77,6 +79,13 @@ export default function AddRecipe() {
         <IngredientsContainer
           ingredients={ingredients}
           setIngredients={setIngredients}
+        />
+      </View>
+      <View style={styles.inputSection}>
+        <AddRecipeInputTitle title='Instructions' />
+        <InstructionsContainer
+          instructions={instructions}
+          setInstructions={setInstructions}
         />
       </View>
     </View>

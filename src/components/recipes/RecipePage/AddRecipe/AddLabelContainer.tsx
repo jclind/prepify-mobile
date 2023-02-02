@@ -10,31 +10,30 @@ import sv from '../../../../config/sv'
 import { MCIcons } from '../../../../config/types/MCIcons'
 import AppText from '../../../text/AppText'
 import AddRecipeInput from './AddRecipeInput'
-import { IngredientsType } from '../../../../screens/App/AddRecipe'
 
 type AddLabelContainerProps = {
   labelVal: string
   setLabelVal: (string) => void
-  addIngredient: (label) => void
+  addToList: (label) => void
 }
 
 export default function AddLabelContainer({
   labelVal,
   setLabelVal,
-  addIngredient,
+  addToList,
 }: AddLabelContainerProps) {
   const [isAddLabelVisible, setIsAddLabelVisible] = useState(false)
   const inputRef = useRef<TextInput>()
 
   const handleEnter = () => {
     if (!isAddLabelVisible || !labelVal) return
-    addIngredient({ label: labelVal })
+    addToList({ label: labelVal })
     setLabelVal('')
     setIsAddLabelVisible(false)
   }
 
   return (
-    <>
+    <View style={styles.container}>
       <View
         style={[
           styles.addLabelContainer,
@@ -58,7 +57,9 @@ export default function AddLabelContainer({
       <View
         style={[
           styles.addLabelInputContainer,
-          { height: isAddLabelVisible ? '100%' : '0%' },
+          {
+            height: isAddLabelVisible ? '100%' : 0,
+          },
         ]}
       >
         <AddRecipeInput
@@ -73,13 +74,19 @@ export default function AddLabelContainer({
           }}
         />
       </View>
-    </>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
-  addLabelContainer: {
-    paddingTop: 15,
+  container: {
+    marginTop: 15,
+    height: 40,
   },
-  addLabelInputContainer: {},
+  addLabelContainer: {
+    overflow: 'hidden',
+  },
+  addLabelInputContainer: {
+    overflow: 'hidden',
+  },
 })
