@@ -44,7 +44,7 @@ export default function IngredientsContainer({
         <TouchableOpacity onLongPress={drag} disabled={isActive}>
           {item.label ? (
             <View style={styles.ingredientLabel} key={item.id}>
-              <AppText size='medium' style={styles.labelText}>
+              <AppText size='mediumSmall' style={styles.labelText}>
                 {item.label}
               </AppText>
             </View>

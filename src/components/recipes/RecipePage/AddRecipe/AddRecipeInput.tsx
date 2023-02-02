@@ -8,6 +8,8 @@ type AddRecipeInputType = {
   numberOfLines?: number
   onEnter?: () => void
   placeholder?: string
+  inputRef?: React.RefObject<TextInput>
+  onBlur?: () => void
 }
 
 export default function AddRecipeInput({
@@ -16,6 +18,8 @@ export default function AddRecipeInput({
   numberOfLines = 1,
   onEnter,
   placeholder,
+  inputRef,
+  onBlur,
 }: AddRecipeInputType) {
   return (
     <View>
@@ -29,8 +33,10 @@ export default function AddRecipeInput({
         multiline={numberOfLines > 1}
         numberOfLines={numberOfLines}
         blurOnSubmit={!!onEnter}
+        onBlur={onBlur}
         onSubmitEditing={onEnter || null}
         placeholder={placeholder}
+        ref={inputRef}
       />
     </View>
   )
