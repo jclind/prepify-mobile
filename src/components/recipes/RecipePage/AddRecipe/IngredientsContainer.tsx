@@ -8,11 +8,16 @@ import * as Haptics from 'expo-haptics'
 import AddRecipeIngredientInput from './AddRecipeIngredientInput'
 import AddRecipeIngredientItem from './AddRecipeIngredientItem'
 import AppText from '../../../text/AppText'
+import uuid from 'react-native-uuid'
 import sv from '../../../../config/sv'
 import Error from '../../../Error'
+import { MCIcons } from '../../../../config/types/MCIcons'
+import { IngredientsType } from '../../../../screens/App/AddRecipe'
+import AddRecipeInput from './AddRecipeInput'
+import AddLabelContainer from './AddLabelContainer'
 
 type IngredientsProps = {
-  ingredients: IngredientResponseType[]
+  ingredients: IngredientsType[]
   setIngredients: (ingr) => void
 }
 
@@ -21,9 +26,14 @@ export default function IngredientsContainer({
   setIngredients,
 }: IngredientsProps) {
   const [error, setError] = useState('')
+  const [labelVal, setLabelVal] = useState('')
 
   const removeIngredient = removeId => {
     setIngredients(prev => prev.filter(ingr => ingr.id !== removeId))
+  }
+  const addIngredient = (data: IngredientsType) => {
+    const ingredientData = { ...data, id: uuid.v4() }
+    setIngredients(prev => [...prev, ingredientData])
   }
 
   const renderItem = ({ item, drag, isActive }) => {
@@ -32,16 +42,24 @@ export default function IngredientsContainer({
     return (
       <ScaleDecorator>
         <TouchableOpacity onLongPress={drag} disabled={isActive}>
-          <AddRecipeIngredientItem
-            key={item.id}
-            id={item.id}
-            comment={comment}
-            name={ingredient}
-            imagePath={imagePath}
-            quantity={quantity}
-            unit={unit}
-            removeIngredient={removeIngredient}
-          />
+          {item.label ? (
+            <View style={styles.ingredientLabel} key={item.id}>
+              <AppText size='medium' style={styles.labelText}>
+                {item.label}
+              </AppText>
+            </View>
+          ) : (
+            <AddRecipeIngredientItem
+              key={item.id}
+              id={item.id}
+              comment={comment}
+              name={ingredient}
+              imagePath={imagePath}
+              quantity={quantity}
+              unit={unit}
+              removeIngredient={removeIngredient}
+            />
+          )}
         </TouchableOpacity>
       </ScaleDecorator>
     )
@@ -54,8 +72,9 @@ export default function IngredientsContainer({
         setIngredients={setIngredients}
         error={error}
         setError={setError}
+        addIngredient={addIngredient}
       />
-      <View>
+      <View style={styles.ingredientList}>
         <DraggableFlatList
           data={ingredients}
           onDragEnd={({ data }) => setIngredients(data)}
@@ -66,15 +85,23 @@ export default function IngredientsContainer({
           onDragBegin={() => Haptics.selectionAsync()}
         />
       </View>
+      <AddLabelContainer
+        labelVal={labelVal}
+        setLabelVal={setLabelVal}
+        addIngredient={addIngredient}
+      />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  // error: {
-  //   width: '100%',
-  //   backgroundColor:
-  //   color: sv.danger,
-  //   paddingBottom: 5,
-  // },
+  ingredientList: {
+    paddingTop: 15,
+  },
+  ingredientLabel: {
+    paddingVertical: 20,
+  },
+  labelText: {
+    fontFamily: 'Montserrat_700Bold',
+  },
 })

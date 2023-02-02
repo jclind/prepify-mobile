@@ -10,22 +10,24 @@ import {
   ingredientParser,
   IngredientResponseType,
 } from '@jclind/ingredient-parser'
-import uuid from 'react-native-uuid'
 import AddRecipeInput from './AddRecipeInput'
 import AppText from '../../../text/AppText'
 import sv from '../../../../config/sv'
 import { SPOONACULAR_API_KEY } from '@env'
+import { IngredientType } from '../../../../config/types/Recipe'
 
 type AddRecipeIngredientInputProps = {
   setIngredients: (ingredient) => void
   error: string
   setError: (string) => void
+  addIngredient: (IngredientType) => void
 }
 
 export default function AddRecipeIngredientInput({
   setIngredients,
   error,
   setError,
+  addIngredient,
 }: AddRecipeIngredientInputProps) {
   const [inputVal, setInputVal] = useState('')
   const [loading, setLoading] = useState(false)
@@ -37,19 +39,15 @@ export default function AddRecipeIngredientInput({
 
     setLoading(true)
 
-    console.log('SUSSSYYYYYY 0')
     ingredientParser(inputVal, SPOONACULAR_API_KEY)
       .then(res => {
-        console.log('SUSSSYYYYYY 1')
-        const ingredientData = { ...res, id: uuid.v4() }
-        setIngredients(prev => [...prev, ingredientData])
+        addIngredient(res)
         setInputVal('')
         setLoading(false)
       })
       .catch(err => {
-        console.log('SUSSSYYYYYY 2')
         console.log(err)
-        // setError(err)
+        setError(err)
         setLoading(false)
       })
   }
@@ -64,13 +62,13 @@ export default function AddRecipeIngredientInput({
           onEnter={handleAddIngredient}
         />
       </View>
-      <TouchableOpacity style={styles.addBtn} onPress={handleAddIngredient}>
+      {/* <TouchableOpacity style={styles.addBtn} onPress={handleAddIngredient}>
         {loading ? (
           <ActivityIndicator />
         ) : (
           <AppText size='mediumSmall'>Add</AppText>
         )}
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   )
 }

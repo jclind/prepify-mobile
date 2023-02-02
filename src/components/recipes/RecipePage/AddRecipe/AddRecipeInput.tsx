@@ -7,6 +7,7 @@ type AddRecipeInputType = {
   setVal: (val) => void
   numberOfLines?: number
   onEnter?: () => void
+  placeholder?: string
 }
 
 export default function AddRecipeInput({
@@ -14,6 +15,7 @@ export default function AddRecipeInput({
   setVal,
   numberOfLines = 1,
   onEnter,
+  placeholder,
 }: AddRecipeInputType) {
   return (
     <View>
@@ -28,6 +30,7 @@ export default function AddRecipeInput({
         numberOfLines={numberOfLines}
         blurOnSubmit={!!onEnter}
         onSubmitEditing={onEnter || null}
+        placeholder={placeholder}
       />
     </View>
   )

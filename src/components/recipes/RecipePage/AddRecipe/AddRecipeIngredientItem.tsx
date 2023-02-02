@@ -3,6 +3,7 @@ import React from 'react'
 import AppText from '../../../text/AppText'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { MCIcons } from '../../../../config/types/MCIcons'
+import sv from '../../../../config/sv'
 
 const unknownImagePath =
   'https://spoonacular.com/cdn/ingredients_100x100/uknown.jpg'
@@ -73,8 +74,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
+    marginBottom: 10,
   },
   imgContainer: {
+    overflow: 'hidden',
+    height: 60,
+    width: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: sv.white,
+    borderRadius: 30,
     marginRight: 15,
   },
   ingredientText: {
