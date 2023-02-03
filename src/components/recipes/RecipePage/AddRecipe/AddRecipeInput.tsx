@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
   input: {
     // width: '100%',
     padding: 10,
+    marginHorizontal: 15,
     paddingTop: 10,
     borderWidth: 1,
     borderColor: sv.inputBorderColor,

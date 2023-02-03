@@ -81,8 +81,11 @@ export default function AddRecipe() {
           setIngredients={setIngredients}
         />
       </View>
-      <View style={styles.inputSection}>
-        <AddRecipeInputTitle title='Instructions' />
+      <View>
+        <AddRecipeInputTitle
+          title='Instructions'
+          style={{ paddingHorizontal: 15 }}
+        />
         <InstructionsContainer
           instructions={instructions}
           setInstructions={setInstructions}
