@@ -84,12 +84,14 @@ export default function InstructionsContainer({
 
   return (
     <View>
-      <AddRecipeInput
-        val={inputVal}
-        setVal={setInputVal}
-        numberOfLines={4}
-        onEnter={handleEnter}
-      />
+      <View style={styles.mx}>
+        <AddRecipeInput
+          val={inputVal}
+          setVal={setInputVal}
+          numberOfLines={4}
+          onEnter={handleEnter}
+        />
+      </View>
       <View style={styles.instructionsList}>
         <DraggableFlatList
           data={instructions}

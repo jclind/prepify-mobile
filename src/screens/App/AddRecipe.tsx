@@ -42,7 +42,7 @@ export default function AddRecipe() {
   const [instructions, setInstructions] = useState<InstructionsType[]>([])
 
   useEffect(() => {
-    console.log('HERE', ingredients)
+    ingredients.map(i => console.log(i.id))
   }, [ingredients])
   const ListFooterComponent = () => (
     <View style={styles.container}>

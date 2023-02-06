@@ -13,13 +13,16 @@ import sv from '../../../../config/sv'
 import { IngredientsType } from './addRecipeTypes'
 import AddRecipeInput from './AddRecipeInput'
 import SwipeableDelete from './SwipeableDelete'
+import { IngredientResponseType } from '@jclind/ingredient-parser'
 
 const unknownImagePath =
   'https://spoonacular.com/cdn/ingredients_100x100/uknown.jpg'
 
 type IngredientItemProps = {
   ingr: IngredientsType
+  editIngredient: (id: string, updatedItem: IngredientsType) => void
   removeIngredient: (string) => void
+  getIngredientData: (val: string) => Promise<IngredientResponseType>
   drag: any
   isActive: any
 }
@@ -78,15 +81,51 @@ export default function AddRecipeIngredientItem({
   removeIngredient,
   drag,
   isActive,
+  editIngredient,
+  getIngredientData,
 }: IngredientItemProps) {
   const [isEditing, setIsEditing] = useState(false)
-  const [editedVal, setEditedVal] = useState('')
+  const [editedVal, setEditedVal] = useState(() => {
+    if ('label' in ingr) return ingr.label
+    return ingr.parsedIngredient.originalIngredientString
+  })
+  const [loading, setLoading] = useState(false)
   const editInputRef = useRef<TextInput>()
 
-  const handleEditSubmit = () => {}
+  const handleInstructionPress = () => {
+    setIsEditing(true)
+    if (editInputRef && editInputRef.current) {
+      editInputRef.current.focus()
+    }
+  }
+
+  const handleEditSubmit = async () => {
+    if (!editedVal) {
+      if (editInputRef && editInputRef.current) {
+        editInputRef.current.blur()
+      }
+    } else {
+      if ('label' in ingr) {
+        if (ingr.label !== editedVal) return
+        editIngredient(ingr.id, { ...ingr, label: editedVal })
+      } else {
+        if (ingr.parsedIngredient.originalIngredientString === editedVal) return
+        setLoading(true)
+        const updatedIngrData: IngredientsType = await getIngredientData(
+          editedVal
+        )
+        editIngredient(ingr.id, { ...updatedIngrData })
+        setLoading(false)
+      }
+    }
+  }
 
   return (
-    <TouchableOpacity onLongPress={drag} disabled={isActive}>
+    <TouchableOpacity
+      onLongPress={drag}
+      onPress={handleInstructionPress}
+      disabled={isActive}
+    >
       <View style={isEditing ? { height: 0 } : {}}>
         <SwipeableDelete removeItem={() => removeIngredient(ingr.id)}>
           <View style={styles.ingredientsContainer}>
@@ -98,7 +137,13 @@ export default function AddRecipeIngredientItem({
           </View>
         </SwipeableDelete>
       </View>
-      <View style={!isEditing ? { height: 0, overflow: 'hidden' } : {}}>
+      <View
+        style={
+          !isEditing
+            ? { height: 0, overflow: 'hidden' }
+            : { marginHorizontal: 15 }
+        }
+      >
         <AddRecipeInput
           val={editedVal}
           setVal={setEditedVal}

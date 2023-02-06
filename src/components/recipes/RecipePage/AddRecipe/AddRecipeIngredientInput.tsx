@@ -6,28 +6,27 @@ import {
   View,
 } from 'react-native'
 import React, { useState } from 'react'
-import {
-  ingredientParser,
-  IngredientResponseType,
-} from '@jclind/ingredient-parser'
+
 import AddRecipeInput from './AddRecipeInput'
 import AppText from '../../../text/AppText'
 import sv from '../../../../config/sv'
-import { SPOONACULAR_API_KEY } from '@env'
-import { IngredientType } from '../../../../config/types/Recipe'
+import { IngredientResponseType } from '@jclind/ingredient-parser'
+import { IngredientsType } from './addRecipeTypes'
 
 type AddRecipeIngredientInputProps = {
   setIngredients: (ingredient) => void
   error: string
   setError: (string) => void
-  addIngredient: (IngredientType) => void
+  getIngredientData: (val: string) => Promise<IngredientResponseType>
+  addIngredientToList: (data: IngredientsType) => void
 }
 
 export default function AddRecipeIngredientInput({
   setIngredients,
   error,
   setError,
-  addIngredient,
+  getIngredientData,
+  addIngredientToList,
 }: AddRecipeIngredientInputProps) {
   const [inputVal, setInputVal] = useState('')
   const [loading, setLoading] = useState(false)
@@ -39,17 +38,27 @@ export default function AddRecipeIngredientInput({
 
     setLoading(true)
 
-    ingredientParser(inputVal, SPOONACULAR_API_KEY)
-      .then(res => {
-        addIngredient(res)
-        setInputVal('')
-        setLoading(false)
-      })
-      .catch(err => {
-        console.log(err)
-        setError(err)
-        setLoading(false)
-      })
+    const data = await getIngredientData(inputVal)
+    if (data) {
+      addIngredientToList(data)
+      setInputVal('')
+      setLoading(false)
+    } else {
+      setLoading(false)
+      setError('something went wrong')
+    }
+
+    // ingredientParser(inputVal, SPOONACULAR_API_KEY)
+    //   .then(res => {
+    //     addIngredient(res)
+    //     setInputVal('')
+    //     setLoading(false)
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //     setError(err)
+    //     setLoading(false)
+    //   })
   }
 
   return (
@@ -62,21 +71,14 @@ export default function AddRecipeIngredientInput({
           onEnter={handleAddIngredient}
         />
       </View>
-      {/* <TouchableOpacity style={styles.addBtn} onPress={handleAddIngredient}>
-        {loading ? (
-          <ActivityIndicator />
-        ) : (
-          <AppText size='mediumSmall'>Add</AppText>
-        )}
-      </TouchableOpacity> */}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     flexDirection: 'row',
+    marginHorizontal: 15,
   },
   inputContainer: { flex: 1 },
   addBtn: {

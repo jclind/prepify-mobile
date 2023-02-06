@@ -1,6 +1,9 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
-import { IngredientResponseType } from '@jclind/ingredient-parser/'
+import {
+  ingredientParser,
+  IngredientResponseType,
+} from '@jclind/ingredient-parser/'
 import DraggableFlatList, {
   ScaleDecorator,
 } from 'react-native-draggable-flatlist'
@@ -15,6 +18,7 @@ import { MCIcons } from '../../../../config/types/MCIcons'
 import AddRecipeInput from './AddRecipeInput'
 import AddLabelContainer from './AddLabelContainer'
 import { IngredientsType } from './addRecipeTypes'
+import { SPOONACULAR_API_KEY } from '@env'
 
 type IngredientsProps = {
   ingredients: IngredientsType[]
@@ -31,9 +35,20 @@ export default function IngredientsContainer({
   const removeIngredient = removeId => {
     setIngredients(prev => prev.filter(ingr => ingr.id !== removeId))
   }
-  const addIngredient = (data: IngredientsType) => {
+  const addIngredientToList = (data: IngredientsType) => {
     const ingredientData = { ...data, id: uuid.v4() }
     setIngredients(prev => [...prev, ingredientData])
+  }
+  const getIngredientData = async (val: string) => {
+    const result = await ingredientParser(val, SPOONACULAR_API_KEY)
+
+    return result
+  }
+
+  const editIngredient = (id: string, updatedItem: IngredientsType) => {
+    setIngredients(prev =>
+      prev.map(instr => (instr.id === id ? { ...updatedItem, id } : instr))
+    )
   }
 
   const renderItem = ({ item, drag, isActive }) => {
@@ -44,6 +59,8 @@ export default function IngredientsContainer({
           removeIngredient={removeIngredient}
           drag={drag}
           isActive={isActive}
+          editIngredient={editIngredient}
+          getIngredientData={getIngredientData}
         />
       </ScaleDecorator>
     )
@@ -56,7 +73,8 @@ export default function IngredientsContainer({
         setIngredients={setIngredients}
         error={error}
         setError={setError}
-        addIngredient={addIngredient}
+        getIngredientData={getIngredientData}
+        addIngredientToList={addIngredientToList}
       />
       <View style={styles.ingredientList}>
         <DraggableFlatList
@@ -74,7 +92,7 @@ export default function IngredientsContainer({
         <AddLabelContainer
           labelVal={labelVal}
           setLabelVal={setLabelVal}
-          addToList={addIngredient}
+          addToList={addIngredientToList}
         />
       </View>
     </View>

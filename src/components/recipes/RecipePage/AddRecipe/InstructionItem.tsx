@@ -105,7 +105,13 @@ export default function InstructionItem({
           </View>
         </SwipeableDelete>
       </View>
-      <View style={!isEditing ? { height: 0, overflow: 'hidden' } : {}}>
+      <View
+        style={
+          !isEditing
+            ? { height: 0, overflow: 'hidden' }
+            : { marginHorizontal: 15 }
+        }
+      >
         <AddRecipeInput
           val={editedVal}
           setVal={setEditedVal}
