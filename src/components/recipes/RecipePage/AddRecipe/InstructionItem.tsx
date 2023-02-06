@@ -13,6 +13,7 @@ import { InstructionsType } from './addRecipeTypes'
 import sv from '../../../../config/sv'
 import { MCIcons } from '../../../../config/types/MCIcons'
 import AddRecipeInput from './AddRecipeInput'
+import SwipeableDelete from './SwipeableDelete'
 
 type InstructionItemType = {
   instr: InstructionsType
@@ -20,6 +21,36 @@ type InstructionItemType = {
   editInstruction: (id: string, updatedItem: InstructionsType) => void
   drag: any
   isActive: any
+}
+
+const Label = ({ id, label }: { id: string; label: string }) => {
+  return (
+    <View key={id}>
+      <AppText size='mediumSmall' style={styles.labelText}>
+        {label}
+      </AppText>
+    </View>
+  )
+}
+const Instruction = ({
+  index,
+  content,
+}: {
+  index: number
+  content: string
+}) => {
+  return (
+    <>
+      <View style={styles.indexContainer}>
+        <AppText size='medium' style={styles.indexText}>
+          {index}
+        </AppText>
+      </View>
+      <Text>
+        <AppText size='mediumSmall'>{content}</AppText>
+      </Text>
+    </>
+  )
 }
 
 export default function InstructionItem({
@@ -57,21 +88,6 @@ export default function InstructionItem({
     }
   }
 
-  const RightActions = ({ progress, dragX, onPress }) => {
-    return (
-      <TouchableOpacity
-        onPress={onPress}
-        style={styles.swipedRow}
-        activeOpacity={1}
-      >
-        <View>
-          <Animated.View style={styles.deleteIconContainer}>
-            <MCIcons name='trash-can' size={24} style={styles.deleteIcon} />
-          </Animated.View>
-        </View>
-      </TouchableOpacity>
-    )
-  }
   return (
     <TouchableOpacity
       onLongPress={drag}
@@ -79,40 +95,15 @@ export default function InstructionItem({
       disabled={isActive}
     >
       <View style={isEditing ? { height: 0 } : {}}>
-        <Swipeable
-          renderRightActions={(progress, dragX) => (
-            <RightActions
-              progress={progress}
-              dragX={dragX}
-              onPress={() => removeInstruction(instr.id)}
-            />
-          )}
-        >
-          <View
-            style={styles.instructionContainer}
-            // onPress={handleInstructionPress}
-            // activeOpacity={1}
-          >
-            {'content' in instr ? (
-              <>
-                <View style={styles.indexContainer}>
-                  <AppText size='medium' style={styles.indexText}>
-                    {instr.index}
-                  </AppText>
-                </View>
-                <Text>
-                  <AppText size='mediumSmall'>{instr.content}</AppText>
-                </Text>
-              </>
+        <SwipeableDelete removeItem={() => removeInstruction(instr.id)}>
+          <View style={styles.instructionContainer}>
+            {'label' in instr ? (
+              <Label id={instr.id} label={instr.label} />
             ) : (
-              <View style={styles.ingredientLabel} key={instr.id}>
-                <AppText size='mediumSmall' style={styles.labelText}>
-                  {instr.label}
-                </AppText>
-              </View>
+              <Instruction index={instr.index} content={instr.content} />
             )}
           </View>
-        </Swipeable>
+        </SwipeableDelete>
       </View>
       <View style={!isEditing ? { height: 0, overflow: 'hidden' } : {}}>
         <AddRecipeInput
@@ -145,35 +136,9 @@ const styles = StyleSheet.create({
     marginRight: 15,
     backgroundColor: sv.tertiaryBackground,
   },
-
-  swipedRow: {
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    flexShrink: -1,
-  },
-  animatedInitial: {
-    backgroundColor: '#b60000',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    height: '100%',
-    opacity: 0,
-  },
-  deleteIconContainer: {
-    height: '100%',
-    backgroundColor: sv.danger,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  deleteIcon: {
-    width: '100%',
-    paddingHorizontal: 20,
-    color: sv.primaryBackground,
-  },
-
   indexText: {
     fontFamily: 'Montserrat_700Bold',
   },
-  ingredientLabel: {},
   labelText: {
     fontFamily: 'Montserrat_700Bold',
   },

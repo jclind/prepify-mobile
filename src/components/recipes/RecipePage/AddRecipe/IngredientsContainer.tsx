@@ -37,30 +37,14 @@ export default function IngredientsContainer({
   }
 
   const renderItem = ({ item, drag, isActive }) => {
-    const { imagePath } = item?.ingredientData ?? {}
-    const { comment, ingredient, quantity, unit } = item?.parsedIngredient ?? {}
     return (
       <ScaleDecorator>
-        <TouchableOpacity onLongPress={drag} disabled={isActive}>
-          {item.label ? (
-            <View style={styles.ingredientLabel} key={item.id}>
-              <AppText size='mediumSmall' style={styles.labelText}>
-                {item.label}
-              </AppText>
-            </View>
-          ) : (
-            <AddRecipeIngredientItem
-              key={item.id}
-              id={item.id}
-              comment={comment}
-              name={ingredient}
-              imagePath={imagePath}
-              quantity={quantity}
-              unit={unit}
-              removeIngredient={removeIngredient}
-            />
-          )}
-        </TouchableOpacity>
+        <AddRecipeIngredientItem
+          ingr={item}
+          removeIngredient={removeIngredient}
+          drag={drag}
+          isActive={isActive}
+        />
       </ScaleDecorator>
     )
   }
@@ -86,23 +70,22 @@ export default function IngredientsContainer({
           onDragBegin={() => Haptics.selectionAsync()}
         />
       </View>
-      <AddLabelContainer
-        labelVal={labelVal}
-        setLabelVal={setLabelVal}
-        addToList={addIngredient}
-      />
+      <View style={styles.mx}>
+        <AddLabelContainer
+          labelVal={labelVal}
+          setLabelVal={setLabelVal}
+          addToList={addIngredient}
+        />
+      </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  mx: {
+    marginHorizontal: 15,
+  },
   ingredientList: {
     paddingTop: 15,
-  },
-  ingredientLabel: {
-    paddingVertical: 20,
-  },
-  labelText: {
-    fontFamily: 'Montserrat_700Bold',
   },
 })

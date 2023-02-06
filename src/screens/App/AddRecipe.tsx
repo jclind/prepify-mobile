@@ -74,18 +74,15 @@ export default function AddRecipe() {
         <AddRecipeInputTitle title='Cook Time' style={styles.flex} />
         <AddRecipeTimeInput time={cookTime} setTime={setCookTime} />
       </View>
-      <View style={styles.inputSection}>
-        <AddRecipeInputTitle title='Ingredients' />
+      <View>
+        <AddRecipeInputTitle title='Ingredients' style={styles.px} />
         <IngredientsContainer
           ingredients={ingredients}
           setIngredients={setIngredients}
         />
       </View>
       <View>
-        <AddRecipeInputTitle
-          title='Instructions'
-          style={{ paddingHorizontal: 15 }}
-        />
+        <AddRecipeInputTitle title='Instructions' style={styles.px} />
         <InstructionsContainer
           instructions={instructions}
           setInstructions={setInstructions}
@@ -123,12 +120,15 @@ const styles = StyleSheet.create({
   inputSection: {
     marginBottom: 25,
     paddingTop: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
   },
   row: {
     flexDirection: 'row',
   },
   flex: {
     flex: 1,
+  },
+  px: {
+    paddingHorizontal: 15,
   },
 })
