@@ -30,19 +30,19 @@ export default function App() {
 
   return (
     <AuthProvider fontsLoaded={fontsLoaded}>
-      <Pressable
+      {/* <Pressable
         style={{ flex: 1 }}
         onPress={() => {
           Keyboard.dismiss()
         }}
-      >
-        <View style={{ flex: 1 }}>
-          <>
-            <Auth />
-            <ChooseNavigator />
-          </>
-        </View>
-      </Pressable>
+      > */}
+      <View style={{ flex: 1 }}>
+        <>
+          <Auth />
+          <ChooseNavigator />
+        </>
+      </View>
+      {/* </Pressable> */}
     </AuthProvider>
   )
 }

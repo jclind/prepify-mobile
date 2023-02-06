@@ -45,70 +45,71 @@ export default function AddRecipe() {
     ingredients.map(i => console.log(i.id))
   }, [ingredients])
   const ListFooterComponent = () => (
-    <View style={styles.container}>
-      <View style={styles.inputSection}>
-        <AddRecipeInputTitle title='Title' />
-        <AddRecipeInput val={title} setVal={setTitle} />
+    <KeyboardAvoidingView
+      behavior='position'
+      style={{
+        flex: 1,
+        width: '100%',
+        height: '100%',
+      }}
+    >
+      <View style={styles.container}>
+        <View style={styles.inputSection}>
+          <AddRecipeInputTitle title='Title' />
+          <AddRecipeInput val={title} setVal={setTitle} />
+        </View>
+        <View style={styles.inputSection}>
+          <AddRecipeInputTitle title='Cover Image' />
+          <AddRecipeImageInput image={image} setImage={setImage} />
+        </View>
+        <View style={styles.inputSection}>
+          <AddRecipeInputTitle title='Description' />
+          <AddRecipeInput
+            val={description}
+            setVal={setDescription}
+            numberOfLines={5}
+          />
+        </View>
+        <View style={[styles.inputSection, styles.row]}>
+          <AddRecipeInputTitle title='Servings' style={styles.flex} />
+          <AddRecipeServingsInput
+            servings={servings}
+            setServings={setServings}
+          />
+        </View>
+        <View style={[styles.inputSection, styles.row]}>
+          <AddRecipeInputTitle title='Prep Time' style={styles.flex} />
+          <AddRecipeTimeInput time={prepTime} setTime={setPrepTime} />
+        </View>
+        <View style={[styles.inputSection, styles.row]}>
+          <AddRecipeInputTitle title='Cook Time' style={styles.flex} />
+          <AddRecipeTimeInput time={cookTime} setTime={setCookTime} />
+        </View>
+        <View>
+          <AddRecipeInputTitle title='Ingredients' style={styles.px} />
+          <IngredientsContainer
+            ingredients={ingredients}
+            setIngredients={setIngredients}
+          />
+        </View>
+        <View>
+          <AddRecipeInputTitle title='Instructions' style={styles.px} />
+          <InstructionsContainer
+            instructions={instructions}
+            setInstructions={setInstructions}
+          />
+        </View>
       </View>
-      <View style={styles.inputSection}>
-        <AddRecipeInputTitle title='Cover Image' />
-        <AddRecipeImageInput image={image} setImage={setImage} />
-      </View>
-      <View style={styles.inputSection}>
-        <AddRecipeInputTitle title='Description' />
-        <AddRecipeInput
-          val={description}
-          setVal={setDescription}
-          numberOfLines={5}
-        />
-      </View>
-      <View style={[styles.inputSection, styles.row]}>
-        <AddRecipeInputTitle title='Servings' style={styles.flex} />
-        <AddRecipeServingsInput servings={servings} setServings={setServings} />
-      </View>
-      <View style={[styles.inputSection, styles.row]}>
-        <AddRecipeInputTitle title='Prep Time' style={styles.flex} />
-        <AddRecipeTimeInput time={prepTime} setTime={setPrepTime} />
-      </View>
-      <View style={[styles.inputSection, styles.row]}>
-        <AddRecipeInputTitle title='Cook Time' style={styles.flex} />
-        <AddRecipeTimeInput time={cookTime} setTime={setCookTime} />
-      </View>
-      <View>
-        <AddRecipeInputTitle title='Ingredients' style={styles.px} />
-        <IngredientsContainer
-          ingredients={ingredients}
-          setIngredients={setIngredients}
-        />
-      </View>
-      <View>
-        <AddRecipeInputTitle title='Instructions' style={styles.px} />
-        <InstructionsContainer
-          instructions={instructions}
-          setInstructions={setInstructions}
-        />
-      </View>
-    </View>
+    </KeyboardAvoidingView>
   )
 
   return (
-    <View style={{ flex: 1, width: '100%', height: '100%' }}>
-      <KeyboardAvoidingView
-        behavior='position'
-        style={{
-          flex: 1,
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        <FlatList
-          data={[]}
-          renderItem={() => null}
-          ListFooterComponent={ListFooterComponent}
-          keyboardShouldPersistTaps='always'
-        />
-      </KeyboardAvoidingView>
-    </View>
+    <FlatList
+      data={[]}
+      renderItem={() => null}
+      ListFooterComponent={ListFooterComponent}
+      keyboardShouldPersistTaps='always'
+    />
   )
 }
 

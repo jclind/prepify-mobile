@@ -86,6 +86,7 @@ export default function IngredientsContainer({
           onScrollOffsetChange={() => Haptics.selectionAsync()}
           onPlaceholderIndexChange={() => Haptics.selectionAsync()}
           onDragBegin={() => Haptics.selectionAsync()}
+          scrollEnabled={false}
         />
       </View>
       <View style={styles.mx}>
