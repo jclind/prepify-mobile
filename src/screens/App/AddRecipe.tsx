@@ -9,6 +9,8 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   SafeAreaView,
+  Pressable,
+  Keyboard,
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { IngredientResponseType } from '@jclind/ingredient-parser/'
@@ -45,12 +47,10 @@ export default function AddRecipe() {
     ingredients.map(i => console.log(i.id))
   }, [ingredients])
   const ListFooterComponent = () => (
-    <KeyboardAvoidingView
-      behavior='position'
-      style={{
-        flex: 1,
-        width: '100%',
-        height: '100%',
+    <Pressable
+      style={{ flex: 1 }}
+      onPress={() => {
+        Keyboard.dismiss()
       }}
     >
       <View style={styles.container}>
@@ -100,16 +100,27 @@ export default function AddRecipe() {
           />
         </View>
       </View>
-    </KeyboardAvoidingView>
+    </Pressable>
   )
 
   return (
-    <FlatList
-      data={[]}
-      renderItem={() => null}
-      ListFooterComponent={ListFooterComponent}
-      keyboardShouldPersistTaps='always'
-    />
+    <View style={{ flex: 1, height: '100%', width: '100%' }}>
+      <KeyboardAvoidingView
+        behavior='position'
+        style={{
+          flex: 1,
+          height: '100%',
+          width: '100%',
+        }}
+      >
+        <FlatList
+          data={[]}
+          renderItem={() => null}
+          ListFooterComponent={ListFooterComponent}
+          keyboardShouldPersistTaps='always'
+        />
+      </KeyboardAvoidingView>
+    </View>
   )
 }
 
