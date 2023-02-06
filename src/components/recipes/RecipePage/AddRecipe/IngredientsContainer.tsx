@@ -78,6 +78,7 @@ export default function IngredientsContainer({
         <DraggableFlatList
           data={ingredients}
           onDragEnd={({ data }) => setIngredients(data)}
+          listKey={uuid.v4().toString()}
           keyExtractor={item => item.id}
           renderItem={renderItem}
           onScrollOffsetChange={() => Haptics.selectionAsync()}

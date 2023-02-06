@@ -1,11 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import AddRecipeInput from './AddRecipeInput'
 import { InstructionsType } from './addRecipeTypes'
 import AddLabelContainer from './AddLabelContainer'
 import uuid from 'react-native-uuid'
 import AppText from '../../../text/AppText'
-import sv from '../../../../config/sv'
+import * as Haptics from 'expo-haptics'
+import DraggableFlatList, {
+  ScaleDecorator,
+} from 'react-native-draggable-flatlist'
 import InstructionItem from './InstructionItem'
 
 type InstructionsContainerTypes = {
@@ -53,10 +56,30 @@ export default function InstructionsContainer({
       return [...prev, instructionData]
     })
   }
+  const editInstruction = (id, updatedItem) => {
+    setInstructions(prev =>
+      prev.map(instr => (instr.id === id ? updatedItem : instr))
+    )
+  }
 
   const handleEnter = () => {
     if (!inputVal) return
     addInstruction({ content: inputVal })
+  }
+
+  const renderItem = ({ item, drag, isActive }) => {
+    return (
+      <ScaleDecorator>
+        <InstructionItem
+          key={item.id}
+          instr={item}
+          removeInstruction={removeInstruction}
+          editInstruction={editInstruction}
+          drag={drag}
+          isActive={isActive}
+        />
+      </ScaleDecorator>
+    )
   }
 
   return (
@@ -68,14 +91,16 @@ export default function InstructionsContainer({
         onEnter={handleEnter}
       />
       <View style={styles.instructionsList}>
-        {instructions.length > 0 &&
-          instructions.map(instr => (
-            <InstructionItem
-              key={instr.id}
-              instr={instr}
-              removeInstruction={removeInstruction}
-            />
-          ))}
+        <DraggableFlatList
+          data={instructions}
+          onDragEnd={({ data }) => setInstructions(data)}
+          listKey={uuid.v4().toString()}
+          keyExtractor={item => item.id}
+          renderItem={renderItem}
+          onScrollOffsetChange={() => Haptics.selectionAsync()}
+          onPlaceholderIndexChange={() => Haptics.selectionAsync()}
+          onDragBegin={() => Haptics.selectionAsync()}
+        />
       </View>
       <View style={styles.mx}>
         <AddLabelContainer
