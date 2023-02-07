@@ -29,11 +29,17 @@ export default function InstructionsContainer({
       instr => instr.id !== removeId
     )
     const removedIdx = instructions.findIndex(instr => instr.id === removeId)
+    // If the removed instruction was a label, don't update the index numbers of the following instructions
+    const removedElement = instructions[removedIdx]
+    if ('label' in removedElement) {
+      return setInstructions(removedInstructionsArr)
+    }
     const updatedInstructionsArr = removedInstructionsArr.map((instr, idx) => {
       if ('label' in instr) return instr
       if (removedIdx <= idx) {
         return { ...instr, index: instr.index - 1 }
       }
+
       return instr
     })
     setInstructions(updatedInstructionsArr)
