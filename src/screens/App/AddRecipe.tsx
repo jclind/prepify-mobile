@@ -1,34 +1,29 @@
 import {
-  Button,
   StyleSheet,
-  Text,
   View,
-  Image,
-  Modal,
-  Alert,
-  ScrollView,
   KeyboardAvoidingView,
-  SafeAreaView,
   Pressable,
   Keyboard,
 } from 'react-native'
+import Constants from 'expo-constants'
 import React, { useEffect, useState } from 'react'
-import { IngredientResponseType } from '@jclind/ingredient-parser/'
+
+import { FlatList } from 'react-native-gesture-handler'
 import AddRecipeInputTitle from '../../components/recipes/RecipePage/AddRecipe/AddRecipeInputTitle'
-import Screen from '../../components/layout/Screen'
 import AddRecipeInput from '../../components/recipes/RecipePage/AddRecipe/AddRecipeInput'
 import AddRecipeImageInput from '../../components/recipes/RecipePage/AddRecipe/AddRecipeImageInput'
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
-import AppText from '../../components/text/AppText'
 import AddRecipeServingsInput from '../../components/recipes/RecipePage/AddRecipe/AddRecipeServingsInput'
 import AddRecipeTimeInput from '../../components/recipes/RecipePage/AddRecipe/AddRecipeTimeInput'
-import Constants from 'expo-constants'
 import IngredientsContainer from '../../components/recipes/RecipePage/AddRecipe/IngredientsContainer'
 import InstructionsContainer from '../../components/recipes/RecipePage/AddRecipe/InstructionsContainer'
+import FormPicker from '../../components/recipes/RecipePage/AddRecipe/FormPicker'
 import {
   IngredientsType,
   InstructionsType,
 } from '../../components/recipes/RecipePage/AddRecipe/addRecipeTypes'
+
+import cuisines from '../../recipeData/cuisines'
+import courses from '../../recipeData/courses'
 
 export default function AddRecipe() {
   const [title, setTitle] = useState('')
@@ -42,6 +37,9 @@ export default function AddRecipe() {
 
   const [ingredients, setIngredients] = useState<IngredientsType[]>([])
   const [instructions, setInstructions] = useState<InstructionsType[]>([])
+
+  const [cuisine, setCuisine] = useState('')
+  const [course, setCourse] = useState('')
 
   useEffect(() => {
     ingredients.map(i => console.log(i.id))
@@ -99,6 +97,24 @@ export default function AddRecipe() {
             setInstructions={setInstructions}
           />
         </View>
+        <View style={[styles.inputSection, styles.row]}>
+          <AddRecipeInputTitle title='Cuisine' style={styles.flex} />
+          <FormPicker
+            items={cuisines}
+            val={cuisine}
+            setVal={setCuisine}
+            title='Set Cuisine'
+          />
+        </View>
+        <View style={[styles.inputSection, styles.row]}>
+          <AddRecipeInputTitle title='Course Type' style={styles.flex} />
+          <FormPicker
+            items={courses}
+            val={course}
+            setVal={setCourse}
+            title='Set Course Type'
+          />
+        </View>
       </View>
     </Pressable>
   )
@@ -130,8 +146,8 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight,
   },
   inputSection: {
-    marginBottom: 25,
-    paddingTop: 10,
+    marginBottom: 30,
+    paddingTop: 15,
     paddingHorizontal: 15,
   },
   row: {

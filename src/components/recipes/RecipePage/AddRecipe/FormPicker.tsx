@@ -6,43 +6,41 @@ import {
   View,
 } from 'react-native'
 import React, { useState } from 'react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import AppText from '../../../text/AppText'
+import cuisines from '../../../../recipeData/cuisines'
+import SearchableDropdown from 'react-native-searchable-dropdown'
 import { Picker } from '@react-native-picker/picker'
-import { MCIcons } from '../../../../config/types/MCIcons'
-import sv from '../../../../config/sv'
-import Button from '../../../Button'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import OpenPickerBtn from './OpenPickerBtn'
+import AppText from '../../../text/AppText'
+import Button from '../../../Button'
 
-type AddRecipeServingsInputProps = {
-  servings: number | null
-  setServings: (val) => void
+type FormPickerProps = {
+  items: string[] | number[]
+  val: string | number
+  setVal: (val) => void
+  title: string
 }
 
-export default function AddRecipeServingsInput({
-  servings,
-  setServings,
-}: AddRecipeServingsInputProps) {
-  const [modalVisible, setModalVisible] = useState(false)
-
-  const [tempServings, setTempServings] = useState(null)
-
-  let pickerOptions = [<Picker.Item label='-' value={null} key='0' />]
-  for (let i = 1; i < 100; i++) {
-    pickerOptions.push(<Picker.Item label={i.toString()} value={i} key={i} />)
-  }
-
+export default function FormPicker({
+  items,
+  val,
+  setVal,
+  title,
+}: FormPickerProps) {
+  const [tempVal, setTempVal] = useState<string | number>('')
+  const [isModalVisible, setModalVisible] = useState(false)
+  console.log(items, val, setVal, title)
   return (
     <View>
       <OpenPickerBtn
-        val={servings ? `${servings} serving${servings > 1 ? 's' : ''}` : null}
+        val={val || null}
         setModalVisible={setModalVisible}
-        title='Add Servings'
+        title={title}
       />
       <Modal
         animationType='slide'
         transparent={true}
-        visible={modalVisible}
+        visible={isModalVisible}
         onRequestClose={() => {
           setModalVisible(false)
         }}
@@ -56,16 +54,18 @@ export default function AddRecipeServingsInput({
               Number Of Servings
             </AppText>
             <Picker
-              selectedValue={tempServings}
+              selectedValue={tempVal}
               style={styles.picker}
-              onValueChange={itemValue => setTempServings(itemValue)}
+              onValueChange={itemValue => setTempVal(itemValue)}
             >
-              {pickerOptions.map(item => item)}
+              {items.map(item => (
+                <Picker.Item key={item} label={item} value={item} />
+              ))}
             </Picker>
             <Button
               title='Save'
               onPress={() => {
-                setServings(tempServings)
+                setVal(tempVal)
                 setModalVisible(false)
               }}
             />
