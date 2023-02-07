@@ -72,6 +72,18 @@ export default function InstructionsContainer({
     if (!inputVal) return
     addInstruction({ content: inputVal })
   }
+  const handleDragEnd = ({ data }: { data: InstructionsType[] }) => {
+    let indexCounter: number = 0
+
+    const indexedData = data.map(ingr => {
+      if ('index' in ingr) {
+        indexCounter++
+        return { ...ingr, index: indexCounter }
+      }
+      return ingr
+    })
+    setInstructions(indexedData)
+  }
 
   const renderItem = ({ item, drag, isActive }) => {
     return (
@@ -101,7 +113,7 @@ export default function InstructionsContainer({
       <View style={styles.instructionsList}>
         <DraggableFlatList
           data={instructions}
-          onDragEnd={({ data }) => setInstructions(data)}
+          onDragEnd={handleDragEnd}
           listKey={uuid.v4().toString()}
           keyExtractor={item => item.id}
           renderItem={renderItem}
