@@ -27,9 +27,8 @@ export default function FormPicker({
   setVal,
   title,
 }: FormPickerProps) {
-  const [tempVal, setTempVal] = useState<string | number>('')
+  const [tempVal, setTempVal] = useState<string | number>(val)
   const [isModalVisible, setModalVisible] = useState(false)
-  console.log(items, val, setVal, title)
   return (
     <View>
       <OpenPickerBtn
@@ -58,6 +57,7 @@ export default function FormPicker({
               style={styles.picker}
               onValueChange={itemValue => setTempVal(itemValue)}
             >
+              <Picker.Item key='null-item' label='-' value={null} />
               {items.map(item => (
                 <Picker.Item key={item} label={item} value={item} />
               ))}

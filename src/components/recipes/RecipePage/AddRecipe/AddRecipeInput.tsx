@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import sv from '../../../../config/sv'
 
 type AddRecipeInputType = {
@@ -21,11 +21,13 @@ export default function AddRecipeInput({
   inputRef,
   onBlur,
 }: AddRecipeInputType) {
+  const [tempVal, setTempVal] = useState(val)
   return (
     <View>
       <TextInput
-        value={val}
-        onChangeText={text => setVal(text)}
+        value={tempVal}
+        onChangeText={text => setTempVal(text)}
+        onEndEditing={() => setVal(tempVal)}
         style={[
           styles.input,
           { minHeight: 20 * numberOfLines, maxHeight: 20 * numberOfLines + 20 },
