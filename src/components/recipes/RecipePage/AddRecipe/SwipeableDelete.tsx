@@ -7,22 +7,30 @@ import {
 } from 'react-native'
 import React from 'react'
 import { Swipeable } from 'react-native-gesture-handler'
+import * as Haptics from 'expo-haptics'
 import { MCIcons } from '../../../../config/types/MCIcons'
 import sv from '../../../../config/sv'
 
 type SwipeableDeleteProps = {
   removeItem: () => void
+  disabled?: boolean
   children: React.ReactNode
 }
 
 export default function SwipeableDelete({
   removeItem,
+  disabled,
   children,
 }: SwipeableDeleteProps) {
+  if (disabled) return <>{children}</>
   const RightActions = ({ progress, dragX, onPress }) => {
+    const handlePress = () => {
+      Haptics.selectionAsync()
+      onPress()
+    }
     return (
       <TouchableOpacity
-        onPress={onPress}
+        onPress={handlePress}
         style={styles.swipedRow}
         activeOpacity={1}
       >

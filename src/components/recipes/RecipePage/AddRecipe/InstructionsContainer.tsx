@@ -1,15 +1,22 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import React, { useState } from 'react'
 import AddRecipeInput from './AddRecipeInput'
 import { InstructionsType } from './addRecipeTypes'
 import AddLabelContainer from './AddLabelContainer'
 import uuid from 'react-native-uuid'
-import AppText from '../../../text/AppText'
 import * as Haptics from 'expo-haptics'
 import DraggableFlatList, {
   ScaleDecorator,
 } from 'react-native-draggable-flatlist'
 import InstructionItem from './InstructionItem'
+import AppText from '../../../text/AppText'
+import sv from '../../../../config/sv'
 
 type InstructionsContainerTypes = {
   instructions: InstructionsType[]
@@ -22,6 +29,8 @@ export default function InstructionsContainer({
 }: InstructionsContainerTypes) {
   const [inputVal, setInputVal] = useState('')
   const [labelVal, setLabelVal] = useState('')
+
+  const [reorderActive, setReorderActive] = useState(false)
 
   // Removes given instruction and updates 'index' value by subtracting one to each instruction after the removed index
   const removeInstruction = (removeId: string) => {
@@ -70,6 +79,7 @@ export default function InstructionsContainer({
 
   const handleEnter = () => {
     if (!inputVal) return
+    setInputVal('')
     addInstruction({ content: inputVal })
   }
   const handleDragEnd = ({ data }: { data: InstructionsType[] }) => {
@@ -93,6 +103,7 @@ export default function InstructionsContainer({
           instr={item}
           removeInstruction={removeInstruction}
           editInstruction={editInstruction}
+          reorderActive={true}
           drag={drag}
           isActive={isActive}
         />
@@ -102,6 +113,14 @@ export default function InstructionsContainer({
 
   return (
     <View>
+      <TouchableOpacity
+        onPress={() => setReorderActive(!reorderActive)}
+        style={styles.reorderBtn}
+      >
+        <AppText size='mediumSmall' textColor={sv.primary}>
+          {reorderActive ? 'Done' : 'Reorder'}
+        </AppText>
+      </TouchableOpacity>
       <View style={styles.mx}>
         <AddRecipeInput
           val={inputVal}
@@ -111,17 +130,34 @@ export default function InstructionsContainer({
         />
       </View>
       <View style={styles.instructionsList}>
-        <DraggableFlatList
-          data={instructions}
-          onDragEnd={handleDragEnd}
-          listKey={uuid.v4().toString()}
-          keyExtractor={item => item.id}
-          renderItem={renderItem}
-          onScrollOffsetChange={() => Haptics.selectionAsync()}
-          onPlaceholderIndexChange={() => Haptics.selectionAsync()}
-          onDragBegin={() => Haptics.selectionAsync()}
-          scrollEnabled={false}
-        />
+        {reorderActive ? (
+          <DraggableFlatList
+            data={instructions}
+            listKey={uuid.v4().toString()}
+            keyExtractor={item => item.id}
+            renderItem={renderItem}
+            onDragEnd={handleDragEnd}
+            onScrollOffsetChange={() => Haptics.selectionAsync()}
+            onPlaceholderIndexChange={() => Haptics.selectionAsync()}
+            onDragBegin={() => Haptics.selectionAsync()}
+            scrollEnabled={false}
+          />
+        ) : (
+          <FlatList
+            data={instructions}
+            listKey={uuid.v4().toString()}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => (
+              <InstructionItem
+                key={item.id}
+                instr={item}
+                removeInstruction={removeInstruction}
+                editInstruction={editInstruction}
+                reorderActive={false}
+              />
+            )}
+          />
+        )}
       </View>
       <View style={styles.mx}>
         <AddLabelContainer
@@ -137,6 +173,11 @@ export default function InstructionsContainer({
 const styles = StyleSheet.create({
   mx: {
     marginHorizontal: 15,
+  },
+  reorderBtn: {
+    position: 'absolute',
+    right: 20,
+    top: -25,
   },
   instructionsList: {
     paddingTop: 15,

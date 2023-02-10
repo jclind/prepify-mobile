@@ -1,4 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import React, { useState } from 'react'
 import {
   ingredientParser,
@@ -31,6 +37,7 @@ export default function IngredientsContainer({
 }: IngredientsProps) {
   const [error, setError] = useState('')
   const [labelVal, setLabelVal] = useState('')
+  const [reorderActive, setReorderActive] = useState(false)
 
   const removeIngredient = removeId => {
     setIngredients(prev => prev.filter(ingr => ingr.id !== removeId))
@@ -59,6 +66,7 @@ export default function IngredientsContainer({
           removeIngredient={removeIngredient}
           drag={drag}
           isActive={isActive}
+          reorderActive={true}
           editIngredient={editIngredient}
           getIngredientData={getIngredientData}
         />
@@ -68,6 +76,14 @@ export default function IngredientsContainer({
 
   return (
     <View>
+      <TouchableOpacity
+        onPress={() => setReorderActive(!reorderActive)}
+        style={styles.reorderBtn}
+      >
+        <AppText size='mediumSmall' textColor={sv.primary}>
+          {reorderActive ? 'Done' : 'Reorder'}
+        </AppText>
+      </TouchableOpacity>
       {error && <Error error={error} />}
       <AddRecipeIngredientInput
         setIngredients={setIngredients}
@@ -77,17 +93,34 @@ export default function IngredientsContainer({
         addIngredientToList={addIngredientToList}
       />
       <View style={styles.ingredientList}>
-        <DraggableFlatList
-          data={ingredients}
-          onDragEnd={({ data }) => setIngredients(data)}
-          listKey={uuid.v4().toString()}
-          keyExtractor={item => item.id}
-          renderItem={renderItem}
-          onScrollOffsetChange={() => Haptics.selectionAsync()}
-          onPlaceholderIndexChange={() => Haptics.selectionAsync()}
-          onDragBegin={() => Haptics.selectionAsync()}
-          scrollEnabled={false}
-        />
+        {reorderActive ? (
+          <DraggableFlatList
+            data={ingredients}
+            listKey={uuid.v4().toString()}
+            keyExtractor={item => item.id}
+            renderItem={renderItem}
+            onDragEnd={({ data }) => setIngredients(data)}
+            onScrollOffsetChange={() => Haptics.selectionAsync()}
+            onPlaceholderIndexChange={() => Haptics.selectionAsync()}
+            onDragBegin={() => Haptics.selectionAsync()}
+            scrollEnabled={false}
+          />
+        ) : (
+          <FlatList
+            data={ingredients}
+            listKey={uuid.v4().toString()}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => (
+              <AddRecipeIngredientItem
+                ingr={item}
+                removeIngredient={removeIngredient}
+                reorderActive={false} 
+                editIngredient={editIngredient}
+                getIngredientData={getIngredientData}
+              />
+            )}
+          />
+        )}
       </View>
       <View style={styles.mx}>
         <AddLabelContainer
@@ -103,6 +136,11 @@ export default function IngredientsContainer({
 const styles = StyleSheet.create({
   mx: {
     marginHorizontal: 15,
+  },
+  reorderBtn: {
+    position: 'absolute',
+    right: 20,
+    top: -25,
   },
   ingredientList: {
     paddingTop: 15,

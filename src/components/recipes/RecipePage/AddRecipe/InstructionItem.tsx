@@ -7,20 +7,21 @@ import {
   View,
 } from 'react-native'
 import React, { useRef, useState } from 'react'
-import { Swipeable } from 'react-native-gesture-handler'
 import AppText from '../../../text/AppText'
 import { InstructionsType } from './addRecipeTypes'
 import sv from '../../../../config/sv'
-import { MCIcons } from '../../../../config/types/MCIcons'
 import AddRecipeInput from './AddRecipeInput'
 import SwipeableDelete from './SwipeableDelete'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { MCIcons } from '../../../../config/types/MCIcons'
 
 type InstructionItemType = {
   instr: InstructionsType
   removeInstruction: (id: string) => void
   editInstruction: (id: string, updatedItem: InstructionsType) => void
-  drag: any
-  isActive: any
+  reorderActive: boolean
+  drag?: any
+  isActive?: any
 }
 
 const Label = ({ id, label }: { id: string; label: string }) => {
@@ -57,6 +58,7 @@ export default function InstructionItem({
   instr,
   removeInstruction,
   editInstruction,
+  reorderActive,
   drag,
   isActive,
 }: InstructionItemType) {
@@ -90,41 +92,58 @@ export default function InstructionItem({
 
   return (
     <TouchableOpacity
-      onLongPress={drag}
-      onPress={handleInstructionPress}
-      disabled={isActive}
+      onPress={!reorderActive ? handleInstructionPress : null}
+      onPressIn={drag}
+      disabled={isActive && reorderActive}
     >
-      <View style={isEditing ? { height: 0 } : {}}>
-        <SwipeableDelete removeItem={() => removeInstruction(instr.id)}>
-          <View style={styles.instructionContainer}>
-            {'label' in instr ? (
-              <Label id={instr.id} label={instr.label} />
-            ) : (
-              <Instruction index={instr.index} content={instr.content} />
-            )}
+      <View style={{ paddingLeft: reorderActive ? 40 : 0 }}>
+        {reorderActive && (
+          <View style={styles.handler}>
+            <MCIcons name='menu' size={30} />
           </View>
-        </SwipeableDelete>
-      </View>
-      <View
-        style={
-          !isEditing
-            ? { height: 0, overflow: 'hidden' }
-            : { marginHorizontal: 15 }
-        }
-      >
-        <AddRecipeInput
-          val={editedVal}
-          setVal={setEditedVal}
-          inputRef={editInputRef}
-          onBlur={() => setIsEditing(false)}
-          onEnter={handleEditSubmit}
-        />
+        )}
+        <View style={isEditing ? { height: 0 } : {}}>
+          <SwipeableDelete
+            removeItem={() => removeInstruction(instr.id)}
+            disabled={reorderActive}
+          >
+            <View style={styles.instructionContainer}>
+              {'label' in instr ? (
+                <Label id={instr.id} label={instr.label} />
+              ) : (
+                <Instruction index={instr.index} content={instr.content} />
+              )}
+            </View>
+          </SwipeableDelete>
+        </View>
+        <View
+          style={
+            !isEditing
+              ? { height: 0, overflow: 'hidden' }
+              : { marginHorizontal: 15 }
+          }
+        >
+          <AddRecipeInput
+            val={editedVal}
+            setVal={setEditedVal}
+            inputRef={editInputRef}
+            onBlur={() => setIsEditing(false)}
+            onEnter={handleEditSubmit}
+          />
+        </View>
       </View>
     </TouchableOpacity>
   )
 }
 
 const styles = StyleSheet.create({
+  handler: {
+    height: '100%',
+    justifyContent: 'center',
+    position: 'absolute',
+    left: 10,
+  },
+
   instructionContainer: {
     flex: 1,
     flexDirection: 'row',

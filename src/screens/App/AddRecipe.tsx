@@ -7,6 +7,7 @@ import {
 } from 'react-native'
 import Constants from 'expo-constants'
 import React, { useEffect, useRef, useState } from 'react'
+import * as Haptics from 'expo-haptics'
 
 import { FlatList } from 'react-native-gesture-handler'
 import AddRecipeInputTitle from '../../components/recipes/RecipePage/AddRecipe/AddRecipeInputTitle'
@@ -41,166 +42,172 @@ type ErrorsType = {
 }
 
 export default function AddRecipe() {
-  const [title, setTitle] = useState('')
-
-  const [image, setImage] = useState('')
-  const [description, setDescription] = useState('')
-  const [servings, setServings] = useState(null)
-
-  const [prepTime, setPrepTime] = useState<{
-    hours: number
-    minutes: number
-  } | null>(null)
-  const [cookTime, setCookTime] = useState<{
-    hours: number
-    minutes: number
-  } | null>(null)
-
-  const [ingredients, setIngredients] = useState<IngredientsType[]>([])
-  const [instructions, setInstructions] = useState<InstructionsType[]>([])
-
-  const [cuisine, setCuisine] = useState('')
-  const [course, setCourse] = useState('')
-
-  const [errors, setErrors] = useState<Partial<ErrorsType>>({})
-
   const addRecipeFormRef = useRef(null)
 
-  const validate = () => {
-    let newErrors: Partial<ErrorsType> = {}
+  const ListFooterComponent = React.memo(() => {
+    const [title, setTitle] = useState('')
 
-    if (!title) {
-      newErrors.title = 'Title is required'
-    } else if (title.length > 50) {
-      newErrors.title = 'Title cannot exceed 50 characters'
-    }
+    const [image, setImage] = useState('')
+    const [description, setDescription] = useState('')
+    const [servings, setServings] = useState(null)
 
-    if (!image) newErrors.image = 'Image is required'
-    if (!description) newErrors.description = 'Description is required'
-    if (!servings) newErrors.servings = 'Servings amount is required'
-    if (!prepTime) newErrors.prepTime = 'Prep time is required'
-    if (ingredients.length <= 0)
-      newErrors.ingredients = 'Recipe must contain ingredients'
-    if (instructions.length <= 0)
-      newErrors.instructions = 'Instructions are required'
-    if (!cuisine) newErrors.cuisine = 'Cuisine required'
-    if (!course) newErrors.course = 'Course required'
+    const [prepTime, setPrepTime] = useState<{
+      hours: number
+      minutes: number
+    } | null>(null)
+    const [cookTime, setCookTime] = useState<{
+      hours: number
+      minutes: number
+    } | null>(null)
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-  const handleAddRecipe = () => {
-    if (validate()) {
-      console.log('success')
-    } else {
-      if (addRecipeFormRef.current) {
-        addRecipeFormRef.current.scrollToOffset({ offset: 0, animated: true })
+    const [ingredients, setIngredients] = useState<IngredientsType[]>([])
+    const [instructions, setInstructions] = useState<InstructionsType[]>([])
+
+    const [cuisine, setCuisine] = useState('')
+    const [course, setCourse] = useState('')
+
+    const [errors, setErrors] = useState<Partial<ErrorsType>>({})
+
+    const validate = () => {
+      let newErrors: Partial<ErrorsType> = {}
+
+      if (!title) {
+        newErrors.title = 'Title is required'
+      } else if (title.length > 50) {
+        newErrors.title = 'Title cannot exceed 50 characters'
       }
-      console.log('Errors')
-    }
-  }
 
-  const ListFooterComponent = () => (
-    <KeyboardAwareScrollView keyboardOpeningTime={0}>
-      <Pressable
-        style={{ flex: 1 }}
-        onPress={() => {
-          Keyboard.dismiss()
-        }}
-      >
-        <View style={styles.container}>
-          <View style={styles.inputSection}>
-            <AddRecipeInputTitle title='Title' />
-            <AddRecipeInput val={title} setVal={setTitle} />
-            <AddRecipeFormError error={errors?.title} />
-          </View>
-          <View style={styles.inputSection}>
-            <AddRecipeInputTitle title='Cover Image' />
-            <AddRecipeImageInput image={image} setImage={setImage} />
-            <AddRecipeFormError error={errors?.image} />
-          </View>
-          <View style={styles.inputSection}>
-            <AddRecipeInputTitle title='Description' />
-            <AddRecipeInput
-              val={description}
-              setVal={setDescription}
-              numberOfLines={5}
-            />
-            <AddRecipeFormError error={errors?.description} />
-          </View>
-          <View style={styles.inputSection}>
-            <View style={styles.row}>
-              <AddRecipeInputTitle title='Servings' style={styles.flex} />
-              <AddRecipeServingsInput
-                servings={servings}
-                setServings={setServings}
+      if (!image) newErrors.image = 'Image is required'
+      if (!description) newErrors.description = 'Description is required'
+      if (!servings) newErrors.servings = 'Servings amount is required'
+      if (!prepTime) newErrors.prepTime = 'Prep time is required'
+      if (ingredients.length <= 0)
+        newErrors.ingredients = 'Recipe must contain ingredients'
+      if (instructions.length <= 0)
+        newErrors.instructions = 'Instructions are required'
+      if (!cuisine) newErrors.cuisine = 'Cuisine required'
+      if (!course) newErrors.course = 'Course required'
+
+      setErrors(newErrors)
+      return Object.keys(newErrors).length === 0
+    }
+    const handleAddRecipe = () => {
+      if (validate()) {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
+        console.log('success')
+      } else {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+        if (addRecipeFormRef.current) {
+          addRecipeFormRef.current.scrollToOffset({ offset: 0, animated: true })
+        }
+        console.log('Errors')
+      }
+    }
+    return (
+      <KeyboardAwareScrollView keyboardOpeningTime={0}>
+        <Pressable
+          style={{ flex: 1 }}
+          onPress={() => {
+            Keyboard.dismiss()
+          }}
+        >
+          <View style={styles.container}>
+            <View style={styles.inputSection}>
+              <AddRecipeInputTitle title='Title' />
+              <AddRecipeInput val={title} setVal={setTitle} />
+              <AddRecipeFormError error={errors?.title} />
+            </View>
+            <View style={styles.inputSection}>
+              <AddRecipeInputTitle title='Cover Image' />
+              <AddRecipeImageInput image={image} setImage={setImage} />
+              <AddRecipeFormError error={errors?.image} />
+            </View>
+            <View style={styles.inputSection}>
+              <AddRecipeInputTitle title='Description' />
+              <AddRecipeInput
+                val={description}
+                setVal={setDescription}
+                numberOfLines={5}
+              />
+              <AddRecipeFormError error={errors?.description} />
+            </View>
+            <View style={styles.inputSection}>
+              <View style={styles.row}>
+                <AddRecipeInputTitle title='Servings' style={styles.flex} />
+                <AddRecipeServingsInput
+                  servings={servings}
+                  setServings={setServings}
+                />
+              </View>
+              <AddRecipeFormError error={errors?.servings} />
+            </View>
+            <View style={styles.inputSection}>
+              <View style={styles.row}>
+                <AddRecipeInputTitle title='Prep Time' style={styles.flex} />
+                <AddRecipeTimeInput time={prepTime} setTime={setPrepTime} />
+              </View>
+              <AddRecipeFormError error={errors?.prepTime} />
+            </View>
+            <View style={[styles.inputSection, styles.row]}>
+              <AddRecipeInputTitle title='Cook Time' style={styles.flex} />
+              <AddRecipeTimeInput time={cookTime} setTime={setCookTime} />
+            </View>
+            <View>
+              <AddRecipeInputTitle title='Ingredients' style={styles.px} />
+              <IngredientsContainer
+                ingredients={ingredients}
+                setIngredients={setIngredients}
+              />
+              <AddRecipeFormError
+                error={errors?.ingredients}
+                style={styles.px}
               />
             </View>
-            <AddRecipeFormError error={errors?.servings} />
-          </View>
-          <View style={styles.inputSection}>
-            <View style={styles.row}>
-              <AddRecipeInputTitle title='Prep Time' style={styles.flex} />
-              <AddRecipeTimeInput time={prepTime} setTime={setPrepTime} />
-            </View>
-            <AddRecipeFormError error={errors?.prepTime} />
-          </View>
-          <View style={[styles.inputSection, styles.row]}>
-            <AddRecipeInputTitle title='Cook Time' style={styles.flex} />
-            <AddRecipeTimeInput time={cookTime} setTime={setCookTime} />
-          </View>
-          <View>
-            <AddRecipeInputTitle title='Ingredients' style={styles.px} />
-            <IngredientsContainer
-              ingredients={ingredients}
-              setIngredients={setIngredients}
-            />
-            <AddRecipeFormError error={errors?.ingredients} style={styles.px} />
-          </View>
-          <View>
-            <AddRecipeInputTitle title='Instructions' style={styles.px} />
-            <InstructionsContainer
-              instructions={instructions}
-              setInstructions={setInstructions}
-            />
-            <AddRecipeFormError
-              error={errors?.instructions}
-              style={styles.px}
-            />
-          </View>
-          <View style={styles.inputSection}>
-            <View style={styles.row}>
-              <AddRecipeInputTitle title='Cuisine' style={styles.flex} />
-              <FormPicker
-                items={cuisines}
-                val={cuisine}
-                setVal={setCuisine}
-                title='Set Cuisine'
+            <View>
+              <AddRecipeInputTitle title='Instructions' style={styles.px} />
+              <InstructionsContainer
+                instructions={instructions}
+                setInstructions={setInstructions}
+              />
+              <AddRecipeFormError
+                error={errors?.instructions}
+                style={styles.px}
               />
             </View>
-            <AddRecipeFormError error={errors?.cuisine} />
-          </View>
-          <View style={styles.inputSection}>
-            <View style={styles.row}>
-              <AddRecipeInputTitle title='Course Type' style={styles.flex} />
-              <FormPicker
-                items={courses}
-                val={course}
-                setVal={setCourse}
-                title='Set Course Type'
-              />
+            <View style={styles.inputSection}>
+              <View style={styles.row}>
+                <AddRecipeInputTitle title='Cuisine' style={styles.flex} />
+                <FormPicker
+                  items={cuisines}
+                  val={cuisine}
+                  setVal={setCuisine}
+                  title='Set Cuisine'
+                />
+              </View>
+              <AddRecipeFormError error={errors?.cuisine} />
             </View>
-            <AddRecipeFormError error={errors?.course} />
+            <View style={styles.inputSection}>
+              <View style={styles.row}>
+                <AddRecipeInputTitle title='Course Type' style={styles.flex} />
+                <FormPicker
+                  items={courses}
+                  val={course}
+                  setVal={setCourse}
+                  title='Set Course Type'
+                />
+              </View>
+              <AddRecipeFormError error={errors?.course} />
+            </View>
           </View>
-        </View>
-        <Button
-          title='Add Recipe'
-          onPress={handleAddRecipe}
-          style={styles.addRecipeBtn}
-        />
-      </Pressable>
-    </KeyboardAwareScrollView>
-  )
+          <Button
+            title='Add Recipe'
+            onPress={handleAddRecipe}
+            style={styles.addRecipeBtn}
+          />
+        </Pressable>
+      </KeyboardAwareScrollView>
+    )
+  })
 
   return (
     <View style={{ flex: 1, height: '100%', width: '100%' }}>

@@ -2,6 +2,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native'
@@ -47,18 +48,6 @@ export default function AddRecipeIngredientInput({
       setLoading(false)
       setError('something went wrong')
     }
-
-    // ingredientParser(inputVal, SPOONACULAR_API_KEY)
-    //   .then(res => {
-    //     addIngredient(res)
-    //     setInputVal('')
-    //     setLoading(false)
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
-    //     setError(err)
-    //     setLoading(false)
-    //   })
   }
 
   return (
@@ -67,8 +56,11 @@ export default function AddRecipeIngredientInput({
         <AddRecipeInput
           val={inputVal}
           setVal={setInputVal}
-          numberOfLines={2}
+          multiline={true}
           onEnter={handleAddIngredient}
+          scrollEnabled={false}
+          numberOfLines={0}
+          style={{ height: 'auto', maxHeight: 'auto' }}
         />
       </View>
     </View>

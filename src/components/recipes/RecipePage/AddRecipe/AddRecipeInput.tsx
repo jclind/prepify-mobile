@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useRef } from 'react'
 import sv from '../../../../config/sv'
 
 type AddRecipeInputType = {
@@ -10,6 +10,9 @@ type AddRecipeInputType = {
   placeholder?: string
   inputRef?: React.RefObject<TextInput>
   onBlur?: () => void
+  multiline?: boolean
+  scrollEnabled?: boolean
+  style?: any
 }
 
 export default function AddRecipeInput({
@@ -20,23 +23,26 @@ export default function AddRecipeInput({
   placeholder,
   inputRef,
   onBlur,
+  multiline,
+  style,
+  scrollEnabled,
 }: AddRecipeInputType) {
-  const [tempVal, setTempVal] = useState(val)
   return (
     <View>
       <TextInput
-        value={tempVal}
-        onChangeText={text => setTempVal(text)}
-        onEndEditing={() => setVal(tempVal)}
+        value={val}
+        onChangeText={text => setVal(text)}
         style={[
           styles.input,
           { minHeight: 20 * numberOfLines, maxHeight: 20 * numberOfLines + 20 },
+          style,
         ]}
-        multiline={numberOfLines > 1}
+        multiline={numberOfLines > 1 || multiline}
         numberOfLines={numberOfLines}
         blurOnSubmit={!!onEnter}
         onBlur={onBlur}
         onSubmitEditing={onEnter || null}
+        scrollEnabled={scrollEnabled}
         placeholder={placeholder}
         ref={inputRef}
       />

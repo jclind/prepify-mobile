@@ -23,8 +23,9 @@ type IngredientItemProps = {
   editIngredient: (id: string, updatedItem: IngredientsType) => void
   removeIngredient: (string) => void
   getIngredientData: (val: string) => Promise<IngredientResponseType>
-  drag: any
-  isActive: any
+  drag?: any
+  isActive?: any
+  reorderActive: boolean
 }
 
 const Label = ({ id, label }: { id: string; label: string }) => {
@@ -81,6 +82,7 @@ export default function AddRecipeIngredientItem({
   removeIngredient,
   drag,
   isActive,
+  reorderActive,
   editIngredient,
   getIngredientData,
 }: IngredientItemProps) {
@@ -122,35 +124,45 @@ export default function AddRecipeIngredientItem({
 
   return (
     <TouchableOpacity
-      onLongPress={drag}
+      onPressIn={drag}
       onPress={handleInstructionPress}
-      disabled={isActive}
+      disabled={isActive && reorderActive}
     >
-      <View style={isEditing ? { height: 0 } : {}}>
-        <SwipeableDelete removeItem={() => removeIngredient(ingr.id)}>
-          <View style={styles.ingredientsContainer}>
-            {'label' in ingr ? (
-              <Label id={ingr.id} label={ingr.label} />
-            ) : (
-              <Ingredient ingr={ingr} />
-            )}
+      <View style={{ paddingLeft: reorderActive ? 40 : 0 }}>
+        {reorderActive && (
+          <View style={styles.handler}>
+            <MCIcons name='menu' size={30} />
           </View>
-        </SwipeableDelete>
-      </View>
-      <View
-        style={
-          !isEditing
-            ? { height: 0, overflow: 'hidden' }
-            : { marginHorizontal: 15 }
-        }
-      >
-        <AddRecipeInput
-          val={editedVal}
-          setVal={setEditedVal}
-          inputRef={editInputRef}
-          onBlur={() => setIsEditing(false)}
-          onEnter={handleEditSubmit}
-        />
+        )}
+        <View style={isEditing ? { height: 0 } : {}}>
+          <SwipeableDelete
+            removeItem={() => removeIngredient(ingr.id)}
+            disabled={reorderActive}
+          >
+            <View style={styles.ingredientsContainer}>
+              {'label' in ingr ? (
+                <Label id={ingr.id} label={ingr.label} />
+              ) : (
+                <Ingredient ingr={ingr} />
+              )}
+            </View>
+          </SwipeableDelete>
+        </View>
+        <View
+          style={
+            !isEditing
+              ? { height: 0, overflow: 'hidden' }
+              : { marginHorizontal: 15 }
+          }
+        >
+          <AddRecipeInput
+            val={editedVal}
+            setVal={setEditedVal}
+            inputRef={editInputRef}
+            onBlur={() => setIsEditing(false)}
+            onEnter={handleEditSubmit}
+          />
+        </View>
       </View>
     </TouchableOpacity>
   )
@@ -162,6 +174,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     marginBottom: 10,
+  },
+  handler: {
+    height: '100%',
+    justifyContent: 'center',
+    position: 'absolute',
+    left: 10,
   },
   ingredientsContainer: {
     // flex: 1,
