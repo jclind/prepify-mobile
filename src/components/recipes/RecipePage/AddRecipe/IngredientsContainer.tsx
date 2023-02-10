@@ -20,11 +20,9 @@ import AppText from '../../../text/AppText'
 import uuid from 'react-native-uuid'
 import sv from '../../../../config/sv'
 import Error from '../../../Error'
-import { MCIcons } from '../../../../config/types/MCIcons'
-import AddRecipeInput from './AddRecipeInput'
 import AddLabelContainer from './AddLabelContainer'
-import { IngredientsType } from './addRecipeTypes'
 import { SPOONACULAR_API_KEY } from '@env'
+import { IngredientsType } from '../../../../../types'
 
 type IngredientsProps = {
   ingredients: IngredientsType[]
@@ -114,7 +112,7 @@ export default function IngredientsContainer({
               <AddRecipeIngredientItem
                 ingr={item}
                 removeIngredient={removeIngredient}
-                reorderActive={false} 
+                reorderActive={false}
                 editIngredient={editIngredient}
                 getIngredientData={getIngredientData}
               />

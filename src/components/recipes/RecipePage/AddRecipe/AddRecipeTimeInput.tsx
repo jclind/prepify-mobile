@@ -76,7 +76,7 @@ export default function AddRecipeTimeInput({
           </TouchableWithoutFeedback>
           <View style={styles.modalContent}>
             <AppText size='medium' style={styles.pickerTitle}>
-              Prep Time
+              Cook Time
             </AppText>
             <View style={styles.pickersContainer}>
               <View style={styles.singlePickerContainer}>

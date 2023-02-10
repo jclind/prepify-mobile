@@ -16,9 +16,10 @@ import Button from '../../../Button'
 
 type FormPickerProps = {
   items: string[] | number[]
-  val: string | number
+  val: string | number | null
   setVal: (val) => void
   title: string
+  label?: string
 }
 
 export default function FormPicker({
@@ -26,13 +27,15 @@ export default function FormPicker({
   val,
   setVal,
   title,
+  label,
 }: FormPickerProps) {
-  const [tempVal, setTempVal] = useState<string | number>(val)
+  const [tempVal, setTempVal] = useState<string | number | null>(val)
   const [isModalVisible, setModalVisible] = useState(false)
   return (
     <View>
       <OpenPickerBtn
         val={val || null}
+        label={label}
         setModalVisible={setModalVisible}
         title={title}
       />
@@ -50,7 +53,7 @@ export default function FormPicker({
           </TouchableWithoutFeedback>
           <View style={styles.modalContent}>
             <AppText size='medium' style={styles.pickerTitle}>
-              Number Of Servings
+              {title}
             </AppText>
             <Picker
               selectedValue={tempVal}
@@ -59,7 +62,7 @@ export default function FormPicker({
             >
               <Picker.Item key='null-item' label='-' value={null} />
               {items.map(item => (
-                <Picker.Item key={item} label={item} value={item} />
+                <Picker.Item key={item} label={item.toString()} value={item} />
               ))}
             </Picker>
             <Button

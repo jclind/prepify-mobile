@@ -12,7 +12,7 @@ import AddRecipeInput from './AddRecipeInput'
 import AppText from '../../../text/AppText'
 import sv from '../../../../config/sv'
 import { IngredientResponseType } from '@jclind/ingredient-parser'
-import { IngredientsType } from './addRecipeTypes'
+import { IngredientsType } from '../../../../../types'
 
 type AddRecipeIngredientInputProps = {
   setIngredients: (ingredient) => void

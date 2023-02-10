@@ -12,6 +12,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { MCIcons } from '../../../../config/types/MCIcons'
 import AppText from '../../../text/AppText'
 import sv from '../../../../config/sv'
+import RecipeAPI from '../../../../api/recipes'
 
 type AddRecipeImageInput = {
   image: string
@@ -25,14 +26,14 @@ export default function AddRecipeImageInput({
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     })
-
     if (!result.canceled) {
-      setImage(result.assets[0].uri)
+      const uri = result.assets[0].uri
+      setImage(uri)
     }
   }
 

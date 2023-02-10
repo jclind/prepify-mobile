@@ -10,10 +10,10 @@ import React, { useRef, useState } from 'react'
 import AppText from '../../../text/AppText'
 import { MCIcons } from '../../../../config/types/MCIcons'
 import sv from '../../../../config/sv'
-import { IngredientsType } from './addRecipeTypes'
 import AddRecipeInput from './AddRecipeInput'
 import SwipeableDelete from './SwipeableDelete'
 import { IngredientResponseType } from '@jclind/ingredient-parser'
+import { IngredientsType } from '../../../../../types'
 
 const unknownImagePath =
   'https://spoonacular.com/cdn/ingredients_100x100/uknown.jpg'

@@ -1,9 +1,10 @@
 import { doc, getDoc } from 'firebase/firestore'
-import { db } from './firebase'
+import { db, storage } from './firebase'
 import { http, nutrition } from './http-common'
 import ingredientParser from '@jclind/ingredient-parser'
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 
-class RecipeAPI {
+class RecipeAPIClass {
   async getTrendingRecipes(limit: number = 4) {
     return await http.get(`getTrendingRecipes?limit=${limit}`)
   }
@@ -59,6 +60,24 @@ class RecipeAPI {
 
     return await http.get(`searchAutoCompleteRecipes?${titleParam}${tagsParam}`)
   }
+
+  async addRecipe(recipeData) {}
+
+  async uploadRecipeImage(imageURI) {
+    if (imageURI) {
+      const imageBlobRes = await fetch(imageURI)
+      const imageBlob = await imageBlobRes.blob()
+
+      const storage = getStorage()
+      const recipeImagesRef = ref(storage, `recipeImages/${Date.now()}`)
+      await uploadBytes(recipeImagesRef, imageBlob)
+      const fileUrl = await getDownloadURL(recipeImagesRef)
+      return fileUrl
+    } else {
+      throw new Error('Image does not exist')
+    }
+  }
 }
 
-export default new RecipeAPI()
+const RecipeAPI = new RecipeAPIClass()
+export default RecipeAPI

@@ -18,15 +18,12 @@ import AddRecipeTimeInput from '../../components/recipes/RecipePage/AddRecipe/Ad
 import IngredientsContainer from '../../components/recipes/RecipePage/AddRecipe/IngredientsContainer'
 import InstructionsContainer from '../../components/recipes/RecipePage/AddRecipe/InstructionsContainer'
 import FormPicker from '../../components/recipes/RecipePage/AddRecipe/FormPicker'
-import {
-  IngredientsType,
-  InstructionsType,
-} from '../../components/recipes/RecipePage/AddRecipe/addRecipeTypes'
 import cuisines from '../../recipeData/cuisines'
 import courses from '../../recipeData/courses'
 import Button from '../../components/Button'
 import AddRecipeFormError from '../../components/recipes/RecipePage/AddRecipe/AddRecipeFormError'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { IngredientsType, InstructionsType } from '../../../types'
 
 type ErrorsType = {
   title: string
@@ -59,6 +56,8 @@ export default function AddRecipe() {
       hours: number
       minutes: number
     } | null>(null)
+    const [fridgeLife, setFridgeLife] = useState<number>(0)
+    const [freezerLife, setFreezerLife] = useState<number>(0)
 
     const [ingredients, setIngredients] = useState<IngredientsType[]>([])
     const [instructions, setInstructions] = useState<InstructionsType[]>([])
@@ -92,6 +91,7 @@ export default function AddRecipe() {
       return Object.keys(newErrors).length === 0
     }
     const handleAddRecipe = () => {
+      console.log(image)
       if (validate()) {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
         console.log('success')
@@ -151,6 +151,26 @@ export default function AddRecipe() {
             <View style={[styles.inputSection, styles.row]}>
               <AddRecipeInputTitle title='Cook Time' style={styles.flex} />
               <AddRecipeTimeInput time={cookTime} setTime={setCookTime} />
+            </View>
+            <View style={[styles.inputSection, styles.row]}>
+              <AddRecipeInputTitle title='Fridge Life' style={styles.flex} />
+              <FormPicker
+                items={[...Array.from({ length: 100 }, (_, i) => i + 1)]}
+                val={fridgeLife}
+                setVal={setFridgeLife}
+                title='Fridge Life (days)'
+                label='days'
+              />
+            </View>
+            <View style={[styles.inputSection, styles.row]}>
+              <AddRecipeInputTitle title='Freezer Life' style={styles.flex} />
+              <FormPicker
+                items={[...Array.from({ length: 365 }, (_, i) => i + 1)]}
+                val={freezerLife}
+                setVal={setFreezerLife}
+                title='Freezer Life (days)'
+                label='days'
+              />
             </View>
             <View>
               <AddRecipeInputTitle title='Ingredients' style={styles.px} />

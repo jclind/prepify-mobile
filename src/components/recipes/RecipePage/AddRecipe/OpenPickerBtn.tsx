@@ -8,12 +8,14 @@ type OpenPickerBtnProps = {
   val: string | number
   setModalVisible: (val: boolean) => void
   title: string
+  label?: string
 }
 
 export default function OpenPickerBtn({
   val,
   setModalVisible,
   title,
+  label,
 }: OpenPickerBtnProps) {
   return (
     <View style={styles.addServingsBtnContainer}>
@@ -21,7 +23,7 @@ export default function OpenPickerBtn({
         <View style={styles.addServingsBtn}>
           {val ? (
             <AppText size='mediumSmall' style={styles.numberOfServings}>
-              {val}
+              {`${val} ${label ? label : ''}`}
             </AppText>
           ) : (
             <>
