@@ -23,6 +23,7 @@
     "@types/react-native": "~0.70.6",
     "axios": "^1.2.0",
     "bad-words": "^3.0.4",
+    "bson-objectid": "^2.0.4",
     "dotenv": "^16.0.3",
     "expo": "~47.0.6",
     "expo-app-loading": "~2.1.1",

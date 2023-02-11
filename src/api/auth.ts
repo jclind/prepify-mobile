@@ -13,18 +13,11 @@ import {
   signOut,
 } from 'firebase/auth'
 import { db, auth } from './firebase'
-import { User as FirebaseUser } from 'firebase/auth'
 
-class AuthAPI {
-  // private _user: FirebaseUser | null = null
-
-  // get user() {
-  //   return this._user
-  // }
-  // private set user(newUser) {
-  //   console.log('why man?')
-  //   this._user = newUser
-  // }
+class AuthAPIClass {
+  getUID(): string {
+    return auth?.currentUser?.uid ?? null
+  }
 
   async loginWithEmailAndPassword(email: string, password: string) {
     try {
@@ -86,4 +79,6 @@ class AuthAPI {
   }
 }
 
-export default new AuthAPI()
+const AuthAPI = new AuthAPIClass()
+
+export default AuthAPI

@@ -24,6 +24,8 @@ import Button from '../../components/Button'
 import AddRecipeFormError from '../../components/recipes/RecipePage/AddRecipe/AddRecipeFormError'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { IngredientsType, InstructionsType } from '../../../types'
+import { calculateServingPrice } from '../../api/util'
+import AuthAPI from '../../api/auth'
 
 type ErrorsType = {
   title: string
@@ -103,6 +105,7 @@ export default function AddRecipe() {
         console.log('Errors')
       }
     }
+
     return (
       <KeyboardAwareScrollView keyboardOpeningTime={0}>
         <Pressable
@@ -208,12 +211,12 @@ export default function AddRecipe() {
             </View>
             <View style={styles.inputSection}>
               <View style={styles.row}>
-                <AddRecipeInputTitle title='Course Type' style={styles.flex} />
+                <AddRecipeInputTitle title='Course' style={styles.flex} />
                 <FormPicker
                   items={courses}
                   val={course}
                   setVal={setCourse}
-                  title='Set Course Type'
+                  title='Set Course'
                 />
               </View>
               <AddRecipeFormError error={errors?.course} />

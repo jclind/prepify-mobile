@@ -12,7 +12,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { MCIcons } from '../../../../config/types/MCIcons'
 import AppText from '../../../text/AppText'
 import sv from '../../../../config/sv'
-import RecipeAPI from '../../../../api/recipes'
 
 type AddRecipeImageInput = {
   image: string

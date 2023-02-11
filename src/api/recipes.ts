@@ -3,6 +3,11 @@ import { db, storage } from './firebase'
 import { http, nutrition } from './http-common'
 import ingredientParser from '@jclind/ingredient-parser'
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
+import { IngredientsType, RecipeType } from '../../types'
+import { calculateServingPrice } from './util'
+import { EDAMAM_APP_ID, EDAMAM_APP_KEY } from '@env'
+import ObjectID from 'bson-objectid'
+import AuthAPI from './auth'
 
 class RecipeAPIClass {
   async getTrendingRecipes(limit: number = 4) {
@@ -61,9 +66,51 @@ class RecipeAPIClass {
     return await http.get(`searchAutoCompleteRecipes?${titleParam}${tagsParam}`)
   }
 
-  async addRecipe(recipeData) {}
+  async addRecipe(recipeData: Partial<RecipeType>) {
+    try {
+      const authorId: string = AuthAPI.getUID()
+      const recipeImage: string = await this.uploadRecipeImage(
+        recipeData.recipeImage
+      )
+      const servingPrice: number = calculateServingPrice(
+        recipeData.ingredients,
+        recipeData.servings
+      )
+      const totalTime: number = recipeData.prepTime + (recipeData.cookTime ?? 0)
+      const nutritionData = this.getRecipeNutrition(recipeData.ingredients)
 
-  async uploadRecipeImage(imageURI) {
+      const returnRecipeData: RecipeType = {
+        _id: '' + ObjectID(),
+        title: recipeData.title,
+        prepTime: recipeData.prepTime,
+        cookTime: recipeData.cookTime,
+        servings: recipeData.servings,
+        fridgeLife: recipeData.fridgeLife,
+        freezerLife: recipeData.freezerLife,
+        description: recipeData.description,
+        ingredients: recipeData.ingredients,
+        instructions: recipeData.instructions,
+        recipeImage,
+        nutritionData,
+        totalTime,
+        authorId,
+        rating: {
+          rateCount: 0,
+          rateValue: 0,
+        },
+        createdAt: new Date().getTime().toString(),
+        editedAt: null,
+        servingPrice,
+        cuisine: recipeData.cuisine,
+        course: recipeData.course,
+      }
+    } catch (error) {
+      console.log(error)
+      // !CATCH ERROR
+    }
+  }
+
+  async uploadRecipeImage(imageURI: string) {
     if (imageURI) {
       const imageBlobRes = await fetch(imageURI)
       const imageBlob = await imageBlobRes.blob()
@@ -76,6 +123,29 @@ class RecipeAPIClass {
     } else {
       throw new Error('Image does not exist')
     }
+  }
+  async getRecipeNutrition(ingrArr: IngredientsType[]) {
+    const ingrData: { title: string; ingredients: string[] } = {
+      title: 'recipe 1',
+      ingredients: [],
+    }
+    ingrArr.forEach(ingr => {
+      if ('parsedIngredient' in ingr) {
+        ingr.parsedIngredient
+        const { quantity, unit, ingredient } = ingr.parsedIngredient
+
+        if (quantity) {
+          const str = `${quantity} ${unit || ''} ${ingredient}`
+          ingrData.ingredients.push(str)
+        }
+      }
+    })
+
+    let nutritionResult = await nutrition.post(
+      `nutrition-details?app_id=${EDAMAM_APP_ID}&app_key=${EDAMAM_APP_KEY}`,
+      ingrData
+    )
+    return nutritionResult
   }
 }
 
