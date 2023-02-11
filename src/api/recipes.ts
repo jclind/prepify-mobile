@@ -3,11 +3,12 @@ import { db, storage } from './firebase'
 import { http, nutrition } from './http-common'
 import ingredientParser from '@jclind/ingredient-parser'
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
-import { IngredientsType, RecipeType } from '../../types'
+import { IngredientsType, NutritionDataType, RecipeType } from '../../types'
 import { calculateServingPrice } from './util'
 import { EDAMAM_APP_ID, EDAMAM_APP_KEY } from '@env'
 import ObjectID from 'bson-objectid'
 import AuthAPI from './auth'
+import dietLabels from '../recipeData/dietLabels'
 
 class RecipeAPIClass {
   async getTrendingRecipes(limit: number = 4) {
@@ -77,7 +78,11 @@ class RecipeAPIClass {
         recipeData.servings
       )
       const totalTime: number = recipeData.prepTime + (recipeData.cookTime ?? 0)
-      const nutritionData = this.getRecipeNutrition(recipeData.ingredients)
+      const nutritionDataRes = await this.getRecipeNutrition(
+        recipeData.ingredients
+      )
+      const nutritionData = nutritionDataRes.nutritionData
+      const nutritionLabels = nutritionDataRes.dietLabels
 
       const returnRecipeData: RecipeType = {
         _id: '' + ObjectID(),
@@ -103,6 +108,7 @@ class RecipeAPIClass {
         servingPrice,
         cuisine: recipeData.cuisine,
         course: recipeData.course,
+        nutritionLabels,
       }
     } catch (error) {
       console.log(error)
@@ -141,11 +147,27 @@ class RecipeAPIClass {
       }
     })
 
-    let nutritionResult = await nutrition.post(
+    let nutritionResult: NutritionDataType = await nutrition.post(
       `nutrition-details?app_id=${EDAMAM_APP_ID}&app_key=${EDAMAM_APP_KEY}`,
       ingrData
     )
-    return nutritionResult
+
+    if (!nutritionResult) return { nutritionData: null, dietLabels: null }
+
+    const currDietLabels: string[] = []
+
+    const returnedNutritionLabels = [
+      ...nutritionResult.dietLabels,
+      ...nutritionResult.healthLabels,
+    ]
+
+    dietLabels.forEach(l => {
+      if (returnedNutritionLabels.includes(l.toUpperCase())) {
+        currDietLabels.push(l)
+      }
+    })
+
+    return { nutritionData: nutritionResult, dietLabels: currDietLabels }
   }
 }
 

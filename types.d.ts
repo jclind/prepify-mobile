@@ -24,6 +24,7 @@ export type RecipeType = {
   servingPrice: number | null
   cuisine: string
   course: string
+  nutritionLabels: string[] | null
 }
 
 export type LabelType = { label: string; id?: string }
@@ -31,3 +32,17 @@ export type IngredientsType = IngredientResponseType | LabelType
 export type InstructionsType =
   | { content: string; index: number; id?: string }
   | LabelType
+
+export interface NutritionDataType {
+  uri: string
+  yield: any
+  calories: any
+  totalWeight: any
+  dietLabels: string[]
+  healthLabels: string[]
+  cautions: any[]
+  totalNutrients: any
+  totalDaily: any
+  ingredients: any[]
+  totalNutrientsKCal: any
+}
