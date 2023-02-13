@@ -6,7 +6,7 @@ import { MCIcons } from '../../../config/types/MCIcons'
 import AppText from '../../text/AppText'
 
 type RatingElementProps = {
-  rating: { rateValue: string; rateCount: string }
+  rating: { rateValue: number; rateCount: number }
   containerStyle?: any
   iconStyle?: any
 }
@@ -16,8 +16,8 @@ export default function RatingElement({
   containerStyle,
   iconStyle,
 }: RatingElementProps) {
-  const rateValue = Number(rating.rateValue)
-  const rateCount = Number(rating.rateCount)
+  const rateValue = rating.rateValue
+  const rateCount = rating.rateCount
 
   const formattedRating = formatRating(rateValue, rateCount)
 

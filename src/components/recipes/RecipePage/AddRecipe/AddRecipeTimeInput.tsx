@@ -16,6 +16,7 @@ import sv from '../../../../config/sv'
 type AddRecipePrepTimeInputProps = {
   time: { hours: number; minutes: number } | null
   setTime: (val: { hours: number; minutes: number }) => void
+  title: string
 }
 
 let hourPickerOptions = []
@@ -32,6 +33,7 @@ for (let i = 0; i < 60; i++) {
 export default function AddRecipeTimeInput({
   time,
   setTime,
+  title,
 }: AddRecipePrepTimeInputProps) {
   const [modalVisible, setModalVisible] = useState(false)
 
@@ -76,7 +78,7 @@ export default function AddRecipeTimeInput({
           </TouchableWithoutFeedback>
           <View style={styles.modalContent}>
             <AppText size='medium' style={styles.pickerTitle}>
-              Cook Time
+              {title}
             </AppText>
             <View style={styles.pickersContainer}>
               <View style={styles.singlePickerContainer}>

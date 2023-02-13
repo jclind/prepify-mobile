@@ -26,6 +26,20 @@ export type RecipeType = {
   course: string
   nutritionLabels: string[] | null
 }
+export type RecipeFormType = {
+  title: string
+  prepTime: number
+  cookTime: number | null
+  servings: number
+  fridgeLife: number | null
+  freezerLife: number | null
+  description: string
+  ingredients: IngredientsType[]
+  instructions: InstructionsType[]
+  recipeImage: string
+  cuisine: string
+  course: string
+}
 
 export type LabelType = { label: string; id?: string }
 export type IngredientsType = IngredientResponseType | LabelType

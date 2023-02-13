@@ -23,9 +23,16 @@ import courses from '../../recipeData/courses'
 import Button from '../../components/Button'
 import AddRecipeFormError from '../../components/recipes/RecipePage/AddRecipe/AddRecipeFormError'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { IngredientsType, InstructionsType } from '../../../types'
+import {
+  IngredientsType,
+  InstructionsType,
+  RecipeFormType,
+  RecipeType,
+} from '../../../types'
 import { calculateServingPrice } from '../../api/util'
 import AuthAPI from '../../api/auth'
+import RecipeAPI from '../../api/recipes'
+import { hrMinToMin } from '../../util/hrMinToMin'
 
 type ErrorsType = {
   title: string
@@ -44,11 +51,12 @@ export default function AddRecipe() {
   const addRecipeFormRef = useRef(null)
 
   const ListFooterComponent = React.memo(() => {
-    const [title, setTitle] = useState('')
+    const [addRecipeLoading, setAddRecipeLoading] = useState(false)
+    const [title, setTitle] = useState('testing')
 
-    const [image, setImage] = useState('')
-    const [description, setDescription] = useState('')
-    const [servings, setServings] = useState(null)
+    const [recipeImage, setRecipeImage] = useState('')
+    const [description, setDescription] = useState('sussy imposter')
+    const [servings, setServings] = useState(3)
 
     const [prepTime, setPrepTime] = useState<{
       hours: number
@@ -58,14 +66,14 @@ export default function AddRecipe() {
       hours: number
       minutes: number
     } | null>(null)
-    const [fridgeLife, setFridgeLife] = useState<number>(0)
-    const [freezerLife, setFreezerLife] = useState<number>(0)
+    const [fridgeLife, setFridgeLife] = useState<number>(3)
+    const [freezerLife, setFreezerLife] = useState<number>(3)
 
     const [ingredients, setIngredients] = useState<IngredientsType[]>([])
     const [instructions, setInstructions] = useState<InstructionsType[]>([])
 
-    const [cuisine, setCuisine] = useState('')
-    const [course, setCourse] = useState('')
+    const [cuisine, setCuisine] = useState('American')
+    const [course, setCourse] = useState('Lunch')
 
     const [errors, setErrors] = useState<Partial<ErrorsType>>({})
 
@@ -78,7 +86,7 @@ export default function AddRecipe() {
         newErrors.title = 'Title cannot exceed 50 characters'
       }
 
-      if (!image) newErrors.image = 'Image is required'
+      if (!recipeImage) newErrors.image = 'Image is required'
       if (!description) newErrors.description = 'Description is required'
       if (!servings) newErrors.servings = 'Servings amount is required'
       if (!prepTime) newErrors.prepTime = 'Prep time is required'
@@ -92,17 +100,52 @@ export default function AddRecipe() {
       setErrors(newErrors)
       return Object.keys(newErrors).length === 0
     }
-    const handleAddRecipe = () => {
-      console.log(image)
+    const clearForm = () => {
+      setTitle('')
+      setRecipeImage('')
+      setDescription('')
+      setServings(null)
+      setPrepTime(null)
+      setCookTime(null)
+      setFridgeLife(0)
+      setFreezerLife(0)
+      setIngredients([])
+      setInstructions([])
+      setCuisine('')
+      setCourse('')
+      setErrors({})
+    }
+    const handleAddRecipe = async () => {
       if (validate()) {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
-        console.log('success')
+        setAddRecipeLoading(true)
+        const recipeData: RecipeFormType = {
+          title,
+          prepTime: hrMinToMin(prepTime),
+          cookTime: hrMinToMin(cookTime),
+          servings,
+          fridgeLife,
+          freezerLife,
+          description,
+          ingredients,
+          instructions,
+          recipeImage,
+          cuisine,
+          course,
+        }
+        try {
+          await RecipeAPI.addRecipe(recipeData)
+          clearForm()
+        } catch (error) {
+          console.log('ERROR:', error)
+        } finally {
+          setAddRecipeLoading(false)
+        }
       } else {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
         if (addRecipeFormRef.current) {
           addRecipeFormRef.current.scrollToOffset({ offset: 0, animated: true })
         }
-        console.log('Errors')
       }
     }
 
@@ -122,7 +165,10 @@ export default function AddRecipe() {
             </View>
             <View style={styles.inputSection}>
               <AddRecipeInputTitle title='Cover Image' />
-              <AddRecipeImageInput image={image} setImage={setImage} />
+              <AddRecipeImageInput
+                image={recipeImage}
+                setImage={setRecipeImage}
+              />
               <AddRecipeFormError error={errors?.image} />
             </View>
             <View style={styles.inputSection}>
@@ -147,13 +193,21 @@ export default function AddRecipe() {
             <View style={styles.inputSection}>
               <View style={styles.row}>
                 <AddRecipeInputTitle title='Prep Time' style={styles.flex} />
-                <AddRecipeTimeInput time={prepTime} setTime={setPrepTime} />
+                <AddRecipeTimeInput
+                  title='Prep Time'
+                  time={prepTime}
+                  setTime={setPrepTime}
+                />
               </View>
               <AddRecipeFormError error={errors?.prepTime} />
             </View>
             <View style={[styles.inputSection, styles.row]}>
               <AddRecipeInputTitle title='Cook Time' style={styles.flex} />
-              <AddRecipeTimeInput time={cookTime} setTime={setCookTime} />
+              <AddRecipeTimeInput
+                title='Cook Time'
+                time={cookTime}
+                setTime={setCookTime}
+              />
             </View>
             <View style={[styles.inputSection, styles.row]}>
               <AddRecipeInputTitle title='Fridge Life' style={styles.flex} />
@@ -226,6 +280,7 @@ export default function AddRecipe() {
             title='Add Recipe'
             onPress={handleAddRecipe}
             style={styles.addRecipeBtn}
+            loading={addRecipeLoading}
           />
         </Pressable>
       </KeyboardAwareScrollView>

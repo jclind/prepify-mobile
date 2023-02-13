@@ -11,14 +11,12 @@ import { useRoute } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
 import RecipeAPI from '../../api/recipes'
 
-import RecipeType from '../../config/types/Recipe'
 import AppText from '../../components/text/AppText'
 import sv from '../../config/sv'
 import TotalTimeElement from '../../components/recipes/TotalTimeElement'
 import RatingElement from '../../components/recipes/RecipePage/RatingElement'
 import RecipeInfoBox from '../../components/recipes/RecipePage/RecipeInfoBox'
 import Ingredients from '../../components/recipes/RecipePage/Ingredients'
-import Directions from '../../components/recipes/RecipePage/Directions'
 import RecipeHeader from '../../components/recipes/RecipePage/RecipeHeader'
 import Animated, {
   useSharedValue,
@@ -26,6 +24,8 @@ import Animated, {
 } from 'react-native-reanimated'
 import TagsList from '../../components/recipes/RecipePage/TagsList'
 import Ratings from '../../components/recipes/RecipePage/Ratings/Ratings'
+import { RecipeType } from '../../../types'
+import Instructions from '../../components/recipes/RecipePage/Instructions'
 
 type ParamList = {
   Recipe: {
@@ -43,9 +43,10 @@ export default function Recipe() {
   const recipeID = params._id
   useEffect(() => {
     RecipeAPI.getRecipe(recipeID).then(res => {
-      if (res.data) {
-        setServings(Number(res.data?.yield?.value))
-        return setRecipe(res.data)
+      const result: RecipeType = res.data
+      if (result) {
+        setServings(result.servings)
+        return setRecipe(result)
       }
       // !ERROR
     })
@@ -149,11 +150,12 @@ export default function Recipe() {
             <Ingredients
               servings={servings}
               setServings={setServings}
-              recipe={recipe}
+              originalServings={recipe.servings}
+              ingredients={recipe.ingredients}
             />
-            <Directions recipe={recipe} />
-            <TagsList tags={recipe.tags} />
-            <Ratings recipe={recipe} />
+            <Instructions instructions={recipe.instructions} />
+            {/* <TagsList tags={recipe.tags} /> */}
+            {/* <Ratings recipe={recipe} /> */}
           </View>
         </View>
       </Animated.ScrollView>

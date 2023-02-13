@@ -43,7 +43,6 @@ export default function AddLabelContainer({
         <TouchableOpacity
           onPress={() => {
             setIsAddLabelVisible(true)
-            console.log(inputRef)
             if (inputRef && inputRef.current) {
               inputRef.current.focus()
             }

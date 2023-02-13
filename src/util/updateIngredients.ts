@@ -1,5 +1,5 @@
 import { evalNum } from './validateIngredientQuantityStr'
-import { IngredientsListType, IngredientType } from '../config/types/Recipe'
+import { IngredientsType } from '../../types'
 
 const mixedToDecimal = (str: string): number => {
   const split = str.split(' ')
@@ -27,33 +27,25 @@ const decimalToFraction = (num: number): string => {
 }
 
 export const updateIngredients = (
-  ingredients: IngredientsListType[],
+  ingredients: IngredientsType[],
   originalServings: number,
   newServings: number
-): IngredientsListType[] => {
+) => {
   const fractionMulti = newServings / originalServings
 
-  const updatedIngredients: IngredientsListType[] = ingredients.map(ingrObj => {
-    const list = ingrObj.list.map(ingr => {
+  const updatedIngredients: IngredientsType[] = ingredients.map(ingr => {
+    if ('parsedIngredient' in ingr) {
       let quantity = null
       let price = null
 
-      if (ingr.quantity) {
-        const res = mixedToDecimal(ingr.quantity) * fractionMulti
-        const wholeNum = Math.floor(res)
-        let fraction = decimalToFraction(res - wholeNum)
-
-        if (fraction === '0') {
-          quantity = `${wholeNum}`
-        } else if (wholeNum === 0) {
-          quantity = `${fraction}`
-        } else {
-          quantity = `${wholeNum} ${fraction}`
-        }
+      if (ingr.parsedIngredient.quantity) {
+        quantity = ingr.parsedIngredient.quantity * fractionMulti
       }
 
-      if (ingr.price) {
-        price = (fractionMulti * Number(ingr.price)).toFixed(2).toString()
+      if (ingr.ingredientData.totalPriceUSACents) {
+        price = (fractionMulti * ingr.ingredientData.totalPriceUSACents)
+          .toFixed(2)
+          .toString()
       }
 
       if (price && quantity) {
@@ -65,8 +57,8 @@ export const updateIngredients = (
       }
 
       return { ...ingr }
-    })
-    return { ...ingrObj, list }
+    }
+    return { ...ingr }
   })
   return updatedIngredients
 }

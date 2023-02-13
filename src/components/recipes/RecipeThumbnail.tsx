@@ -1,12 +1,12 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
-import RecipeType from '../../config/types/Recipe'
 import sv from '../../config/sv'
 import AppText from '../text/AppText'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
 import TotalTimeElement from './TotalTimeElement'
 import RatingElement from './RecipePage/RatingElement'
+import { RecipeType } from '../../../types'
 
 type RecipeThumbnailProps = {
   recipe: RecipeType
@@ -23,7 +23,7 @@ export default function RecipeThumbnail({ recipe }: RecipeThumbnailProps) {
 
   const priceText = () => {
     const servingPrice = Number(recipe.servingPrice)
-    const numServings = Number(recipe.yield.value)
+    const numServings = Number(recipe.servings)
     const recipePrice = (servingPrice * numServings).toFixed(2)
     return (
       <AppText

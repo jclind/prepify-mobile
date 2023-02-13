@@ -7,43 +7,53 @@ import {
 } from 'react-native'
 import Checkbox from 'expo-checkbox'
 import React, { useState } from 'react'
-import { IngredientType } from '../../../config/types/Recipe'
 import sv from '../../../config/sv'
 import AppText from '../../text/AppText'
+import { IngredientsType } from '../../../../types'
 
 type IngredientItemProps = {
-  ingredient: IngredientType
+  ingredient: IngredientsType
 }
 
 export default function IngredientItem({ ingredient }: IngredientItemProps) {
-  const [isChecked, setIsChecked] = useState(false)
+  if ('parsedIngredient' in ingredient) {
+    const [isChecked, setIsChecked] = useState(false)
 
-  return (
-    <TouchableWithoutFeedback onPress={() => setIsChecked(prev => !prev)}>
-      <View
-        style={
-          isChecked
-            ? [styles.ingredientItem, styles.checked]
-            : styles.ingredientItem
-        }
-      >
-        <Checkbox
-          style={styles.checkbox}
-          value={isChecked}
-          onValueChange={setIsChecked}
-          color={isChecked ? sv.primary : undefined}
-        />
-        <Text style={styles.textContainer} numberOfLines={3}>
-          <AppText style={styles.quantity} size='mediumSmall'>{`${
-            ingredient.quantity ?? ''
-          } ${ingredient.measurement.value ?? ''} `}</AppText>
-          <AppText style={styles.ingrText} size='mediumSmall'>
-            {ingredient.name}
-          </AppText>
-        </Text>
-      </View>
-    </TouchableWithoutFeedback>
-  )
+    const {
+      quantity,
+      unit,
+      ingredient: ingredientName,
+    } = ingredient.parsedIngredient
+
+    return (
+      <TouchableWithoutFeedback onPress={() => setIsChecked(prev => !prev)}>
+        <View
+          style={
+            isChecked
+              ? [styles.ingredientItem, styles.checked]
+              : styles.ingredientItem
+          }
+        >
+          <Checkbox
+            style={styles.checkbox}
+            value={isChecked}
+            onValueChange={setIsChecked}
+            color={isChecked ? sv.primary : undefined}
+          />
+          <Text style={styles.textContainer} numberOfLines={3}>
+            <AppText style={styles.quantity} size='mediumSmall'>{`${
+              quantity ?? ''
+            } ${unit ?? ''} `}</AppText>
+            <AppText style={styles.ingrText} size='mediumSmall'>
+              {ingredientName}
+            </AppText>
+          </Text>
+        </View>
+      </TouchableWithoutFeedback>
+    )
+  } else {
+    return null
+  }
 }
 
 const styles = StyleSheet.create({

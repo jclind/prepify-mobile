@@ -9,32 +9,29 @@ import { updateIngredients } from '../../../util/updateIngredients'
 import recipeStyles from '../../../config/recipeStyles'
 import SectionListTitle from './SectionListTitle'
 import SectionTitle from './SectionTitle'
+import { IngredientsType } from '../../../../types'
 
 type IngredientsProps = {
   servings: number
   setServings: (servings) => void
-  recipe: RecipeType
+  originalServings: number
+  ingredients: IngredientsType[]
 }
 
 export default function Ingredients({
   servings,
   setServings,
-  recipe,
+  originalServings,
+  ingredients,
 }: IngredientsProps) {
-  const [modIngredients, setModIngredients] = useState<IngredientsListType[]>(
-    []
-  )
+  const [modIngredients, setModIngredients] = useState<IngredientsType[]>([])
 
   useEffect(() => {
-    if (servings === Number(recipe.yield.value)) {
-      setModIngredients(recipe.ingredients)
+    if (servings === originalServings) {
+      setModIngredients(ingredients)
     } else {
       setModIngredients(
-        updateIngredients(
-          recipe.ingredients,
-          Number(recipe.yield.value),
-          servings
-        )
+        updateIngredients(ingredients, originalServings, servings)
       )
     }
   }, [servings])
@@ -89,24 +86,15 @@ export default function Ingredients({
       </View>
     </View>
   )
-  const renderAllIngredientsLists = () => {
-    return modIngredients.map((ingrList, idx) => {
-      const isMultiIngrList = recipe.ingredients.length > 1 // true if there is more than one ingredient list
-      return (
-        <View style={styles.ingredientItem} key={idx}>
-          {isMultiIngrList && (
-            <SectionListTitle>{ingrList.name}</SectionListTitle>
-          )}
-          {renderIngredientsList(ingrList)}
-        </View>
-      )
-    })
-  }
-  const renderIngredientsList = (ingrList: IngredientsListType) => {
+  const renderIngredientsList = () => {
     return (
       <View style={recipeStyles.sectionList}>
-        {ingrList.list.map(ingr => {
-          return <IngredientItem ingredient={ingr} key={ingr.id} />
+        {ingredients.map(ingr => {
+          if ('parsedIngredient' in ingr) {
+            return <IngredientItem ingredient={ingr} key={ingr.id} />
+          } else {
+            return <AppText>{ingr.label}</AppText>
+          }
         })}
       </View>
     )
@@ -118,13 +106,13 @@ export default function Ingredients({
         <View>
           <SectionTitle>Ingredients For</SectionTitle>
           <AppText size='mediumSmall' textColor={sv.tertiaryText}>
-            {`${servings} ${recipe.yield.type.value}`}
+            {`${servings} servings`}
           </AppText>
         </View>
         {renderServingsCounter()}
       </View>
       <View style={recipeStyles.sectionListsContainer}>
-        {renderAllIngredientsLists()}
+        {renderIngredientsList()}
       </View>
       <View style={recipeStyles.horizontalDivider} />
     </View>

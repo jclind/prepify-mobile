@@ -1,8 +1,8 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useState, useEffect, Fragment } from 'react'
 import RecipeAPI from '../../api/recipes'
-import RecipeType from '../../config/types/Recipe'
 import RecipeThumbnail from './RecipeThumbnail'
+import { RecipeType } from '../../../types'
 
 export default function TrendingRecipeList() {
   const [recipes, setRecipes] = useState<RecipeType[] | null>([])

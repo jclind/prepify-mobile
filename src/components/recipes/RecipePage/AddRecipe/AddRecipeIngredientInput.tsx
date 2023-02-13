@@ -34,7 +34,6 @@ export default function AddRecipeIngredientInput({
 
   const handleAddIngredient = async () => {
     setError('')
-    console.log('here', loading, inputVal)
     if (loading || !inputVal) return
 
     setLoading(true)
