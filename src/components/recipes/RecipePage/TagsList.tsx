@@ -4,10 +4,22 @@ import AppText from '../../text/AppText'
 import SectionTitle from './SectionTitle'
 import sv from '../../../config/sv'
 import recipeStyles from '../../../config/recipeStyles'
+import { RecipeType } from '../../../../types'
+import { useState, useEffect } from 'react'
 
-type TagsListProps = { tags: string[] }
+type TagsListProps = { recipe: RecipeType }
 
-export default function TagsList({ tags }: TagsListProps) {
+export default function TagsList({ recipe }: TagsListProps) {
+  const [tags, setTags] = useState<string[]>([])
+
+  useEffect(() => {
+    const tempTags: string[] = []
+    tempTags.push(recipe.cuisine)
+    tempTags.push(recipe.course)
+    tempTags.push(...recipe.nutritionLabels)
+    setTags(tempTags)
+  }, [])
+
   return (
     <View style={recipeStyles.sectionContainer}>
       <View style={styles.container}>
@@ -15,7 +27,7 @@ export default function TagsList({ tags }: TagsListProps) {
         <View style={styles.tagsList}>
           {tags.map(tag => {
             return (
-              <AppText size='mediumSmall' style={styles.tag} key={tag}>
+              <AppText size='small' style={styles.tag} key={tag}>
                 {tag}
               </AppText>
             )
@@ -28,16 +40,20 @@ export default function TagsList({ tags }: TagsListProps) {
 }
 
 const styles = StyleSheet.create({
-  container: { flexDirection: 'row', paddingBottom: 45 },
+  container: { paddingBottom: 45 },
 
-  tagsList: { flexDirection: 'row', marginLeft: 15 },
+  tagsList: { flexDirection: 'row', flexWrap: 'wrap', paddingTop: 10 },
   tag: {
     backgroundColor: sv.tagBackground,
     borderWidth: 1,
     borderRadius: sv.borderRadius,
     borderColor: sv.tagBorderColor,
     overflow: 'hidden',
-    paddingVertical: 2,
-    paddingHorizontal: 5,
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    marginRight: 5,
+    marginBottom: 5,
+    fontFamily: 'Montserrat_600SemiBold',
+    color: sv.primaryBackground,
   },
 })

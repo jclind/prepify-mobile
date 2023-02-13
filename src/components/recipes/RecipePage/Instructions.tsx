@@ -20,8 +20,8 @@ export default function Instructions({ instructions }: InstructionsProps) {
       <View style={recipeStyles.sectionListsContainer}>
         {instructions.map((instr, idx) => {
           return (
-            <View style={recipeStyles.sectionList} key={idx}>
-              <DirectionItem instruction={instr} key={instr.id} />
+            <View style={recipeStyles.sectionListItem} key={instr.id}>
+              <DirectionItem instruction={instr} />
             </View>
           )
         })}

@@ -10,6 +10,7 @@ import React, { useState } from 'react'
 import sv from '../../../config/sv'
 import AppText from '../../text/AppText'
 import { IngredientsType } from '../../../../types'
+import SectionListTitle from './SectionListTitle'
 
 type IngredientItemProps = {
   ingredient: IngredientsType
@@ -52,7 +53,7 @@ export default function IngredientItem({ ingredient }: IngredientItemProps) {
       </TouchableWithoutFeedback>
     )
   } else {
-    return null
+    return <SectionListTitle>{ingredient.label}</SectionListTitle>
   }
 }
 
@@ -61,7 +62,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingBottom: 30,
-    marginVertical: 5,
   },
   checkbox: {
     borderRadius: 5,

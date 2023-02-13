@@ -125,13 +125,13 @@ export default function Recipe() {
                 <RecipeInfoBox label='Servings' value={servings} />
                 <RecipeInfoBox
                   label='Recipe Cost'
-                  value={`$${(
-                    Number(recipe.servingPrice) * Number(servings)
-                  ).toFixed(2)}`}
+                  value={`$${((recipe.servingPrice * servings) / 100).toFixed(
+                    2
+                  )}`}
                 />
                 <RecipeInfoBox
                   label='Serving Cost'
-                  value={`$${Number(recipe.servingPrice).toFixed(2)}`}
+                  value={`$${(recipe.servingPrice / 100).toFixed(2)}`}
                 />
                 {recipe.fridgeLife && (
                   <RecipeInfoBox
@@ -154,8 +154,8 @@ export default function Recipe() {
               ingredients={recipe.ingredients}
             />
             <Instructions instructions={recipe.instructions} />
-            {/* <TagsList tags={recipe.tags} /> */}
-            {/* <Ratings recipe={recipe} /> */}
+            <TagsList recipe={recipe} />
+            <Ratings recipeID={recipe._id} rating={recipe.rating} />
           </View>
         </View>
       </Animated.ScrollView>

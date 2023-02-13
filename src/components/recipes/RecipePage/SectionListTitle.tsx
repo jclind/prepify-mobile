@@ -14,16 +14,14 @@ export default function SectionListTitle({ children }: SectionListTitle) {
       <AppText size='mediumSmall' style={styles.sectionListTitle}>
         {children}
       </AppText>
-      <View style={recipeStyles.horizontalDivider} />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   sectionListTitle: {
-    marginTop: 25,
-    marginBottom: 5,
-    color: sv.primary,
-    fontFamily: 'Montserrat_600SemiBold',
+    color: sv.primaryText,
+    marginBottom: 15,
+    fontFamily: 'Montserrat_700Bold',
   },
 })

@@ -86,19 +86,6 @@ export default function Ingredients({
       </View>
     </View>
   )
-  const renderIngredientsList = () => {
-    return (
-      <View style={recipeStyles.sectionList}>
-        {ingredients.map(ingr => {
-          if ('parsedIngredient' in ingr) {
-            return <IngredientItem ingredient={ingr} key={ingr.id} />
-          } else {
-            return <AppText>{ingr.label}</AppText>
-          }
-        })}
-      </View>
-    )
-  }
 
   return (
     <View style={recipeStyles.sectionContainer}>
@@ -112,7 +99,11 @@ export default function Ingredients({
         {renderServingsCounter()}
       </View>
       <View style={recipeStyles.sectionListsContainer}>
-        {renderIngredientsList()}
+        {modIngredients.map(ingr => (
+          <View style={recipeStyles.sectionListItem} key={ingr.id}>
+            <IngredientItem ingredient={ingr} key={ingr.id} />
+          </View>
+        ))}
       </View>
       <View style={recipeStyles.horizontalDivider} />
     </View>

@@ -22,8 +22,8 @@ export default function RecipeThumbnail({ recipe }: RecipeThumbnailProps) {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
   const priceText = () => {
-    const servingPrice = Number(recipe.servingPrice)
-    const numServings = Number(recipe.servings)
+    const servingPrice = recipe.servingPrice / 100
+    const numServings = recipe.servings
     const recipePrice = (servingPrice * numServings).toFixed(2)
     return (
       <AppText

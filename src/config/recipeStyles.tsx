@@ -16,10 +16,10 @@ export default StyleSheet.create({
     paddingBottom: 5,
   },
   sectionListsContainer: {
-    marginTop: 10,
-  },
-  sectionList: {
     marginTop: 25,
-    marginBottom: 15,
+    marginBottom: 35,
+  },
+  sectionListItem: {
+    marginBottom: 5,
   },
 })

@@ -6,14 +6,14 @@ import RecipeType from '../../../../config/types/Recipe'
 import ReviewItem from './ReviewItem'
 
 type ReviewsListProps = {
-  recipe: RecipeType
+  recipeID: string
 }
 
-export default function ReviewsList({ recipe }: ReviewsListProps) {
+export default function ReviewsList({ recipeID }: ReviewsListProps) {
   const [reviews, setReviews] = useState<ReviewType[]>([])
 
   useEffect(() => {
-    RecipeAPI.getRecipeReviews(null, recipe._id).then(res => {
+    RecipeAPI.getRecipeReviews(null, recipeID).then(res => {
       setReviews(res.data.reviews)
     })
   }, [])

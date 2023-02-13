@@ -8,23 +8,22 @@ import RatingsHeader from './RatingsHeader'
 import ReviewsList from './ReviewsList'
 
 type RatingsProps = {
-  recipe: RecipeType
+  recipeID: string
+  rating: { rateCount: number; rateValue: number }
 }
 
-export default function Ratings({ recipe }: RatingsProps) {
+export default function Ratings({ recipeID, rating }: RatingsProps) {
   const averageRating =
-    Number(recipe.rating.rateCount) > 0
-      ? Number(recipe.rating.rateValue) / Number(recipe.rating.rateCount)
-      : 0
+    rating.rateCount > 0 ? rating.rateValue / rating.rateCount : 0
 
   return (
     <View style={recipeStyles.sectionContainer}>
       <SectionTitle>Ratings & Reviews</SectionTitle>
       <RatingsHeader
         averageRating={averageRating}
-        rateCount={Number(recipe.rating.rateCount)}
+        rateCount={rating.rateCount}
       />
-      <ReviewsList recipe={recipe} />
+      <ReviewsList recipeID={recipeID} />
     </View>
   )
 }

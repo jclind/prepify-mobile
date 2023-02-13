@@ -20,41 +20,35 @@ type InstructionsItemProps = {
 export default function InstructionsItem({
   instruction,
 }: InstructionsItemProps) {
-  const [isChecked, setIsChecked] = useState(false)
+  if ('content' in instruction) {
+    const [isChecked, setIsChecked] = useState(false)
 
-  return (
-    <View style={{ flex: 1, width: '100%' }}>
-      {'label' in instruction ? (
-        <SectionListTitle>{instruction.label}</SectionListTitle>
-      ) : (
-        <TouchableWithoutFeedback onPress={() => setIsChecked(prev => !prev)}>
-          <View
-            style={
-              isChecked ? [styles.container, styles.checked] : styles.container
-            }
-          >
-            <AppText size='medium' style={styles.indexText}>
-              Step {instruction.index}
-            </AppText>
-            <AppText
-              size='mediumSmall'
-              style={styles.content}
-              numberOfLines={10}
-            >
-              {instruction.content.trim()}
-            </AppText>
+    return (
+      <TouchableWithoutFeedback onPress={() => setIsChecked(prev => !prev)}>
+        <View
+          style={
+            isChecked ? [styles.container, styles.checked] : styles.container
+          }
+        >
+          <AppText size='medium' style={styles.indexText}>
+            Step {instruction.index}
+          </AppText>
+          <AppText size='mediumSmall' style={styles.content} numberOfLines={10}>
+            {instruction.content.trim()}
+          </AppText>
 
-            <Checkbox
-              style={styles.checkbox}
-              value={isChecked}
-              onValueChange={setIsChecked}
-              color={isChecked ? sv.primary : undefined}
-            />
-          </View>
-        </TouchableWithoutFeedback>
-      )}
-    </View>
-  )
+          <Checkbox
+            style={styles.checkbox}
+            value={isChecked}
+            onValueChange={setIsChecked}
+            color={isChecked ? sv.primary : undefined}
+          />
+        </View>
+      </TouchableWithoutFeedback>
+    )
+  } else {
+    return <SectionListTitle>{instruction.label}</SectionListTitle>
+  }
 }
 
 const styles = StyleSheet.create({
@@ -63,7 +57,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '100%',
     borderRadius: sv.borderRadius,
-    marginBottom: 35,
+    marginBottom: 15,
     padding: 15,
     backgroundColor: sv.secondaryBackground,
   },
