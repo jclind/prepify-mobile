@@ -116,7 +116,7 @@ class RecipeAPIClass {
         editedAt: null,
         servingPrice,
         cuisine: recipeData.cuisine,
-        course: recipeData.course,
+        mealTypes: recipeData.mealTypes,
         nutritionLabels,
       }
       console.log(8)

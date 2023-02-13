@@ -18,8 +18,7 @@ import AddRecipeTimeInput from '../../components/recipes/RecipePage/AddRecipe/Ad
 import IngredientsContainer from '../../components/recipes/RecipePage/AddRecipe/IngredientsContainer'
 import InstructionsContainer from '../../components/recipes/RecipePage/AddRecipe/InstructionsContainer'
 import FormPicker from '../../components/recipes/RecipePage/AddRecipe/FormPicker'
-import cuisines from '../../recipeData/cuisines'
-import courses from '../../recipeData/courses'
+import cuisinesList from '../../recipeData/cuisinesList'
 import Button from '../../components/Button'
 import AddRecipeFormError from '../../components/recipes/RecipePage/AddRecipe/AddRecipeFormError'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -33,6 +32,8 @@ import { calculateServingPrice } from '../../api/util'
 import AuthAPI from '../../api/auth'
 import RecipeAPI from '../../api/recipes'
 import { hrMinToMin } from '../../util/hrMinToMin'
+import TagSelector from '../../components/TagSelector'
+import mealTypesList from '../../recipeData/mealTypesList'
 
 type ErrorsType = {
   title: string
@@ -73,7 +74,7 @@ export default function AddRecipe() {
     const [instructions, setInstructions] = useState<InstructionsType[]>([])
 
     const [cuisine, setCuisine] = useState('American')
-    const [course, setCourse] = useState('Lunch')
+    const [mealTypes, setMealTypes] = useState<string[]>([])
 
     const [errors, setErrors] = useState<Partial<ErrorsType>>({})
 
@@ -95,7 +96,7 @@ export default function AddRecipe() {
       if (instructions.length <= 0)
         newErrors.instructions = 'Instructions are required'
       if (!cuisine) newErrors.cuisine = 'Cuisine required'
-      if (!course) newErrors.course = 'Course required'
+      if (mealTypes.length <= 0) newErrors.course = 'Course required'
 
       setErrors(newErrors)
       return Object.keys(newErrors).length === 0
@@ -112,7 +113,7 @@ export default function AddRecipe() {
       setIngredients([])
       setInstructions([])
       setCuisine('')
-      setCourse('')
+      setMealTypes([])
       setErrors({})
     }
     const handleAddRecipe = async () => {
@@ -131,7 +132,7 @@ export default function AddRecipe() {
           instructions,
           recipeImage,
           cuisine,
-          course,
+          mealTypes,
         }
         try {
           await RecipeAPI.addRecipe(recipeData)
@@ -255,7 +256,7 @@ export default function AddRecipe() {
               <View style={styles.row}>
                 <AddRecipeInputTitle title='Cuisine' style={styles.flex} />
                 <FormPicker
-                  items={cuisines}
+                  items={cuisinesList}
                   val={cuisine}
                   setVal={setCuisine}
                   title='Set Cuisine'
@@ -266,11 +267,11 @@ export default function AddRecipe() {
             <View style={styles.inputSection}>
               <View style={styles.row}>
                 <AddRecipeInputTitle title='Course' style={styles.flex} />
-                <FormPicker
-                  items={courses}
-                  val={course}
-                  setVal={setCourse}
-                  title='Set Course'
+                <TagSelector
+                  tags={mealTypesList}
+                  arr={mealTypes}
+                  setArr={setMealTypes}
+                  title='Set Courses'
                 />
               </View>
               <AddRecipeFormError error={errors?.course} />

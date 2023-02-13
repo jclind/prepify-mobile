@@ -23,7 +23,7 @@ export type RecipeType = {
   editedAt: null | string
   servingPrice: number | null
   cuisine: string
-  course: string
+  mealTypes: string[]
   nutritionLabels: string[] | null
 }
 export type RecipeFormType = {
@@ -38,7 +38,7 @@ export type RecipeFormType = {
   instructions: InstructionsType[]
   recipeImage: string
   cuisine: string
-  course: string
+  mealTypes: string[]
 }
 
 export type LabelType = { label: string; id?: string }

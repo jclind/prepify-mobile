@@ -1,4 +1,4 @@
-export default cuisines = [
+export default cuisinesList = [
   'African',
   'American',
   'Asian',

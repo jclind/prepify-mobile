@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native'
 import React, { useState } from 'react'
-import cuisines from '../../../../recipeData/cuisines'
+import cuisines from '../../../../recipeData/cuisinesList'
 import SearchableDropdown from 'react-native-searchable-dropdown'
 import { Picker } from '@react-native-picker/picker'
 import { TouchableOpacity } from 'react-native-gesture-handler'
