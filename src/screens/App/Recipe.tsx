@@ -133,13 +133,13 @@ export default function Recipe() {
                   label='Serving Cost'
                   value={`$${(recipe.servingPrice / 100).toFixed(2)}`}
                 />
-                {recipe.fridgeLife && (
+                {recipe.fridgeLife !== 0 && (
                   <RecipeInfoBox
                     label='Fridge Life'
                     value={`${recipe.fridgeLife} days`}
                   />
                 )}
-                {recipe.freezerLife && (
+                {recipe.freezerLife !== 0 && (
                   <RecipeInfoBox
                     label='Freezer Life'
                     value={`${recipe.freezerLife} days`}

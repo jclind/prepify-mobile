@@ -24,12 +24,14 @@ export default function RecipeThumbnail({ recipe }: RecipeThumbnailProps) {
   const priceText = () => {
     const servingPrice = recipe.servingPrice / 100
     const numServings = recipe.servings
-    const recipePrice = (servingPrice * numServings).toFixed(2)
+    const recipePrice = servingPrice * numServings
     return (
       <AppText
         size='small'
         style={styles.priceText}
-      >{`Serving: $${servingPrice} | Recipe: $${recipePrice}`}</AppText>
+      >{`Serving: $${servingPrice.toFixed(2)} | Recipe: $${recipePrice.toFixed(
+        2
+      )}`}</AppText>
     )
   }
 

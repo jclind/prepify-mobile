@@ -13,7 +13,7 @@
     "@expo-google-fonts/inter": "^0.2.2",
     "@expo-google-fonts/montserrat": "^0.2.2",
     "@gorhom/bottom-sheet": "^4.4.5",
-    "@jclind/ingredient-parser": "^1.0.20",
+    "@jclind/ingredient-parser": "^1.0.21",
     "@react-native-async-storage/async-storage": "~1.17.3",
     "@react-native-firebase/app": "^16.4.6",
     "@react-native-picker/picker": "2.4.8",

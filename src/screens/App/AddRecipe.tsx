@@ -94,7 +94,6 @@ export default function AddRecipe() {
         newErrors.ingredients = 'Recipe must contain ingredients'
       if (instructions.length <= 0)
         newErrors.instructions = 'Instructions are required'
-      if (!cuisine) newErrors.cuisine = 'Cuisine required'
       if (mealTypes.length <= 0) newErrors.course = 'Course required'
 
       setErrors(newErrors)
@@ -264,7 +263,6 @@ export default function AddRecipe() {
                     title='Set Cuisine'
                   />
                 </View>
-                <AddRecipeFormError error={errors?.cuisine} />
               </View>
               <View style={styles.inputSection}>
                 <View style={styles.row}>

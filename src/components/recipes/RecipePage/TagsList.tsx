@@ -14,7 +14,7 @@ export default function TagsList({ recipe }: TagsListProps) {
 
   useEffect(() => {
     const tempTags: string[] = []
-    tempTags.push(recipe.cuisine)
+    recipe.cuisine && tempTags.push(recipe.cuisine)
     tempTags.push(...recipe.mealTypes)
     tempTags.push(...recipe.nutritionLabels)
     setTags(tempTags)

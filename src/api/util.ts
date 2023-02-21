@@ -9,7 +9,7 @@ export const calculateServingPrice = (
   let priceForAllServings = 0
   ingredientsList.forEach(ingr => {
     if ('parsedIngredient' in ingr) {
-      const ingrPrice = ingr.ingredientData.totalPriceUSACents
+      const ingrPrice = Number(ingr.ingredientData.totalPriceUSACents)
       const singleServingIngrPrice = ingrPrice / numServings
       priceForAllServings += singleServingIngrPrice
     }
