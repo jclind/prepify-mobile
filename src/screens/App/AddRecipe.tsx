@@ -26,14 +26,13 @@ import {
   IngredientsType,
   InstructionsType,
   RecipeFormType,
-  RecipeType,
 } from '../../../types'
-import { calculateServingPrice } from '../../api/util'
-import AuthAPI from '../../api/auth'
 import RecipeAPI from '../../api/recipes'
 import { hrMinToMin } from '../../util/hrMinToMin'
 import TagSelector from '../../components/TagSelector'
 import mealTypesList from '../../recipeData/mealTypesList'
+import * as Progress from 'react-native-progress'
+import sv from '../../config/sv'
 
 type ErrorsType = {
   title: string
@@ -50,34 +49,34 @@ type ErrorsType = {
 
 export default function AddRecipe() {
   const addRecipeFormRef = useRef(null)
+  const [loadingProgress, setLoadingProgress] = useState(0)
 
+  const [addRecipeLoading, setAddRecipeLoading] = useState(false)
+  const [title, setTitle] = useState('testing')
+
+  const [recipeImage, setRecipeImage] = useState('')
+  const [description, setDescription] = useState('sussy imposter')
+  const [servings, setServings] = useState(3)
+
+  const [prepTime, setPrepTime] = useState<{
+    hours: number
+    minutes: number
+  } | null>(null)
+  const [cookTime, setCookTime] = useState<{
+    hours: number
+    minutes: number
+  } | null>(null)
+  const [fridgeLife, setFridgeLife] = useState<number>(3)
+  const [freezerLife, setFreezerLife] = useState<number>(3)
+
+  const [ingredients, setIngredients] = useState<IngredientsType[]>([])
+  const [instructions, setInstructions] = useState<InstructionsType[]>([])
+
+  const [cuisine, setCuisine] = useState('American')
+  const [mealTypes, setMealTypes] = useState<string[]>([])
+
+  const [errors, setErrors] = useState<Partial<ErrorsType>>({})
   const ListFooterComponent = React.memo(() => {
-    const [addRecipeLoading, setAddRecipeLoading] = useState(false)
-    const [title, setTitle] = useState('testing')
-
-    const [recipeImage, setRecipeImage] = useState('')
-    const [description, setDescription] = useState('sussy imposter')
-    const [servings, setServings] = useState(3)
-
-    const [prepTime, setPrepTime] = useState<{
-      hours: number
-      minutes: number
-    } | null>(null)
-    const [cookTime, setCookTime] = useState<{
-      hours: number
-      minutes: number
-    } | null>(null)
-    const [fridgeLife, setFridgeLife] = useState<number>(3)
-    const [freezerLife, setFreezerLife] = useState<number>(3)
-
-    const [ingredients, setIngredients] = useState<IngredientsType[]>([])
-    const [instructions, setInstructions] = useState<InstructionsType[]>([])
-
-    const [cuisine, setCuisine] = useState('American')
-    const [mealTypes, setMealTypes] = useState<string[]>([])
-
-    const [errors, setErrors] = useState<Partial<ErrorsType>>({})
-
     const validate = () => {
       let newErrors: Partial<ErrorsType> = {}
 
@@ -135,12 +134,14 @@ export default function AddRecipe() {
           mealTypes,
         }
         try {
-          await RecipeAPI.addRecipe(recipeData)
+          await RecipeAPI.addRecipe(recipeData, setLoadingProgress)
+          setLoadingProgress(1)
           clearForm()
         } catch (error) {
           console.log('ERROR:', error)
         } finally {
           setAddRecipeLoading(false)
+          setLoadingProgress(0)
         }
       } else {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
@@ -158,131 +159,133 @@ export default function AddRecipe() {
             Keyboard.dismiss()
           }}
         >
-          <View style={styles.container}>
-            <View style={styles.inputSection}>
-              <AddRecipeInputTitle title='Title' />
-              <AddRecipeInput val={title} setVal={setTitle} />
-              <AddRecipeFormError error={errors?.title} />
-            </View>
-            <View style={styles.inputSection}>
-              <AddRecipeInputTitle title='Cover Image' />
-              <AddRecipeImageInput
-                image={recipeImage}
-                setImage={setRecipeImage}
-              />
-              <AddRecipeFormError error={errors?.image} />
-            </View>
-            <View style={styles.inputSection}>
-              <AddRecipeInputTitle title='Description' />
-              <AddRecipeInput
-                val={description}
-                setVal={setDescription}
-                numberOfLines={5}
-              />
-              <AddRecipeFormError error={errors?.description} />
-            </View>
-            <View style={styles.inputSection}>
-              <View style={styles.row}>
-                <AddRecipeInputTitle title='Servings' style={styles.flex} />
-                <AddRecipeServingsInput
-                  servings={servings}
-                  setServings={setServings}
-                />
+          <>
+            <View style={styles.container}>
+              <View style={styles.inputSection}>
+                <AddRecipeInputTitle title='Title' />
+                <AddRecipeInput val={title} setVal={setTitle} />
+                <AddRecipeFormError error={errors?.title} />
               </View>
-              <AddRecipeFormError error={errors?.servings} />
-            </View>
-            <View style={styles.inputSection}>
-              <View style={styles.row}>
-                <AddRecipeInputTitle title='Prep Time' style={styles.flex} />
+              <View style={styles.inputSection}>
+                <AddRecipeInputTitle title='Cover Image' />
+                <AddRecipeImageInput
+                  image={recipeImage}
+                  setImage={setRecipeImage}
+                />
+                <AddRecipeFormError error={errors?.image} />
+              </View>
+              <View style={styles.inputSection}>
+                <AddRecipeInputTitle title='Description' />
+                <AddRecipeInput
+                  val={description}
+                  setVal={setDescription}
+                  numberOfLines={5}
+                />
+                <AddRecipeFormError error={errors?.description} />
+              </View>
+              <View style={styles.inputSection}>
+                <View style={styles.row}>
+                  <AddRecipeInputTitle title='Servings' style={styles.flex} />
+                  <AddRecipeServingsInput
+                    servings={servings}
+                    setServings={setServings}
+                  />
+                </View>
+                <AddRecipeFormError error={errors?.servings} />
+              </View>
+              <View style={styles.inputSection}>
+                <View style={styles.row}>
+                  <AddRecipeInputTitle title='Prep Time' style={styles.flex} />
+                  <AddRecipeTimeInput
+                    title='Prep Time'
+                    time={prepTime}
+                    setTime={setPrepTime}
+                  />
+                </View>
+                <AddRecipeFormError error={errors?.prepTime} />
+              </View>
+              <View style={[styles.inputSection, styles.row]}>
+                <AddRecipeInputTitle title='Cook Time' style={styles.flex} />
                 <AddRecipeTimeInput
-                  title='Prep Time'
-                  time={prepTime}
-                  setTime={setPrepTime}
+                  title='Cook Time'
+                  time={cookTime}
+                  setTime={setCookTime}
                 />
               </View>
-              <AddRecipeFormError error={errors?.prepTime} />
-            </View>
-            <View style={[styles.inputSection, styles.row]}>
-              <AddRecipeInputTitle title='Cook Time' style={styles.flex} />
-              <AddRecipeTimeInput
-                title='Cook Time'
-                time={cookTime}
-                setTime={setCookTime}
-              />
-            </View>
-            <View style={[styles.inputSection, styles.row]}>
-              <AddRecipeInputTitle title='Fridge Life' style={styles.flex} />
-              <FormPicker
-                items={[...Array.from({ length: 100 }, (_, i) => i + 1)]}
-                val={fridgeLife}
-                setVal={setFridgeLife}
-                title='Fridge Life (days)'
-                label='days'
-              />
-            </View>
-            <View style={[styles.inputSection, styles.row]}>
-              <AddRecipeInputTitle title='Freezer Life' style={styles.flex} />
-              <FormPicker
-                items={[...Array.from({ length: 365 }, (_, i) => i + 1)]}
-                val={freezerLife}
-                setVal={setFreezerLife}
-                title='Freezer Life (days)'
-                label='days'
-              />
-            </View>
-            <View>
-              <AddRecipeInputTitle title='Ingredients' style={styles.px} />
-              <IngredientsContainer
-                ingredients={ingredients}
-                setIngredients={setIngredients}
-              />
-              <AddRecipeFormError
-                error={errors?.ingredients}
-                style={styles.px}
-              />
-            </View>
-            <View>
-              <AddRecipeInputTitle title='Instructions' style={styles.px} />
-              <InstructionsContainer
-                instructions={instructions}
-                setInstructions={setInstructions}
-              />
-              <AddRecipeFormError
-                error={errors?.instructions}
-                style={styles.px}
-              />
-            </View>
-            <View style={styles.inputSection}>
-              <View style={styles.row}>
-                <AddRecipeInputTitle title='Cuisine' style={styles.flex} />
+              <View style={[styles.inputSection, styles.row]}>
+                <AddRecipeInputTitle title='Fridge Life' style={styles.flex} />
                 <FormPicker
-                  items={cuisinesList}
-                  val={cuisine}
-                  setVal={setCuisine}
-                  title='Set Cuisine'
+                  items={[...Array.from({ length: 100 }, (_, i) => i + 1)]}
+                  val={fridgeLife}
+                  setVal={setFridgeLife}
+                  title='Fridge Life (days)'
+                  label='days'
                 />
               </View>
-              <AddRecipeFormError error={errors?.cuisine} />
-            </View>
-            <View style={styles.inputSection}>
-              <View style={styles.row}>
-                <AddRecipeInputTitle title='Course' style={styles.flex} />
-                <TagSelector
-                  tags={mealTypesList}
-                  arr={mealTypes}
-                  setArr={setMealTypes}
-                  title='Set Courses'
+              <View style={[styles.inputSection, styles.row]}>
+                <AddRecipeInputTitle title='Freezer Life' style={styles.flex} />
+                <FormPicker
+                  items={[...Array.from({ length: 365 }, (_, i) => i + 1)]}
+                  val={freezerLife}
+                  setVal={setFreezerLife}
+                  title='Freezer Life (days)'
+                  label='days'
                 />
               </View>
-              <AddRecipeFormError error={errors?.course} />
+              <View>
+                <AddRecipeInputTitle title='Ingredients' style={styles.px} />
+                <IngredientsContainer
+                  ingredients={ingredients}
+                  setIngredients={setIngredients}
+                />
+                <AddRecipeFormError
+                  error={errors?.ingredients}
+                  style={styles.px}
+                />
+              </View>
+              <View>
+                <AddRecipeInputTitle title='Instructions' style={styles.px} />
+                <InstructionsContainer
+                  instructions={instructions}
+                  setInstructions={setInstructions}
+                />
+                <AddRecipeFormError
+                  error={errors?.instructions}
+                  style={styles.px}
+                />
+              </View>
+              <View style={styles.inputSection}>
+                <View style={styles.row}>
+                  <AddRecipeInputTitle title='Cuisine' style={styles.flex} />
+                  <FormPicker
+                    items={cuisinesList}
+                    val={cuisine}
+                    setVal={setCuisine}
+                    title='Set Cuisine'
+                  />
+                </View>
+                <AddRecipeFormError error={errors?.cuisine} />
+              </View>
+              <View style={styles.inputSection}>
+                <View style={styles.row}>
+                  <AddRecipeInputTitle title='Course' style={styles.flex} />
+                  <TagSelector
+                    tags={mealTypesList}
+                    arr={mealTypes}
+                    setArr={setMealTypes}
+                    title='Set Courses'
+                  />
+                </View>
+                <AddRecipeFormError error={errors?.course} />
+              </View>
             </View>
-          </View>
-          <Button
-            title='Add Recipe'
-            onPress={handleAddRecipe}
-            style={styles.addRecipeBtn}
-            loading={addRecipeLoading}
-          />
+            <Button
+              title='Add Recipe'
+              onPress={handleAddRecipe}
+              style={styles.addRecipeBtn}
+              loading={addRecipeLoading}
+            />
+          </>
         </Pressable>
       </KeyboardAwareScrollView>
     )
@@ -296,6 +299,15 @@ export default function AddRecipe() {
         ListFooterComponent={ListFooterComponent}
         keyboardShouldPersistTaps='always'
         ref={addRecipeFormRef}
+      />
+      <Progress.Bar
+        progress={loadingProgress}
+        width={loadingProgress ? null : 0}
+        borderRadius={0}
+        borderWidth={0}
+        height={2}
+        style={styles.loadingIndicator}
+        color={sv.primary}
       />
     </View>
   )
@@ -325,5 +337,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 30,
     marginBottom: 40,
+  },
+  loadingIndicator: {
+    width: '100%',
   },
 })

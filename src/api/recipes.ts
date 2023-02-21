@@ -1,7 +1,13 @@
 import { doc, getDoc } from 'firebase/firestore'
 import { db, storage } from './firebase'
 import { http, nutrition } from './http-common'
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
+} from 'firebase/storage'
 import {
   IngredientsType,
   NutritionDataType,
@@ -70,29 +76,25 @@ class RecipeAPIClass {
     return await http.get(`searchAutoCompleteRecipes?${titleParam}${tagsParam}`)
   }
 
-  async addRecipe(recipeData: RecipeFormType) {
+  async addRecipe(recipeData: RecipeFormType, setProgress: (val) => void) {
     try {
+      setProgress(0.1)
       const authorId: string = AuthAPI.getUID()
-      console.log(1)
       const recipeImage: string = await this.uploadRecipeImage(
-        recipeData.recipeImage
+        recipeData.recipeImage,
+        setProgress
       )
-      console.log(2)
       const servingPrice: number = calculateServingPrice(
         recipeData.ingredients,
         recipeData.servings
       )
-      console.log(3)
+      setProgress(0.8)
       const totalTime: number = recipeData.prepTime + (recipeData.cookTime ?? 0)
-      console.log(4)
       const nutritionDataRes = await this.getRecipeNutrition(
         recipeData.ingredients
       )
-      console.log(5)
       const nutritionData = nutritionDataRes.nutritionData
-      console.log(6)
       const nutritionLabels = nutritionDataRes.dietLabels
-      console.log(7)
       const returnRecipeData: RecipeType = {
         _id: '' + ObjectID(),
         title: recipeData.title,
@@ -119,7 +121,7 @@ class RecipeAPIClass {
         mealTypes: recipeData.mealTypes,
         nutritionLabels,
       }
-      console.log(8)
+      setProgress(0.9)
       return await http.post('addRecipe', returnRecipeData)
     } catch (error) {
       console.log(error)
@@ -127,16 +129,19 @@ class RecipeAPIClass {
     }
   }
 
-  async uploadRecipeImage(imageURI: string) {
+  async uploadRecipeImage(imageURI: string, setProgress: (val) => void) {
     try {
       if (imageURI) {
         const imageBlobRes = await fetch(imageURI)
+        setProgress(0.4)
         const imageBlob = await imageBlobRes.blob()
+        setProgress(0.5)
 
         const storage = getStorage()
         const recipeImagesRef = ref(storage, `recipeImages/${Date.now()}`)
-        await uploadBytes(recipeImagesRef, imageBlob)
+        await uploadBytesResumable(recipeImagesRef, imageBlob)
         const fileUrl = await getDownloadURL(recipeImagesRef)
+        setProgress(0.7)
         return fileUrl
       } else {
         throw new Error('Image does not exist')

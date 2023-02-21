@@ -12,6 +12,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { MCIcons } from '../../../../config/types/MCIcons'
 import AppText from '../../../text/AppText'
 import sv from '../../../../config/sv'
+import * as FileSystem from 'expo-file-system'
+import RecipeAPI from '../../../../api/recipes'
 
 type AddRecipeImageInput = {
   image: string
@@ -22,6 +24,14 @@ export default function AddRecipeImageInput({
   image,
   setImage,
 }: AddRecipeImageInput) {
+  const isLessThanTheMB = (fileSize: number, smallerThanSizeMB: number) => {
+    const isOk = fileSize / 1024 / 1024 < smallerThanSizeMB
+    return isOk
+  }
+  const getFileInfo = async (fileURI: string) => {
+    const fileInfo = await FileSystem.getInfoAsync(fileURI)
+    return fileInfo
+  }
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -32,6 +42,12 @@ export default function AddRecipeImageInput({
     })
     if (!result.canceled) {
       const uri = result.assets[0].uri
+      const fileInfo = await getFileInfo(uri)
+      const isLt15MB = isLessThanTheMB(fileInfo.size, 15)
+      if (!isLt15MB) {
+        alert(`Image size must be smaller than 15MB!`)
+        return
+      }
       setImage(uri)
     }
   }

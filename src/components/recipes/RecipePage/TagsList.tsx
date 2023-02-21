@@ -15,7 +15,7 @@ export default function TagsList({ recipe }: TagsListProps) {
   useEffect(() => {
     const tempTags: string[] = []
     tempTags.push(recipe.cuisine)
-    tempTags.push(recipe.course)
+    tempTags.push(...recipe.mealTypes)
     tempTags.push(...recipe.nutritionLabels)
     setTags(tempTags)
   }, [])
@@ -28,7 +28,7 @@ export default function TagsList({ recipe }: TagsListProps) {
           {tags.map(tag => {
             return (
               <AppText size='small' style={styles.tag} key={tag}>
-                {tag}
+                {tag.toLowerCase().replace('_', ' ')}
               </AppText>
             )
           })}
