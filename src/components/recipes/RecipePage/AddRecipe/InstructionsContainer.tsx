@@ -7,7 +7,6 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import AddRecipeInput from './AddRecipeInput'
-import { InstructionsType } from './addRecipeTypes'
 import AddLabelContainer from './AddLabelContainer'
 import uuid from 'react-native-uuid'
 import * as Haptics from 'expo-haptics'
@@ -17,6 +16,7 @@ import DraggableFlatList, {
 import InstructionItem from './InstructionItem'
 import AppText from '../../../text/AppText'
 import sv from '../../../../config/sv'
+import { InstructionsType } from '../../../../../types'
 
 type InstructionsContainerTypes = {
   instructions: InstructionsType[]

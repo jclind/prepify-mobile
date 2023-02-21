@@ -52,11 +52,11 @@ export default function AddRecipe() {
   const [loadingProgress, setLoadingProgress] = useState(0)
 
   const [addRecipeLoading, setAddRecipeLoading] = useState(false)
-  const [title, setTitle] = useState('testing')
+  const [title, setTitle] = useState('')
 
   const [recipeImage, setRecipeImage] = useState('')
-  const [description, setDescription] = useState('sussy imposter')
-  const [servings, setServings] = useState(3)
+  const [description, setDescription] = useState('')
+  const [servings, setServings] = useState<number>(0)
 
   const [prepTime, setPrepTime] = useState<{
     hours: number
@@ -66,13 +66,13 @@ export default function AddRecipe() {
     hours: number
     minutes: number
   } | null>(null)
-  const [fridgeLife, setFridgeLife] = useState<number>(3)
-  const [freezerLife, setFreezerLife] = useState<number>(3)
+  const [fridgeLife, setFridgeLife] = useState<number>(0)
+  const [freezerLife, setFreezerLife] = useState<number>(0)
 
   const [ingredients, setIngredients] = useState<IngredientsType[]>([])
   const [instructions, setInstructions] = useState<InstructionsType[]>([])
 
-  const [cuisine, setCuisine] = useState('American')
+  const [cuisine, setCuisine] = useState('')
   const [mealTypes, setMealTypes] = useState<string[]>([])
 
   const [errors, setErrors] = useState<Partial<ErrorsType>>({})

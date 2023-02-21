@@ -8,12 +8,11 @@ import {
 } from 'react-native'
 import React, { useRef, useState } from 'react'
 import AppText from '../../../text/AppText'
-import { InstructionsType } from './addRecipeTypes'
 import sv from '../../../../config/sv'
 import AddRecipeInput from './AddRecipeInput'
 import SwipeableDelete from './SwipeableDelete'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { MCIcons } from '../../../../config/types/MCIcons'
+import { InstructionsType } from '../../../../../types'
 
 type InstructionItemType = {
   instr: InstructionsType
@@ -47,7 +46,7 @@ const Instruction = ({
           {index}
         </AppText>
       </View>
-      <Text>
+      <Text style={styles.instructionText}>
         <AppText size='mediumSmall'>{content}</AppText>
       </Text>
     </>
@@ -163,6 +162,9 @@ const styles = StyleSheet.create({
   },
   indexText: {
     fontFamily: 'Montserrat_700Bold',
+  },
+  instructionText: {
+    width: '85%',
   },
   labelText: {
     fontFamily: 'Montserrat_700Bold',
